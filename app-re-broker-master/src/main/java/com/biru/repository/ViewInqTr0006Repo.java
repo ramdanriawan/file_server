@@ -56,7 +56,7 @@ public interface ViewInqTr0006Repo extends PagingAndSortingRepository<ViewInqTr0
 	
 	public List<ViewInqTr0006Entity> findByIdKey(String idKey);
 
-    @Query(value = "select * from view_inq_tr0006 where TRX_VOUCHER_ID like %:trxVoucherId%")
+    @Query(value = "select * from view_inq_tr0006 where TRX_VOUCHER_ID like %:trxVoucherId%", nativeQuery = true)
     public List<ViewInqTr0006Entity> findByTrxVoucherId(@Param("trxVoucherId") String trxVoucherId);
 
     @Query(value = "select * from view_inq_tr0006",  nativeQuery = true)
