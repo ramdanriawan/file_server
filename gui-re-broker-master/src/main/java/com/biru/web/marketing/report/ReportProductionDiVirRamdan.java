@@ -48,7 +48,7 @@ public class ReportProductionDiVirRamdan {
     @RequestMapping(value = REST.MR_REPORT_PRODUCTION_DI_VIR, method = RequestMethod.GET)
     public String endorsement(Model model) throws Exception {
         model.addAttribute("mainMenu", "Marketing / Report Production Vir");
-        model.addAttribute("titlePage", "VOUCHER ID RELATIONSHIP");
+        model.addAttribute("titlePage", "VOUCHER ID RELATIONSHIP.");
         model.addAttribute("urlGetVoucherId", REST.GET_VOUCHER_ID);
 
         model.addAttribute("urlSearch", "report-production-di-vir/inquiry");
