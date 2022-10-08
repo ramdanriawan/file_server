@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<th:block th:replace="fragments/import :: info-header" />
+<th:block th:replace="fragments/import :: css-header" />
+<th:block th:replace="fragments/import :: js-header" />
+</head>
+
+<body id="page-top">
+	<th:block th:replace="fragments/general :: navbar-header" />
+
+	<div id="wrapper">
+		<th:block th:replace="fragments/general :: menu" />
+
+		<div id="content-wrapper">
+			<div class="container-fluid">
+				<th:block th:replace="fragments/general :: panel-page" />
+
+
+				<!-- CONTENT PAGE -->
+				<div id="divContentHeader" class="card-header">
+					<b><span id="titlePage" th:text="${titlePage}"></span></b>
+				</div>
+				<div class="card-body">
+					<div id="alertSuccess" class="alert alert-success"
+						style="display: none;">
+						<strong>Success!</strong> <span id="alertSuccessMsg"
+							th:text="${M_0005}"></span>
+					</div>
+					<div id="alertFailed" class="alert alert-danger"
+						style="display: none;">
+						<strong>Failed!</strong> <span id="alertFailedMsg"></span>
+					</div>
+					<div class="row justify-content-end">
+						<div class="col-md-2">
+							<button id="create" class="btn btn-primary col-md-12"
+								onclick="create()">
+								<i class="fa fa-plus"></i> Create
+							</button>
+						</div>
+					</div>
+					<table id="participantTable" data-unique-id="idKey"
+						data-toggle="table"
+						data-url="/gui-re-broker/static-data/participant/inquiry"
+						data-sortable="true" data-search="true" data-pagination="true"
+						data-page-size="5">
+						<thead>
+							<tr>
+								<th data-field="idKey">id</th>
+								<th data-field="cliCode" data-sortable="true">Code</th>
+								<th data-field="cliName" data-sortable="true">Name</th>
+								<th data-field="cliTaxId" data-sortable="true">Tax Id</th>
+								<th data-field="cliTypeDesc" data-sortable="true">Type</th>
+								<th data-field="cliType" data-sortable="true">TypeCode</th>
+								<th data-field="cliDataStatusStr">Status</th>
+								<th data-field="action" data-halign="center" data-align="center">Action</th>
+								<th data-field="cliDataStatus">DataStatus</th>
+								<th data-field="cliAddress">Address</th>
+								<th data-field="cliPostCode">Post Code</th>
+								<th data-field="cliCountryId">Country Id</th>
+								<th data-field="cliTelepon">Telepon</th>
+								<th data-field="cliFax">Fax</th>
+								<th data-field="cliIndustry">Industry</th>
+								<th data-field="cliWeb">Web</th>
+								<th data-field="cliEmail">Email</th>
+								<th data-field="cliJointDate">Join Date</th>
+								<th data-field="cliLastTrx">Last Trx</th>
+								<th data-field="cliPic1">PIC 1</th>
+								<th data-field="cliPic1Email">PIC 1 Email</th>
+								<th data-field="cliPic1Telp">PIC 1 Telp</th>
+								<th data-field="cliPic2">PIC 2</th>
+								<th data-field="cliPic2Email">PIC 2 Email</th>
+								<th data-field="cliPic2Telp">PIC 2 Telp</th>
+								<th data-field="cliRemark">Remark</th>
+							</tr>
+						</thead>
+					</table>
+					<br>
+					<div class="row">
+						<div class="col-md-1">
+							<label>Code</label>
+						</div>
+						<div class="col-md-1">
+							<input type="text" name="code" id="code" class="form-control"
+								disabled />
+						</div>
+
+						<div class="col-md-1">
+							<label>Name*</label>
+						</div>
+						<div class="col-md-3">
+							<input type="text" name="name" id="name" class="form-control"
+								disabled />
+						</div>
+
+						<div class="col-md-1">
+							<label>Type*</label>
+						</div>
+						<div class="col-md-2">
+							<select id="type" name="type" class="custom-select" disabled>
+							</select>
+						</div>
+
+						<div class="col-md-1">
+							<label>Status*</label>
+						</div>
+						<div class="col-md-2">
+							<select id="status" name="status" class="custom-select" disabled>
+							</select>
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<div class="col-md-1">
+							<label>Address*</label>
+						</div>
+						<div class="col-md-7">
+							<textarea class="form-control" id="address" name="address"
+								rows="4" disabled></textarea>
+						</div>
+						<div class="col-md-4">
+							<div class="row">
+								<div class="col-md-4">
+									<label>Post Code*</label>
+								</div>
+								<div class="col-md-5">
+									<input type="text" name="postCode" id="postCode"
+										class="form-control" disabled />
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-md-4">
+									<label>Country*</label>
+								</div>
+								<div class="col-md-8">
+									<select id="country" name="country" class="custom-select"
+										disabled>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<div class="col-md-1">
+							<label>NPWP*</label>
+						</div>
+						<div class="col-md-2">
+							<input type="text" name="npwp" id="npwp" class="form-control"
+								disabled />
+						</div>
+
+						<div class="col-md-1">
+							<label>Phone*</label>
+						</div>
+						<div class="col-md-2">
+							<input type="text" name="phone" id="phone" class="form-control"
+								disabled />
+						</div>
+
+						<div class="col-md-1">
+							<label>Fax</label>
+						</div>
+						<div class="col-md-2">
+							<input type="text" name="fax" id="fax" class="form-control"
+								disabled />
+						</div>
+
+						<div class="col-md-1">
+							<label>Industry*</label>
+						</div>
+						<div class="col-md-2">
+							<select id="industry" name="industry" class="custom-select"
+								disabled>
+
+							</select>
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<div class="col-md-1">
+							<label>Web Site</label>
+						</div>
+						<div class="col-md-2">
+							<input type="text" name="webSite" id="webSite"
+								class="form-control" disabled />
+						</div>
+						<div class="col-md-1">
+							<label>Email*</label>
+						</div>
+						<div class="col-md-2">
+							<input type="text" name="email" id="email" class="form-control"
+								disabled />
+						</div>
+						<div class="col-md-1">
+							<label>Join*</label>
+						</div>
+						<div class="col-md-2">
+							<div class="input-group">
+								<input id="join" name="join" type="text" class="form-control"
+									disabled>
+								<div class="input-group-append">
+									<button id='btnJoin' class="btn btn-primary" type="button"
+										disabled>
+										<i class="fas fa-calendar"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-1">
+							<label>Last Trx*</label>
+						</div>
+						<div class="col-md-2">
+							<div class="input-group">
+								<input id="lastTrx" name="lastTrx" type="text"
+									class="form-control" disabled>
+								<div class="input-group-append">
+									<button id='btnLastTrx' class="btn btn-primary" type="button"
+										disabled>
+										<i class="fas fa-calendar"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<div class="col-md-1">
+							<label>PIC 1*</label>
+						</div>
+						<div class="col-md-3">
+							<input type="text" name="pic1" id="pic1" class="form-control"
+								disabled />
+						</div>
+
+						<div class="col-md-1">
+							<label>PIC 1 Email*</label>
+						</div>
+						<div class="col-md-3">
+							<input type="text" name="pic1Email" id="pic1Email"
+								class="form-control" disabled />
+						</div>
+
+						<div class="col-md-1">
+							<label>PIC 1 Phone*</label>
+						</div>
+						<div class="col-md-2">
+							<input type="text" name="pic1Phone" id="pic1Phone"
+								class="form-control" disabled />
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<div class="col-md-1">
+							<label>PIC 2</label>
+						</div>
+						<div class="col-md-3">
+							<input type="text" name="pic2" id="pic2" class="form-control"
+								disabled />
+						</div>
+
+						<div class="col-md-1">
+							<label>PIC 2 Email</label>
+						</div>
+						<div class="col-md-3">
+							<input type="text" name="pic2Email" id="pic2Email"
+								class="form-control" disabled />
+						</div>
+
+						<div class="col-md-1">
+							<label>PIC 2 Phone</label>
+						</div>
+						<div class="col-md-2">
+							<input type="text" name="pic2Phone" id="pic2Phone"
+								class="form-control" disabled />
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<div class="col-md-1">
+							<label>Remark</label>
+						</div>
+						<div class="col-md-11">
+							<textarea class="form-control" id="remark" name="remark" rows="4"
+								disabled></textarea>
+						</div>
+					</div>
+
+				</div>
+
+				<th:block th:replace="fragments/button :: btn-save-cancel" />
+			</div>
+			<!-- /.container-fluid -->
+			
+			<th:block th:replace="fragments/general :: copyright-footer"></th:block>
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<!-- /#wrapper -->
+	<th:block th:replace="fragments/modal :: confirmation-save" />
+	<th:block th:replace="fragments/general :: scroll-to-top" />
+	<th:block th:replace="fragments/general :: logout-modal" />
+	<th:block th:replace="fragments/import :: js-body" />
+
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+
+	var objectData = null;
+	$(function() {
+		$('#btnSave').attr('disabled', true);
+		$('#btnCancel').attr('disabled', true);
+		$('#btnCancel').click(function() {
+			cancel();
+		});
+		$('#participantTable').bootstrapTable('hideColumn', 'idKey');
+		$('#participantTable').bootstrapTable('hideColumn', 'cliType');
+		$('#participantTable').bootstrapTable('hideColumn', 'cliDataStatus');
+		$('#participantTable').bootstrapTable('hideColumn', 'cliAddress');
+		$('#participantTable').bootstrapTable('hideColumn', 'cliPostCode');
+		$('#participantTable').bootstrapTable('hideColumn', 'cliCountryId');
+		$('#participantTable').bootstrapTable('hideColumn', 'cliTelepon');
+		$('#participantTable').bootstrapTable('hideColumn', 'cliFax');
+		$('#participantTable').bootstrapTable('hideColumn', 'cliIndustry');
+		$('#participantTable').bootstrapTable('hideColumn', 'cliWeb');
+		$('#participantTable').bootstrapTable('hideColumn', 'cliEmail');
+		$('#participantTable').bootstrapTable('hideColumn', 'cliJointDate');
+		$('#participantTable').bootstrapTable('hideColumn', 'cliLastTrx');
+		$('#participantTable').bootstrapTable('hideColumn', 'cliPic1');
+		$('#participantTable').bootstrapTable('hideColumn', 'cliPic1Email');
+		$('#participantTable').bootstrapTable('hideColumn', 'cliPic1Telp');
+		$('#participantTable').bootstrapTable('hideColumn', 'cliPic2');
+		$('#participantTable').bootstrapTable('hideColumn', 'cliPic2Email');
+		$('#participantTable').bootstrapTable('hideColumn', 'cliPic2Telp');
+		$('#participantTable').bootstrapTable('hideColumn', 'cliRemark');
+
+		$('#participantTable').bootstrapTable('refreshOptions', {
+			theadClasses : 'thead-dark'
+		});
+
+		rest('GET',
+				'/gui-re-broker/static-data/participant/dropdown-participant-status')
+				.done(function(data) {
+					$('#status').select2({
+						width : '100%',
+						data : data
+					});
+				});
+		
+		rest('GET',
+				'/gui-re-broker/static-data/dropdown-clientType')
+				.done(function(data) {
+					$('#type').select2({
+						width : '100%',
+						data : data
+					});
+				});
+
+		rest('GET',
+				'/gui-re-broker/static-data/participant/dropdown-participant-country')
+				.done(function(data) {
+					$('#country').select2({
+						width : '100%',
+						data : data
+					});
+				});
+		rest('GET',
+				'/gui-re-broker/static-data/participant/dropdown-participant-industry')
+				.done(function(data) {
+					$('#industry').select2({
+						width : '100%',
+						data : data
+					});
+				});
+		
+		$('#join').datepicker({
+			dateFormat: 'dd/mm/yy',
+		});
+		$('#btnJoin').click(function(){
+			$('#join').datepicker('show');
+		});
+		
+		$('#lastTrx').datepicker({
+			dateFormat: 'dd/mm/yy',
+		});
+		$('#btnLastTrx').click(function(){
+			$('#lastTrx').datepicker('show');
+		});
+		
+		
+		$('#btnSave').click(function() {
+			save();
+		});
+		$('#btnModalYes').click(function() {
+			$('#btnModalYes').attr('disabled', true);
+			saveProcess();
+		});
+	});
+
+	function create() {
+		$('#name').removeAttr('disabled');
+		$('#type').removeAttr('disabled');
+		$('#status').removeAttr('disabled');
+		$('#address').removeAttr('disabled');
+		$('#postCode').removeAttr('disabled');
+		$('#country').removeAttr('disabled');
+		$('#npwp').removeAttr('disabled');
+		$('#phone').removeAttr('disabled');
+		$('#fax').removeAttr('disabled');
+		$('#industry').removeAttr('disabled');
+		$('#webSite').removeAttr('disabled');
+		$('#email').removeAttr('disabled');
+		$('#btnJoin').removeAttr('disabled');
+		$('#btnLastTrx').removeAttr('disabled');
+		$('#pic1').removeAttr('disabled');
+		$('#pic1Email').removeAttr('disabled');
+		$('#pic1Phone').removeAttr('disabled');
+		$('#pic2').removeAttr('disabled');
+		$('#pic2Email').removeAttr('disabled');
+		$('#pic2Phone').removeAttr('disabled');
+		$('#remark').removeAttr('disabled');
+		$('#btnSave').removeAttr('disabled');
+		$('#btnCancel').removeAttr('disabled');
+	}
+
+	function cancel() {
+		$('#name').val('');
+		$('#name').attr('disabled', 'true');
+		
+		$('#code').val('');
+
+		$('#type').val(0).trigger('change');
+		$('#type').attr('disabled', 'true');
+
+		$('#status').val('11').trigger('change');
+		$('#status').attr('disabled', 'true');
+
+		$('#address').text('');
+		$('#address').attr('disabled', 'true');
+		$('#postCode').val('');
+		$('#postCode').attr('disabled', 'true');
+
+		$('#country').val(0).trigger('change');
+		$('#country').attr('disabled', 'true');
+
+		$('#npwp').val('');
+		$('#npwp').attr('disabled', 'true');
+
+		$('#phone').val('');
+		$('#phone').attr('disabled', 'true');
+
+		$('#fax').val('');
+		$('#fax').attr('disabled', 'true');
+
+		$('#industry').val('');
+		$('#industry').attr('disabled', 'true');
+
+		$('#webSite').val('');
+		$('#webSite').attr('disabled', 'true');
+
+		$('#email').val('');
+		$('#email').attr('disabled', 'true');
+
+		$('#join').val('');
+		$('#btnJoin').attr('disabled', 'true');
+
+		$('#lastTrx').val('');
+		$('#btnLastTrx').attr('disabled', 'true');
+
+		$('#pic1').val('');
+		$('#pic1').attr('disabled', 'true');
+
+		$('#pic1Email').val('');
+		$('#pic1Email').attr('disabled', 'true');
+
+		$('#pic1Phone').val('');
+		$('#pic1Phone').attr('disabled', 'true');
+
+		$('#pic2').val('');
+		$('#pic2').attr('disabled', 'true');
+
+		$('#pic2Email').val('');
+		$('#pic2Email').attr('disabled', 'true');
+
+		$('#pic2Phone').val('');
+		$('#pic2Phone').attr('disabled', 'true');
+
+		$('#remark').text('');
+		$('#remark').attr('disabled', 'true');
+
+		$('#btnSave').attr('disabled', 'true');
+		$('#btnCancel').attr('disabled', 'true');
+
+		objectEdit = null;
+	}
+
+	function edit(id) {
+		objectData = $('#participantTable').bootstrapTable('getRowByUniqueId',
+				id);
+		if(objectData.cliJointDate != null){
+			var datex =  objectData.cliJointDate.split('-');
+			objectData.cliJointDate = datex[2]+'/'+datex[1]+'/'+datex[0];
+		}
+		
+		if(objectData.cliLastTrx != null){
+			var datex = objectData.cliLastTrx.split('-');
+			objectData.cliLastTrx = datex[2]+'/'+datex[1]+'/'+datex[0];
+		}
+		
+		create();
+		
+		$('#code').val(objectData.cliCode);
+		$('#name').val(objectData.cliName);
+		$('#type').val(objectData.cliType).trigger('change');
+		$('#status').val(objectData.cliDataStatus).trigger('change');
+		$('#address').text(objectData.cliAddress);
+		$('#postCode').val(objectData.cliPostCode);
+		$('#country').val(objectData.cliCountryId).trigger('change');
+		$('#npwp').val(objectData.cliTaxId);
+		$('#phone').val(objectData.cliTelepon);
+		$('#fax').val(objectData.cliFax);
+		$('#industry').val(objectData.cliIndustry);
+		$('#webSite').val(objectData.cliWeb);
+		$('#email').val(objectData.cliEmail);
+		$('#join').val(objectData.cliJointDate);
+		$('#lastTrx').val(objectData.cliLastTrx);
+		$('#pic1').val(objectData.cliPic1);
+		$('#pic1Email').val(objectData.cliPic1Email);
+		$('#pic1Phone').val(objectData.cliPic1Telp);
+		$('#pic2').val(objectData.cliPic2);
+		$('#pic2Email').val(objectData.cliPic2Email);
+		$('#pic2Phone').val(objectData.cliPic2Telp);
+		$('#remark').text(objectData.cliRemark);
+
+	}
+
+	function save() {
+		if (saveIsOk()) {
+			$('#modalConfirmation').modal('show');
+			
+		} else {
+			alert('Please complete all required field');
+		}
+	}
+
+	function saveProcess() {
+		var cliName = $('#name').val();
+		var cliType = $('#type').val();
+		var cliDataStatus = $('#status').val();
+		var cliAddress = $('#address').val();
+		var cliPostCode = $('#postCode').val();
+		var cliCountryId = $('#country').val();
+		var cliTaxId = $('#npwp').val();
+		var cliTelepon = $('#phone').val();
+		var cliFax = $('#fax').val();
+		var cliIndustry = $('#industry').val();
+		var cliWeb = $('#webSite').val();
+		var cliEmail = $('#email').val();
+		var cliJointDate = $('#join').val();
+		var cliLastTrx = $('#lastTrx').val();
+		var cliPic1 = $('#pic1').val();
+		var cliPic1Email = $('#pic1Email').val();
+		var cliPic1Telp = $('#pic1Phone').val();
+		var cliPic2 = $('#pic2').val();
+		var cliPic2Email = $('#pic2Email').val();
+		var cliPic2Telp = $('#pic2Phone').val();
+		var cliRemark = $('#remark').val();
+		
+		if(objectData != null){
+			objectData['cliName'] = cliName;
+			objectData['cliType'] = cliType;
+			objectData['cliDataStatus'] = cliDataStatus;
+			objectData['cliAddress'] = cliAddress;
+			objectData['cliPostCode'] = cliPostCode;
+			objectData['cliCountryId'] = cliCountryId;
+			objectData['cliTaxId'] = cliTaxId;
+			objectData['cliTelepon'] = cliTelepon;
+			objectData['cliFax'] = cliFax;
+			objectData['cliIndustry'] = cliIndustry;
+			objectData['cliWeb'] = cliWeb;
+			objectData['cliEmail'] = cliEmail;
+			objectData['cliJointDate'] = cliJointDate;
+			objectData['cliLastTrx'] = cliLastTrx;
+			objectData['cliPic1'] = cliPic1;
+			objectData['cliPic1Email'] = cliPic1Email;
+			objectData['cliPic1Telp'] = cliPic1Telp;
+			objectData['cliPic2'] = cliPic2;
+			objectData['cliPic2Email'] = cliPic2Email;
+			objectData['cliPic2Telp'] = cliPic2Telp;
+			objectData['cliRemark'] = cliRemark;
+		}else{
+			objectData = {
+				idKey:null,
+				cliName:cliName,
+				cliType:cliType,
+				cliDataStatus:cliDataStatus,
+				cliAddress:cliAddress,
+				cliPostCode:cliPostCode,
+				cliCountryId:cliCountryId,
+				cliTaxId:cliTaxId,
+				cliTelepon:cliTelepon,
+				cliFax:cliFax,
+				cliIndustry:cliIndustry,
+				cliWeb:cliWeb,
+				cliEmail:cliEmail,
+				cliJointDate:cliJointDate,
+				cliLastTrx:cliLastTrx,
+				cliPic1:cliPic1,
+				cliPic1Email:cliPic1Email,
+				cliPic1Telp:cliPic1Telp,
+				cliPic2:cliPic2,
+				cliPic2Email:cliPic2Email,
+				cliPic2Telp:cliPic2Telp,
+				cliRemark:cliRemark
+			}
+		}
+		var url = '/gui-re-broker/static-data/participant/save';
+		
+		restPOST('POST', url, objectData).done(function(data) {
+			$('#modalConfirmation').modal('hide');
+			if (data.status == "200") {
+				showAlertSuccess();
+			} else {
+				showAlertFailed(data.message);
+			}
+		});
+	}
+
+	function saveIsOk() {
+		var name = $('#name').val();
+		var address = $('#address').val();
+		var postCode = $('#postCode').val();
+		var npwp = $('#npwp').val();
+		var phone = $('#phone').val();
+		var industry = $('#industry').val();
+		var email = $('#email').val();
+		var join = $('#join').val();
+		var lastTrx = $('#lastTrx').val();
+		var pic1 = $('#pic1').val();
+		var pic1Email = $('#pic1Email').val();
+		var pic1Phone = $('#pic1Phone').val();
+		if(name == '' || address == '' || postCode == ''
+				|| npwp == '' || phone == '' 
+				|| industry == '' || email == ''
+				|| join == '' || lastTrx == '' || pic1 == ''
+				|| pic1Email == '' || pic1Phone == ''){
+			 return false;
+		}
+		
+		return true;
+	}
+
+	function showAlertSuccess() {
+		$(location).attr('href', '#page-top');
+		$('#alertSuccess').fadeTo(2000, 500).slideUp(500, function() {
+			$('#alertSuccess').slideUp(500);
+			location.reload();
+		});
+	}
+
+	function showAlertFailed(msgAlert) {
+		$(location).attr('href', '#page-top');
+		$('#alertFailedMsg').text(msgAlert);
+		$('#alertFailed').fadeTo(3000, 500).slideUp(500, function() {
+			$('#alertFailed').slideUp(500);
+			$('btnModalYesDelete').removeAttr('disabled')
+			$('#btnModalYes').removeAttr('disabled')
+		});
+	}
+
+	/*]]>*/
+</script>
+
+</html>

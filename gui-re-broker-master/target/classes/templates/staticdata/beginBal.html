@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<th:block th:replace="fragments/import :: info-header"/>
+	<th:block th:replace="fragments/import :: css-header"/>
+	<th:block th:replace="fragments/import :: js-header"/>
+	
+	<!-- Auto Numeric -->
+	<script th:src="@{/js/autoNumeric.min.js}"></script>
+</head>
+
+<body id="page-top">
+	<th:block th:replace="fragments/general :: navbar-header"/>
+	
+  	<div id="wrapper">
+		<th:block th:replace="fragments/general :: menu"/>
+		
+    	<div id="content-wrapper">
+      		<div class="container-fluid">
+      		<th:block th:replace="fragments/general :: panel-page"/>
+
+			<!-- CONTENT PAGE -->
+       		<div class="card mb-3">
+          	 <div class="card-header">
+              	<b><span id="titlePage" th:text="${titlePage}"></span></b>
+             </div>
+	             
+             <!-- INQUIRY -->
+	         <div id="beginBalInquiry" class="card-body">	         
+			  	<div class="row justify-content-end">
+			  		<button id="btnImport" class="btn btn-success col-md-2">
+						Export to Excel
+					</button>
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<button id="btnCreate" class="btn btn-primary col-md-2">
+						<i class="fa fa-plus"></i> Create
+					</button>
+					<div id="exportJson"></div>
+				</div>
+				
+				<br>
+				
+				<div class="row justify-content-end">
+					<div class="col-md-2">
+						<select id="dropdownYear" class="select2 form-control" style="width:100%">
+				      	</select>
+				    	<input type= "hidden" id="h_dropdownYear" th:value="${year}"/>
+					</div>
+				</div>
+				
+				<br>
+				
+	            <table
+				  id="tableBeginBal"
+				  data-toggle="table"
+				  data-sortable="true"
+				  data-url=""
+				  data-pagination="true"
+				  data-side-pagination="server"
+				  data-page-size="5"
+				  data-page-list="[5, 10, 25, 50, ALL]">
+				  <thead>
+				    <tr>
+				      <th data-field="coaCode" data-sortable="true">COA</th>
+				      <th data-field="coaDescript">Description</th>
+				      <th data-field="glBalDebit0" data-sortable="true" data-align="right">Debit</th>
+				      <th data-field="glBalCredit0" data-sortable="true" data-align="right">Credit</th>
+				    </tr>
+				  </thead>
+				</table>
+	         </div>
+		         
+	         <div id="beginBalCreateEdit" class="card-body" hidden="true">
+	         	<div id="alertSuccess" class="alert alert-success" style="display: none;">
+			   		<strong>Success!</strong> <span id="alertSuccessMsg" th:text="${M_0005}"></span>
+				</div>
+	         	<div id="alertFailed" class="alert alert-danger" style="display: none;">
+			   		<strong>Failed!</strong> <span id="alertFailedMsg"></span>
+				</div>
+				
+				<input type="hidden" id="h_isCreate"/>
+	         
+			    <div class="row card-body justify-content-end">
+					<button id="btnBack" class="btn btn-danger col-md-2">
+						<i class="fa fa-chevron-left"></i> Back
+					</button>
+				</div>
+
+				<form class="form-horizontal">
+				  <div class="form-group" id="inputCoaNew" hidden="true">
+				    <label class="col-sm-4" for="inputCoaCodeNew">Chart Of Account</label>
+				    <div class="input-group col-md-3">
+						<input type="text" class="form-control" id="inputCoaCodeNew" readonly>
+						<input type= "hidden" id="h_inputCoaCodeNew"/>
+						<div class="input-group-append">
+							<button class="btn btn-primary" id="btnInputCoaCodeNew" type="button" 
+									data-toggle="modal" data-target="#modalLookupCoa">
+								<i class="fas fa-search"></i>
+							</button>
+						</div>
+				  	</div>
+				  </div>
+				  <div class="form-group" id="inputCoaEdit" hidden="true">
+				    <label class="col-sm-4" for="inputCoaCodeEdit">Chart Of Account</label>
+				  	<div class="input-group col-md-6">
+						<input type="text" class="form-control col-sm-2" id="inputCoaCodeEdit" disabled>
+						&nbsp;&nbsp;&nbsp;
+						<input type="text" class="form-control col-sm-4" id="inputCoaDescEdit" disabled>
+				  	</div>
+				  </div>
+				  <div class="form-group">
+				    <label class="col-sm-4" for="inputDebit">Debit</label>
+				    <div class="col-sm-4"> 
+				      <input type="text" class="form-control" id="inputDebit" 
+				      	style="text-align: right;" placeholder="0.00">
+				      <input type= "hidden" id="h_inputDebit"/>
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label class="col-sm-4" for="inputCredit">Credit</label>
+				    <div class="col-sm-4"> 
+				      <input type="text" class="form-control" id="inputCredit"
+				      	style="text-align: right;" placeholder="0.00">
+				      <input type= "hidden" id="h_inputCredit"/>
+				    </div>
+				  </div>
+				</form>
+				<th:block th:replace="fragments/button :: btn-save-cancel"/>
+			</div>
+		   </div>
+		        
+		   <th:block th:replace="fragments/general :: copyright-footer"></th:block>
+
+      	   </div>
+      	   <!-- /.container-fluid -->
+    	</div>
+    	<!-- /.content-wrapper -->
+	</div>
+  	<!-- /#wrapper -->
+
+	<th:block th:replace="fragments/modal :: confirmation-save"/>
+	<th:block th:replace="fragments/general :: scroll-to-top"/>
+	<th:block th:replace="fragments/general :: logout-modal"/>
+	<th:block th:replace="fragments/import :: js-body"/>
+	
+	<div class="modal fade" id="modalLookupCoa" tabindex="-1" role="dialog" 
+			aria-labelledby="modalLookupCoa" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="modalLookupCoaLabel">Chart Of Account</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">					
+					<div class="row card-body justify-content-end">
+						<select id="filterKeyCoa" name="filterKeyCoa" class="custom-select col-md-2">
+								<option value="coaCode">Code</option>
+								<option value="coaDescript">Description</option>
+						</select>
+						<div class="input-group col-md-3">
+							<input type="text" class="form-control" id="filterValueCoa">
+							<div class="input-group-append">
+								<button class="btn btn-primary" id="btnfilterValueCoa" type="button">
+									<i class="fas fa-search"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+
+					<table
+					  id="tableCoa"
+					  data-toggle="table"
+					  data-sortable="true"
+					  data-url=""
+					  data-pagination="true"
+					  data-side-pagination="server"
+					  data-page-size="5"
+					  data-page-list="[5, 10, 25, 50, ALL]">
+					  <thead>
+					    <tr>
+					      <th data-field="coaCode" data-sortable="true">Code</th>
+					      <th data-field="coaDescript" data-sortable="true">Description</th>
+					    </tr>
+					  </thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+		
+	$(function() {	
+		
+		new AutoNumeric('#inputDebit', {
+		    decimalCharacter : '.',
+		    digitGroupSeparator : ',',
+		    maximumValue : '10000000000000000000'
+		});
+		
+		new AutoNumeric('#inputCredit', {
+		    decimalCharacter : '.',
+		    digitGroupSeparator : ',',
+		    maximumValue : '10000000000000000000'
+		});
+		
+		function initializeTableLookupCoa() {
+			var filterKey = $("#filterKeyCoa").val();
+			var filterValue = $( "#filterValueCoa" ).val();
+			var urlInq = /*[[@{/static-data/beginBal/lookup-coa}]]*/;
+			
+			urlInq = urlInq + "?filterKey=" + filterKey + "&filterValue=" + filterValue;
+			$('#tableCoa').bootstrapTable('refreshOptions', {
+		        pageSize: 5,
+		  		paginationSuccessivelySize: 3,
+		        theadClasses: 'thead-dark',
+		        url: urlInq,
+		    });
+		}
+		initializeTableLookupCoa();
+		
+		function initializeTableBeginBal() {
+			var urlInq = /*[[@{/static-data/beginBal/inquiry}]]*/;
+			urlInq = urlInq + '?glBalYear=' + $('#dropdownYear option:selected').text();
+			
+			$('#tableBeginBal').bootstrapTable('refreshOptions', {
+		  		paginationSuccessivelySize: 3,
+		        theadClasses: 'thead-dark',
+		        url: urlInq
+		    });
+		}
+		
+		function initializeDropdown() {
+			return $.ajax({
+				type: 'GET', global: false, dataType: 'json',
+				url: /*[[@{/static-data/beginBal/get-year}]]*/
+			});
+		}
+		initializeDropdown().done(function(data) {
+			$('#dropdownYear').select2({data: data});
+			$('#dropdownYear').select2().val(/*[[${year}]]*/).trigger('change');			
+		});	  	
+		$('#dropdownYear').on('change', function (e) {
+			initializeTableBeginBal();
+		});
+	});
+	
+	$('#btnCreate').click(function() {
+		createEdit(/*[[${titlePageCreate}]]*/);
+		
+		$('#h_isCreate').val('true');
+		$('#inputCoaNew').removeAttr('hidden');
+		$('#inputCoaEdit').attr('hidden', 'true');
+		
+		$('#inputCoaCodeNew').val('');
+		AutoNumeric.getAutoNumericElement('#inputDebit').set('');
+		AutoNumeric.getAutoNumericElement('#inputCredit').set('');
+	  	$('#h_inputCoaCodeNew').val('');
+	  	$('#h_inputDebit').val('');
+	  	$('#h_inputCredit').val('');
+	});
+	$('#btnBack').click(function() {
+		inquiry();
+	});
+	$('#btnImport').click(function() {
+		var urlInq = /*[[@{/static-data/beginBal/export}]]*/;
+		var param = '?glBalYear=' + $('#dropdownYear option:selected').text();
+
+		param = encodeURI(param);
+		
+		window.open(urlInq+param, '_blank');
+	});
+	$('#btnSave').click(function() {
+		if(validationRequired()) {
+			$('#btnModalYes').removeAttr('disabled');
+			$('#modalConfirmation').modal('show');
+		}else {
+			showAlertFailed(/*[[${M_0008}]]*/);
+		}
+	});
+	$('#btnCancel').click(function() {
+		var isCreate = $('#h_isCreate').val();
+		
+		if(isCreate == 'true')
+			$('#inputCoaCodeNew').val($('#h_inputCoaCodeNew').val());
+		
+		AutoNumeric.getAutoNumericElement('#inputDebit').set($('#h_inputDebit').val());
+		AutoNumeric.getAutoNumericElement('#inputCredit').set($('#h_inputCredit').val());
+	});
+	$('#btnModalYes').click(function() {
+		$('#btnModalYes').attr('disabled', 'true');
+		$('#modalConfirmation').modal('hide');
+		doSave();
+	});
+	$('#btnInputCoaCodeNew').click(function() {
+		$("#filterKeyCoa").val('coaCode');
+		$("#filterValueCoa").val('');
+		searchCoa();
+	});
+	$('#btnfilterValueCoa').click(function() {
+		searchCoa();
+	});
+	
+  	$('#tableBeginBal').on('click-row.bs.table', function(e, row, $tr) {
+  		if(row.coaCode.trim()) {
+  			createEdit(/*[[${titlePageEdit}]]*/);
+  			
+  			$('#h_isCreate').val('false');
+  			$('#inputCoaEdit').removeAttr('hidden');
+  			$('#inputCoaNew').attr('hidden', 'true');
+  			
+  			$('#inputCoaCodeEdit').val(row.coaCode);
+  	  		$('#inputCoaDescEdit').val(row.coaDescript);
+  	  		AutoNumeric.getAutoNumericElement('#inputDebit').set(row.glBalDebit0);
+  	  		AutoNumeric.getAutoNumericElement('#inputCredit').set(row.glBalCredit0);
+  	  		
+  	  		$('#h_inputCoaCodeEdit').val(row.coaCode);
+	  		$('#h_inputCoaDescEdit').val(row.coaDescript);
+	  		$('#h_inputDebit').val(row.glBalDebit0);
+	  		$('#h_inputCredit').val(row.glBalCredit0);
+  		}
+  			
+  	});
+  	
+  	$('#tableCoa').on('click-row.bs.table', function(e, row, $tr) {
+  		$('#inputCoaCodeNew').val(row.coaCode);
+  		$('#modalLookupCoa').modal('hide');
+  	});
+	
+  	function createEdit(title) {
+		$('#titlePage').text(title);
+		$('#beginBalCreateEdit').removeAttr('hidden');
+		$('#beginBalInquiry').attr('hidden', 'true');
+	}
+
+	function inquiry() {
+		$('#titlePage').text(/*[[${titlePage}]]*/);
+		$('#beginBalInquiry').removeAttr('hidden');
+		$('#beginBalCreateEdit').attr('hidden', 'true');
+	}
+	
+	function validationRequired() {
+		var isCreate = $('#h_isCreate').val();
+		
+		var coaCode;
+		if(isCreate == 'true') {
+			coaCode = $('#inputCoaCodeNew').val();
+		}else {
+			coaCode = $('#inputCoaCodeEdit').val();
+		}
+		
+		var credit = AutoNumeric.getAutoNumericElement('#inputDebit').get();
+		var debit = AutoNumeric.getAutoNumericElement('#inputCredit').get();
+		
+		if(!debit.trim())
+			debit = '0.00'	
+		if(!credit.trim())
+			credit = '0.00';
+		
+		credit = parseFloat(credit);
+		debit = parseFloat(debit);
+		
+		if(coaCode.trim() && (debit>0 || credit>0)) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	function showAlertSuccess() {
+		$('#alertSuccess').fadeTo(2000, 500).slideUp(500, function() {
+		    $('#alertSuccess').slideUp(500);
+		    location.reload();
+		});
+	}
+	
+	function showAlertFailed(msgAlert) {
+		$('#alertFailedMsg').text(msgAlert);
+		$('#alertFailed').fadeTo(3000, 500).slideUp(500, function() {
+		    $('#alertFailed').slideUp(500);
+		});
+	}
+	
+	function save() {
+		var isCreate = $('#h_isCreate').val();
+		
+		var coaCode;
+		if(isCreate == 'true')
+			coaCode = $('#inputCoaCodeNew').val();
+		else
+			coaCode = $('#inputCoaCodeEdit').val();
+		
+		var year = $('#dropdownYear').select2().val();
+		var debit = AutoNumeric.getAutoNumericElement('#inputDebit').get();
+		var credit = AutoNumeric.getAutoNumericElement('#inputCredit').get();
+		
+		if(!debit.trim())
+			debit = '0.00'	
+		if(!credit.trim())
+			credit = '0.00';
+		
+		var json = {
+			coaCode: coaCode,
+			glBalYear: year,
+			glBalDebit0: debit,
+			glBalCredit0: credit
+		};
+		
+		return $.ajax({type: 'POST', global: false, dataType: 'json',  
+			contentType:'application/json',
+			url: /*[[@{/static-data/beginBal/save}]]*/, 
+			data: JSON.stringify(json), 
+			success: function (data) {
+			}
+		});
+	}
+	
+	function doSave() {
+		save().done(function(isSuccess) {
+			if(isSuccess)
+				showAlertSuccess();
+			else
+				showAlertFailed(/*[[${M_0006}]]*/);
+		});
+	}
+	
+	function searchCoa(){
+		var filterKey = $("#filterKeyCoa").val();
+		var filterValue = $( "#filterValueCoa" ).val();
+		var urlInq = /*[[@{/static-data/beginBal/lookup-coa}]]*/;
+		
+		urlInq = urlInq + "?filterKey=" + filterKey + "&filterValue=" + filterValue;
+		$('#tableCoa').bootstrapTable('refreshOptions', {
+	  		paginationSuccessivelySize: 3,
+	        theadClasses: 'thead-dark',
+	        url: urlInq
+	    });
+	}
+
+	/*]]>*/
+</script>
+
+</html>

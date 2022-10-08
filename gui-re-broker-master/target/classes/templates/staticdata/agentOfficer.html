@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<th:block th:replace="fragments/import :: info-header"/>
+	<th:block th:replace="fragments/import :: css-header"/>
+	<th:block th:replace="fragments/import :: js-header"/>
+	
+	
+	<script th:src="@{/js/autoNumeric.min.js}"></script>
+</head>
+
+<body id="page-top">
+	<th:block th:replace="fragments/general :: navbar-header"/>
+	
+	<div id="wrapper">
+		<th:block th:replace="fragments/general :: menu"/>
+		
+		<div id="content-wrapper">
+			<div class="container-fluid">
+				<th:block th:replace="fragments/general :: panel-page"/>
+
+				<!-- CONTENT PAGE -->
+				<div class="card mb-3">
+					<div class="card-header">
+						<b><span id="titlePage" th:text="${titlePage}"></span></b>
+					</div>
+
+					<!-- INQUIRY -->
+					<div id="agentOfficerIndexPage" class="card-body">     
+						<div class="row card-body justify-content-end">
+							<button id="btnCreate" class="btn btn-primary col-md-2" onclick="create()">
+								<i class="fa fa-plus"></i> Create
+							</button>
+						</div>
+
+						<br>
+
+						<div class="row justify-content-end">
+							<div class="input-group col-md-2 ">
+								<input id="brFilterValue" name="filterValue" type="text"
+								class="form-control">
+								<div class="input-group-append">
+									<button id = btn_brFilterValue class="btn btn-primary" type="button">
+										<i class="fas fa-search"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+
+						<br>
+
+						<table
+						id="tableAgentOfficer"
+						data-toggle="table"
+						data-sortable="true"
+						data-url=""
+						data-side-pagination="server"
+						data-pagination="true"
+						data-page-size="5"
+						data-page-list="[5, 10, 25, 50, ALL]">
+						<thead>
+							<tr>
+								<th data-field="saCode" data-sortable="true">Code</th>
+								<th data-field="saName">Name</th>
+								<th data-field="saOfficeLabel">Office</th>
+								<th data-field="saTaxId">Tax ID</th>
+								<th data-field="saCommision">Commision (%)</th>								
+								<th data-field="saTypeDesc">Type</th>
+								<th data-field="saDataStatusDesc">Status</th>
+								<!-- <th data-field="action">Action</th> -->
+								
+							</tr>
+						</thead>
+					</table>
+				</div>
+
+				<div id="agentOfficerCreateEdit" class="card-body" hidden="true">
+					<div id="alertSuccess" class="alert alert-success" style="display: none;">
+						<strong>Success!</strong> <span id="alertSuccessMsg" th:text="${M_0005}"></span>
+					</div>
+					<div id="alertFailed" class="alert alert-danger" style="display: none;">
+						<strong>Failed!</strong> <span id="alertFailedMsg"></span>
+					</div>
+
+					<input type="hidden" id="h_isCreate"/>
+
+					<form id="formInputAgentOfficer" class="form-horizontal">
+
+						<!-- Button Back -->
+						<div class="row justify-content-end">
+							<div class="col-md-2">
+								<button class="btn btn-danger col-md-12" onclick="back()">
+									<i class="fa fa-chevron-left"></i> Back
+								</button>
+							</div>
+						</div>
+						<br>
+						
+						<!-- Row 1 input -->
+						<div class="row">
+							<!-- first row -->
+							<div class="col-md-3">
+								<label>Code*</label> 
+								<input type="text" readonly	name="code" id="saCode" class="form-control"/>
+								<input type="hidden" id="h_idKey"/>
+							</div>
+
+							<div class="col-md-2">
+								<label>Office*  </label>
+								<select name="office" id="saOfficeId" class="select2" style="width:100%"></select>
+								<input type="hidden" id="h_saOfficeId"/>
+							</div>
+
+							<div class="col-md-2">
+								<label>Type*</label>
+								<select id="saType" class="select2" style="width:100%">
+									<option value='0'>Agent</option>
+									<option value='1'>Internal</option>
+									<option value='2'>Others</option>
+								</select>
+								<input type="hidden" id="h_saType"/>
+							</div>
+						</div>
+
+						<br>
+						<!-- second row -->
+						<div class="row">
+							<div class="col-md-6">
+								<label>Name*</label>
+								<input type="text" name="name" id="saName" class="form-control col-md-12"/>
+								<input type="hidden" id="h_saName"/>
+							</div>
+							<div class="col-md-3">
+								<label>Tax ID</label> 
+								<input type="text" name="tax id" id="saTaxId" class="form-control"/>
+								<input type="hidden" id="h_saTaxId"/>
+							</div>
+						</div>
+
+						<br>
+						<!-- third row -->
+						<div class="row">
+							<div class="col-md-5">
+								<label>EMAIL</label>
+								<input type="text" name="name" id="saEmail" class="form-control col-md-12"/>
+								<input type="hidden" id="h_saEmail"/>
+							</div>
+							<div class="col-md-2">
+								<label>Phone</label>
+								<input type="text" name="name" id="saPhone" class="form-control col-md-12"/>
+								<input type="hidden" id="h_saPhone"/>
+							</div>
+							<div class="form-group">
+								<label for="datepickerHoliDate">Joint Date*  </label>
+								<div class="input-group">
+									<input type="text" class="form-control datepicker col-md-12" id="datepickerHoliDate" placeholder="dd-MM-yyyy" 
+									maxlength="10" disabled>
+									<div id="btnDatepickerHoliDate" class="input-group-append">
+										<button class="btn btn-primary" type="button">
+											<span class="fa fa-calendar"></span>
+										</button>
+									</div>
+								</div>
+								<input type="hidden" id="h_datepickerHoliDate"/>
+							</div>
+						</div>
+						<br>
+						<!-- fourth row -->
+						<div class="row">
+							<div class="col-md-4">
+								<label>License</label>
+								<input type="text" name="name" id="saLicense" class="form-control col-md-12"/>
+								<input type="hidden" id="h_saLicense"/>
+							</div>
+							<div class="col-sm-2">
+								<label>Commission (%)</label>
+								<input type="text" class="form-control" id="saCommision"
+								style="text-align: right;" placeholder="0.00" value="0.0000">
+								<input type="hidden" id="h_saCommision"/>
+							</div>
+							<div class="col-sm-2">
+								<label>Status*  </label>
+								<select id="saDataStatus" class="select2" style="width:100%">
+								</select>
+								<input type="hidden" id="h_saDataStatus"/>
+							</div>
+							
+						</div>
+						<!-- button row -->
+						<br>
+						<div class="row justify-content-md-center">
+							<button id="btnSave" class="btn btn-success col-md-1" style="margin:5px;" >Save</button>
+							<button id="btnCancel" class="btn btn-success col-md-1" style="margin:5px;" >Cancel</button>
+						</div>
+					</form>
+					<!-- end form input -->
+				</div>
+			</div>
+		</form>
+		<!-- <th:block th:replace="fragments/button :: btn-save-cancel"/> -->
+	</div>
+</div>
+
+
+</div>
+<!-- /.container-fluid -->
+<th:block th:replace="fragments/general :: copyright-footer"></th:block>
+</div>
+<!-- /.content-wrapper -->
+
+<th:block th:replace="fragments/modal :: confirmation-save" />
+<th:block th:replace="fragments/general :: scroll-to-top"/>
+<th:block th:replace="fragments/general :: logout-modal"/>
+<th:block th:replace="fragments/import :: js-body"/>
+</div>
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	
+		
+	$(function() {
+	
+	new AutoNumeric('#saCommision', {
+	    decimalCharacter : '.',
+	    digitGroupSeparator : ',',
+	    maximumValue : '100',
+	    minimumValue: '0',
+		decimalPlaces : 4,
+	    watchExternalChanges: true,
+        emptyInputBehavior: 'zero',
+        allowDecimalPadding: 'true' 
+		});
+	});
+	$('document').ready(function() {
+
+	/**
+	 * Drop down Office 
+	 */
+	 $.ajax({
+	 	url: /*[[@{/static-data/dropdown-office}]]*/,
+	 	type: 'GET', dataType:'json'
+	 }).then(function(data) {
+	 	$('#saOfficeId').select2({
+	 		width: '100%',
+	 		data:data
+	 	});
+	 });
+	 
+	/**
+	 * Dropdown Status Initialize 
+	 */
+	 function initializeDropdown() {
+	 	return $.ajax({
+	 		type: 'GET', global: false, dataType: 'json',
+	 		url: /*[[@{/static-data/dropdown-status}]]*/
+	 	});
+	 }
+	 initializeDropdown().done(function(data) {
+	 	$('#saDataStatus').select2({width:'100%', data : data});
+	 });
+	 
+	/*
+	 * Datepicker initialize
+	 */
+	 $('#datepickerHoliDate').datepicker({
+	 	dateFormat: 'dd-mm-yy',
+	 	minDate: new Date(/*[[${appDateNextDP}]]*/),
+	 });
+
+	/**
+	 * Button Save on GUI action 
+	 */
+	 $('#btnSave').click(function() {
+	 	$('#btnSave').attr('disabled', true);
+	 	$('#modalConfirmation').modal('show');
+	 }); 
+
+	/**
+	 * Button Cancel on GUI action 
+	 */
+	 $('#btnCancel').click(function() {
+	 	//reset();
+	 	$('#agentOfficerIndexPage').removeAttr('hidden');
+	 });
+
+	/**
+	 * Modal Confirmation - YES 
+	 */
+	 $('#btnModalYes').click(function() {
+	 	$('#btnModalYes').attr('disabled', 'true');
+	 	$('#modalConfirmation').modal('hide');
+	 	console.log("at modal show");
+	 	save();
+	 });
+
+	/**
+	* Button Search 
+	*/
+	$('#btn_brFilterValue').click(function() {
+		inquiry();
+	});
+	
+	/**
+	 * Inquiry Table 
+	 */
+	 inquiry();
+
+	/**
+	* Detail Data Inquiry Table
+	*/
+
+	$('#tableAgentOfficer').on('click-row.bs.table', function(e, row, $tr) {$('#h_idKey').val();
+		console.log("here ", row)
+		$('#h_idKey').val(row.idKey);
+		$('#saCode').val(row.saCode);
+		$('#saOfficeId').val(row.saOfficeId);
+		$('#saType').select2().val(row.saType).trigger('change');
+		$('#saName').val(row.saName);
+		$('#saTaxId').val(row.saTaxId);
+		$('#saEmail').val(row.saEmail);
+		$('#saPhone').val(row.saPhone);
+		$('#saLicense').val(row.saLicense);
+		$('#saDataStatus').select2().val(row.saDataStatus).trigger('change');
+		$('#datepickerHoliDate').val(row.saJoint);
+		$('#saCommision').val(row.saCommision);
+		$('#btnAdd').removeAttr('disabled');
+		$('#agentOfficerCreateEdit').removeAttr('hidden');
+		$('#agentOfficerIndexPage').attr('hidden', true);
+		
+		$('#titlePage').text('AGENT OFFICER | EDIT');
+		
+	});
+	
+});    
+
+	function inquiry(){
+		var url = /*[[@{/static-data/agentOfficer/inquiry}]]*/;
+		url = url + '?filterValue=' + $('#brFilterValue').val();
+
+		/*url = url + '?filterValue=F';*/
+
+	/**
+	 * Inquiry Table 
+	 */
+	 
+	 $('#tableAgentOfficer').bootstrapTable('refreshOptions', {
+	 	theadClasses: 'thead-dark',
+	 	url: url
+	 });
+	}
+
+
+	function create(){
+		$('#titlePage').text('AGENT OFFICER | NEW');
+		$('#agentOfficerCreateEdit').removeAttr('hidden');
+		$('#agentOfficerIndexPage').attr('hidden', true);	
+		$("#datepickerHoliDate").datepicker("setDate", new Date());
+
+	}
+
+	function back(){
+		$('#titlePage').text(/*${titlePage}*/);
+		$('#agentOfficerCreateEdit').attr('hidden', true);
+		$('#agentOfficerIndexPage').removeAttr('hidden');
+		/*
+		$('#tableAgentOfficer').bootstrapTable('refreshOptions', {
+			theadClasses: 'thead-dark',
+			url: url
+		});
+		*/
+	}
+
+	$('#btnSave').click(function() {
+		console.log("btnSave hit");
+		var msgRequaired = /*[[${M_0008}]]*/;
+
+		var val = validationRequired();
+		msgRequaired = msgRequaired + ": " + val + ".";
+
+		if(val.length>0) {
+			showAlertFailed(msgRequaired);
+			$('#modalConfirmation').modal('hide');
+		} else {
+			console.log("modal show");
+			$('#btnSave').attr('disabled', true);
+			$('#modalConfirmation').modal('show');
+		}
+	});
+
+	function validationRequired() {		
+		var field = [];
+
+		var curr = $('#saName').val();
+		if(!curr.trim())
+			field.push("Name");
+
+		var status = $('#saDataStatus').val();
+		if(!status.trim())
+			field.push("Data Status");
+
+		return field;
+	}
+
+	function removeAdd(id) {
+		$('#tableAgentOfficer').bootstrapTable('removeByUniqueId', id);
+
+		var rows = $('#tableAgentOfficer').bootstrapTable('getData');	
+		$('#tableAgentOfficer').bootstrapTable('load', rows);
+	}
+
+	function save() {
+
+		var p_idkey = $('#h_idKey').val();
+		var p_code = $('#saCode').val();
+		var p_saOfficeId = $('#saOfficeId option:selected').val();
+		var p_type = $('#saType option:selected').val();
+		var p_name = $('#saName').val();
+		var p_tax = $('#saTaxId').val();
+		var p_email = $('#saEmail').val();
+		var p_Phone = $('#saPhone').val();
+		var p_license = $('#saLicense').val();
+		var p_status = $('#saDataStatus option:selected').val();
+		var p_date = $('#datepickerHoliDate').val();
+		var p_commision = $('#saCommision').val();
+
+		var action = "<button class=\"btn btn-danger\" onclick=\"tr12Edit('"+p_idkey+"')\">" 
+		+ "<i class=\"fa fa-trash\"></i>" 
+		+ "</button>";
+		
+		var datas = {
+			idKey: p_idkey,
+			saCode: p_code,
+			saOfficeId:p_saOfficeId,
+			saType:p_type,
+			saName: p_name,
+			saTaxId: p_tax,
+			saEmail: p_email,
+			saPhone: p_Phone,
+			saJointDate: p_date,
+			saLicense: p_license,
+			saDataStatus: p_status,
+			saCommision: p_commision,
+			action : action
+		}
+		
+		console.log("json ", datas)
+		$.ajax({
+			type: 'POST', 
+			global: false, 
+			dataType: 'json',  
+			contentType:'application/json',
+			url: /*[[@{/static-data/agentOfficer/save}]]*/, 
+			data: JSON.stringify(datas), 
+			complete:function(jqXHR, textStatus){
+				if(textStatus == "success") {
+					showAlertSuccess();
+					reset();
+				}else {
+					showAlertFailed(/*${M_0006}*/);
+					$('#btnSave').removeAttr('disabled');
+				} 
+			}
+		}); 
+		
+		$('#btnModalyes').removeAttr('disabled');
+		$('#modalConfirmation').modal('hide');
+	}
+
+	function reset(){
+		$('#saCode').val($('#h_saCode').val());
+		$('#saName').val($('#h_saName').val());
+		$('#saEmail').val($('#h_saEmail').val());
+		$('#saPhone').val($('#h_saPhone').val());
+		$('#saOfficeId').val($('#h_saOfficeId').val());
+		$('#saTaxId').val($('#h_saTaxId').val());
+		$('#saCommision').val($('#h_saCommision').val());
+		
+		$('#saType').select2().val($('#h_saType').val()).trigger('change');
+		$('#saDataStatus').select2().val($('#h_saDataStatus').val()).trigger('change');
+		$('#saLicense').val($('#h_saLicense').val());
+		
+		$('#btnSave').removeAttr('disabled');
+	}
+
+	function showAlertSuccess() {
+		$(location).attr('href','#page-top');
+		$('#alertSuccess').fadeTo(2000, 500).slideUp(500, function() {
+			$('#alertSuccess').slideUp(500);
+		});	
+	}
+
+	function showAlertFailed(msgAlert) {
+		$(location).attr('href','#page-top');
+		$('#alertFailedMsg').text(msgAlert);
+		$('#alertFailed').fadeTo(3000, 500).slideUp(500, function() {
+			$('#alertFailed').slideUp(500);
+		});
+	}
+
+
+	/*]]>*/
+</script>    
+
+</html>

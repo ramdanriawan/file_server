@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ClaimsInternalMemo" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="40" bottomMargin="40" uuid="6852d899-f65c-430b-8217-16a9005a12d3">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="43"/>
+	<parameter name="P_START_DATE" class="java.util.Date"/>
+	<parameter name="P_END_DATE" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_CEDANT" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_CCY" class="java.lang.String"/>
+	<parameter name="P_APP_DATE" class="java.util.Date"/>
+	<queryString>
+		<![CDATA[SELECT
+	A.TX_INS_ID CEDANT_ID,
+	(SELECT CLI_NAME FROM MA0005 WHERE CLI_CODE = A.TX_INS_ID) AS CEDANT,
+	A.TX_CURR_ID,
+	A.RECEIVED,
+	(SELECT CO_NAME FROM MA0010) AS CO_NAME
+FROM (SELECT T15D.TX_INS_ID, T15.TX_CURR_ID,
+			SUM(T15D.TX_INS_RECEIVED_RC - T15D.TX_INS_RECEIVED_PY) RECEIVED
+		FROM TR0015 T15, TR0015D T15D
+			WHERE T15.TX_VOUCHER_ID = T15D.TX_VOUCHER_ID
+			AND T15D.TX_INS_RDATE >= $P{P_START_DATE}
+			AND T15D.TX_INS_RDATE <= $P{P_END_DATE}
+			AND T15D.TX_INS_RECEIVED_PY <> T15D.TX_INS_RECEIVED_RC
+			AND T15D.TX_CURR_ID = $P{P_CCY}
+			AND T15D.TX_INS_ID = $P{P_CEDANT}
+			GROUP BY T15D.TX_INS_ID, T15.TX_CURR_ID) A
+ORDER BY A.TX_CURR_ID]]>
+	</queryString>
+	<field name="CEDANT_ID" class="java.lang.String"/>
+	<field name="CEDANT" class="java.lang.String"/>
+	<field name="TX_CURR_ID" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="RECEIVED" class="java.math.BigDecimal"/>
+	<field name="CO_NAME" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<group name="footer">
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="0" y="0" width="90" height="20" uuid="6e744e75-3099-41e7-abb7-bb9d2fc7da67"/>
+					<box>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="11" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["TO"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="114" y="0" width="400" height="20" uuid="601c866d-9520-4879-9fda-0a462d589ece"/>
+					<box>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="11" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["BOD"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="90" y="0" width="24" height="20" uuid="ba7d9382-477b-44da-92c9-f30317824204"/>
+					<box>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="11" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[":"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="20">
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="0" y="0" width="90" height="20" uuid="39d1f095-72ca-43ce-a73c-e957a1f5a4c3"/>
+					<box>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="11" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["FROM"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="114" y="0" width="400" height="20" uuid="305a7889-f5d4-4872-a8dc-6d5fe05492fa"/>
+					<box>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="11" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Claim Department"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="90" y="0" width="24" height="20" uuid="41a84b51-f69f-4e50-bab4-be179d1ce370"/>
+					<box>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="11" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[":"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="20">
+				<textField>
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="90" height="20" uuid="90c6c47f-cdff-4839-a633-59565f037b87"/>
+					<box>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="11" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["DATE"]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd MMMMM yyyy">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="114" y="0" width="400" height="20" uuid="a885b1b7-eaea-45fa-8497-379ff93f5e45"/>
+					<box>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="11" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{P_APP_DATE}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="90" y="0" width="24" height="20" uuid="adef7e91-8b19-4bb5-98c0-97ae9e65472b"/>
+					<box>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="11" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[":"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="20">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="90" height="20" uuid="0297521a-8a4c-44d8-8fb4-5224356985ff"/>
+					<box>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="11" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["SUBJECT"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="114" y="0" width="400" height="20" uuid="bf8a39ac-7d26-4553-b1be-0f30c2847835"/>
+					<box>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="11" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Settlement Claim for "
++ $F{CEDANT}
++ " ("
++ new SimpleDateFormat("dd/MM/yyyy").format($P{P_START_DATE})
++ " - "
++ new SimpleDateFormat("dd/MM/yyyy").format($P{P_END_DATE})
++ ")"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="90" y="0" width="24" height="20" uuid="dab513fa-cec9-4ec9-9590-159ba2fdae7c"/>
+					<box>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Arial" size="11" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[":"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="40">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="14" y="10" width="25" height="20" uuid="74fb2062-c66b-4981-afa1-8b631be3cae8"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" isBold="false"/>
+						<paragraph leftIndent="5"/>
+					</textElement>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="39" y="10" width="45" height="20" uuid="96af7662-a2fd-46fe-9fb2-1be87e9c80a2"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" isBold="false"/>
+						<paragraph leftIndent="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Urgent"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="334" y="10" width="65" height="20" uuid="caeaf5aa-b926-4482-8bfa-2527e66e20d5"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" isBold="false"/>
+						<paragraph leftIndent="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Please Reply"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="117" y="10" width="65" height="20" uuid="0e0b781c-0316-4176-bffd-a1f2f5584876"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" isBold="false"/>
+						<paragraph leftIndent="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA["For Review"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="217" y="10" width="85" height="20" uuid="4ed17cc6-ea25-4d02-9288-30681c13c82c"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" isBold="false"/>
+						<paragraph leftIndent="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Please Comment"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="189" y="10" width="25" height="20" uuid="d10612d0-3845-4428-9d0a-c85aac4a942e"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" isBold="false"/>
+						<paragraph leftIndent="5"/>
+					</textElement>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="410" y="10" width="25" height="20" uuid="ba121870-a6b4-45a3-8c5b-3abb9a3f2c90"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" isBold="false"/>
+						<paragraph leftIndent="5"/>
+					</textElement>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="92" y="10" width="25" height="20" uuid="882048b4-459b-438f-97fd-a8fc585b67ec"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" isBold="false"/>
+						<paragraph leftIndent="5"/>
+					</textElement>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="309" y="10" width="25" height="20" uuid="97e06abd-1506-4f1e-9cae-e2801e244d8a"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" isBold="false"/>
+						<paragraph leftIndent="5"/>
+					</textElement>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="435" y="10" width="75" height="20" uuid="4a554a31-ba1c-4893-9323-f7aa417ffda5"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" isBold="false"/>
+						<paragraph leftIndent="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Please Recycle"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="10">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="514" height="10" uuid="3d46d493-c09e-44ef-b1ed-328dd46645df"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" isBold="false"/>
+						<paragraph leftIndent="5"/>
+					</textElement>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="25" splitType="Prevent">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="20" uuid="94e87c5b-a10d-47dd-bea6-b51e7a4e65e1"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Dear Sirs,"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="50">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="50" uuid="488e3b66-9404-466f-814a-2d7c2be9c9ac"/>
+					<textElement textAlignment="Justified" markup="styled">
+						<font fontName="Arial" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Following to the received of claim recovery from reinsurer and the above subject, herewith we would like to get your approval for the claim recovery settlement of "
++ $F{CEDANT}
++ " which will be executed on ………..............……..  with summary as follows:"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="25">
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="0" y="0" width="398" height="20" uuid="e0a589ab-9712-4d06-891a-0fee7cb31085"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Claim recovery settlement amounting to "
++ $F{TX_CURR_ID}
++ ". "
++ new java.text.DecimalFormat("#,##0.00").format($F{RECEIVED})
++ "."]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="25">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="20" uuid="e2799efa-bd8b-40be-a2d1-37ef51294073"/>
+					<textElement textAlignment="Justified">
+						<font fontName="Arial" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Detail of the above propose claim recovery settlement as per attached."]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="110">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="1" y="7" width="240" height="20" uuid="b516c2fc-ac74-48a1-bb86-dc8566041fed"/>
+					<textElement textAlignment="Justified">
+						<font fontName="Arial" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Kind regards,"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="1" y="90" width="240" height="20" uuid="b9aab63a-960e-4b20-b448-e2fcfff4de06"/>
+					<textElement textAlignment="Justified">
+						<font fontName="Arial" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Claim Department"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="276" y="7" width="240" height="20" uuid="6814b367-0367-4082-bf41-f13bc3b2e993"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Approved by,"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="276" y="90" width="240" height="20" uuid="9ea23b68-b629-422b-bba4-066729ad22a6"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["(				)"]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="60" splitType="Stretch">
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="516" height="20" uuid="49177c00-bedb-40d2-a7ea-a8ff5b14b1ba"/>
+				<box>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CO_NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="0" y="25" width="516" height="20" uuid="e58b79bf-25eb-47f1-b066-66766284ee06"/>
+				<box>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["INTERNAL MEMO"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<lastPageFooter>
+		<band height="26">
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="170" height="13" uuid="3dfeca82-66d1-45c3-a551-afa5c8e15882"/>
+				<box>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true" isItalic="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["CC :"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="13" width="515" height="13" uuid="8a32f5a4-1343-4ac8-87bd-939422ff7014"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Arial" isBold="false" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Finance/Accounting"]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+</jasperReport>

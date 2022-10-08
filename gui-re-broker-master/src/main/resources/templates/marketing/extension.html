@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<th:block th:replace="fragments/import :: info-header" />
+<th:block th:replace="fragments/import :: css-header" />
+<th:block th:replace="fragments/import :: js-header" />
+
+<script th:src="@{/js/autoNumeric.min.js}"></script>
+
+</head>
+
+<body id="page-top">
+	<th:block th:replace="fragments/general :: navbar-header" />
+	<div id="wrapper">
+		<th:block th:replace="fragments/general :: menu" />
+		<div id="content-wrapper">
+			<div class="container-fluid">
+				<th:block th:replace="fragments/general :: panel-page" />
+				<!-- CONTENT PAGE STARTS HERE-->
+				<div id="cart" class="card mb-3">
+					<div id="divContentHeader" class="card-header">
+						<b><span id="titlePage" th:text="${titlePage}"></span></b>
+					</div>
+					<div class="card-body">
+						<div id="alertSuccess" class="alert alert-success" style="display: none;">
+							<strong>Success!</strong> <span id="alertSuccessMsg"
+								th:text="${M_0005}"></span>
+						</div>
+						<div id="alertFailed" class="alert alert-danger" style="display: none;">
+							<strong>Failed!</strong> <span id="alertFailedMsg"></span>
+						</div>
+						<div id="extensionIndexPage">
+							<div class="row">
+								<div class="col-md-1"></div>
+								<div class="col-md-2">
+									<label>Type of Cover</label>
+								</div>
+								<div class="col-md-3">
+									<select name="dropdownTypeCover" id="dropdownTypeCover"
+										class="form-control col-md-12" required>
+										<option value=""></option>
+									</select>
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-md-1"></div>
+								<div class="col-md-2">
+									<label>Client</label>
+								</div>
+								<div class="col-md-3">
+									<div class="input-group">
+										<input id="clientDesc" name="clientDesc" type="text" class="form-control" disabled> 
+										<input id="client" name="client" type="text" class="form-control" hidden="true"/>
+				
+										<div class="input-group-append">
+											<button id='btnClientSearch' class="btn btn-primary" type="button" 
+												data-toggle="modal" data-target="#client-modal">
+												<i class="fas fa-search"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<br>
+							<br>
+							<th:block th:replace="fragments/button :: btn-search-reset"></th:block>
+							<br>
+							<table id="tableExtension" 
+								   data-toggle="table"
+								   data-sortable="true"
+								   data-url=""
+								   data-side-pagination="server"
+								   data-pagination="true"
+								   data-page-size="5"
+								   data-unique-id="idKey" 
+								   data-page-list="[5, 10, 25, 50, ALL]">
+								<thead>
+									<tr>
+										<th data-field="trxDate">Date</th>
+										<th data-field="trxTrxId">Type</th>
+										<th data-field="trxVoucherId">Voucher ID</th>
+										<th data-field="trxCoverCode">Type of Cover</th>
+										<th data-field="cliName">Client</th>
+										<th data-field="trxDescription">Description</th>
+										<th data-field="trxInsStartStr">Period</th>
+										<th data-field="trxInsEndStr">Period</th>
+										<th data-field="trxCurrId">Curr</th>										
+										<th data-field="trxTsiAmountStr" data-halign="right" data-align="right">TSI</th>
+										<th data-field="createBy">Created</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+						
+						<!-- EDIT PAGE STARTS HERE -->
+						<div id="extensionCreateEdit" class="card-body" hidden="true">
+						<!-- Button Back -->
+			              <div class="row justify-content-end">
+			                <div class="col-md-2">
+			                  <button class="btn btn-danger col-md-12" onclick="back()">
+			                    <i class="fa fa-chevron-left"></i> Back
+			                  </button>
+			                </div>
+			              </div>
+			              <br />
+						<input type="hidden" id="h_officer"/>
+						<input type="hidden" id="h_voucherId"/>
+						<input type="hidden" id="h_currency"/>
+						<input type="hidden" id="h_interest"/>
+						<input type="hidden" id="h_typeOfCov"/>
+							<div class="row">
+								<div class="col-md-3">
+									<label>Reference</label> <br>
+									<div class="input-group"> 
+									<input id="ref" name="ref" type="text"
+										class="form-control col-md-2" disabled/>
+									<input id="refNum" name="refNum" type="text"
+										class="form-control col-md-10" disabled/>
+									</div>
+								</div>
+								<div class="col-md-3">
+									<label>Reinsurance</label> <br>
+									<input id="rein" name="rein" type="text"
+										class="form-control" disabled/>
+								</div>
+								<div class="col-md-3">
+									<label>Client/Cedant</label> <br>
+									<input id="cedant" name="cedant" type="text"
+										class="form-control" disabled/>
+								</div>
+								<div class="col-md-3">
+									<label>Type of Cover</label> <br>
+									<input id="typeofcov" name="typeofcov" type="text"
+										class="form-control" disabled/>
+								</div>
+							</div>
+							<br />
+							<div id="cart" class="card mb-3">
+								<div class="card-body">
+									<div class="row">
+										<div class="col-md-1">
+											<label>*Currency</label> <br>
+											<select name="dropdownCurr" id="dropdownCurr" 
+													class="form-control col-md-12" required></select>
+										</div>
+										<div class="col-md-1">
+											<label>*Exchange</label> <br>
+											<input id="exc" name="exc" type="text"
+												style="text-align: right;" placeholder="0.00" class="form-control" required/>
+										</div>
+										<div class="col-md-2">
+											<label>*TSI</label> <br>
+											<input id="tsi" name="tsi" type="text"
+												style="text-align: right;" placeholder="0.00" class="form-control" disabled required/>
+										</div>
+										<div class="col-md-2">
+											<label>*New Portion(%)</label> <br>
+											<input id="portion" name="portion" type="text"
+												style="text-align: right;" placeholder="0.00" class="form-control" required/>
+										</div>
+										<div class="col-md-2">
+											<label>*Transaction</label> <br>
+											<div class="input-group">
+												<input id="transDate" name="transDate" type="text"
+													class="form-control" placeholder="dd/MM/yyyy" disabled required>
+												<div class="input-group-append">
+													<button id='btnTransDate' class="btn btn-primary" type="button">
+														<i class="fas fa-calendar"></i>
+													</button>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-2">
+											<label>*Period</label> <br>
+											<div class="input-group">
+												<input id="periodFrom" name="periodFrom" type="text"
+													class="form-control" placeholder="dd/MM/yyyy" disabled required>
+												<div class="input-group-append">
+													<button id='btnPeriodFrom' class="btn btn-primary" type="button">
+														<i class="fas fa-calendar"></i>
+													</button>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-2">
+											<label>&nbsp;</label> <br>
+											<div class="input-group">
+												<input id="periodTo" name="periodTo" type="text"
+													class="form-control" placeholder="dd/MM/yyyy" disabled required>
+												<div class="input-group-append">
+													<button id='btnPeriodTo' class="btn btn-primary" type="button">
+														<i class="fas fa-calendar"></i>
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<br />
+									<div class="row">
+										<div class="col-md-12">
+											<label>*Endorsement Description</label> <br>
+											<textarea class="form-control" id="interest"
+												name="interest" rows="16" required></textarea>
+										</div>
+									</div>
+									<br />
+									<label>Premium</label> <br>
+									<div class="row">
+										<div class="col-md-1">
+											<label>&nbsp;</label>
+										</div>
+										<div class="col-md-1">
+											<label>Client</label>
+										</div>
+										<div class="col-md-2">
+											<div class="input-group">
+												<input id="clientDate" name="clientDate" type="text"
+													class="form-control" placeholder="dd/MM/yyyy" disabled>
+												<div class="input-group-append">
+													<button id='btnClientDate' class="btn btn-primary" type="button">
+														<i class="fas fa-calendar"></i>
+													</button>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-3">
+											<input id="cliAmount" name="cliAmount" type="text"
+												style="text-align: right;" placeholder="0.00" class="form-control" required/>
+										</div>
+									</div>
+									<br />
+									<div class="row">
+										<div class="col-md-1">
+											<label>&nbsp;</label>
+										</div>
+										<div class="col-md-1">
+											<label>Reinsurance</label>
+										</div>
+										<div class="col-md-2">
+											<div class="input-group">
+												<input id="reinDate" name="reinDate" type="text"
+													class="form-control" placeholder="dd/MM/yyyy" disabled>
+												<div class="input-group-append">
+													<button id='btnReinDate' class="btn btn-primary" type="button">
+														<i class="fas fa-calendar"></i>
+													</button>
+												</div>
+											</div>
+										</div>
+										<div class="col-md-3">
+											<input id="reinAmount" name="reinAmount" type="text"
+												style="text-align: right;" placeholder="0.00" class="form-control" required/>
+										</div>
+									</div>
+									<br>
+									<div class="custom-control custom-checkbox">
+										<input type="checkbox" class="custom-control-input" id="DCNvoucher">
+										<label class="custom-control-label" for="DCNvoucher">D/C Notes Voucher</label>
+									</div>
+									<br>
+									<div class="row">
+										<div class="col-md-1">
+											<label>&nbsp;</label>
+										</div>
+										<div class="col-md-1">
+											<label>Due Date</label>
+										</div>
+										<div class="col-md-2">
+											<div class="input-group">
+												<input id="dueDate" name="dueDate" type="text"
+													class="form-control" placeholder="dd/MM/yyyy" disabled>
+												<div class="input-group-append">
+													<button id='btnDueDate' class="btn btn-primary" type="button">
+														<i class="fas fa-calendar"></i>
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<br>
+									<th:block th:replace="fragments/button :: btn-save-cancel" />
+								</div>
+							</div>
+							<br />
+							<div id="cart" class="card mb-3">
+								<div class="card-body">
+								<label>Upload Data</label> <br><br>
+									<div class="row">
+										<div class="col-md-2">
+											<label>Format</label>
+										</div>
+										<div class="col-md-4">
+											<select name="dropdownFormat" id="dropdownFormat" 
+													class="form-control col-md-12" required></select>
+										</div>
+									</div>
+									<br />
+									<div class="row">
+										<div class="col-md-2">
+											<label>Description</label>
+										</div>
+										<div class="col-md-7">
+											<input id="description" name="description" type="text"
+												class="form-control"/>
+										</div>
+									</div>
+									<br />
+									<div class="row">
+										<div class="col-md-9">
+											<input type="file" class="form-control" id="t7-inputUpload" name="t7-inputUpload" accept=".pdf, .xls, .xlsx">
+										</div>
+										<div class="col-md-1">
+											<button id="t7-upload" class="btn btn-success col-md-12">Upload</button>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- EDIT PAGE ENDS HERE -->
+					</div>
+				</div>
+				<br />
+				<div id="previewReport" class="card-body" hidden="true">
+						<table id="tableSend" data-toolbar-align="right"
+							data-toggle="table" data-pagination="true" data-page-size="10">
+							<thead>
+								<tr>
+									<th data-field="action" data-halign="center" data-align="center">Action</th>
+									<th data-field="name">Name</th>
+									<th data-field="document">Document</th>
+								</tr>
+							</thead>
+						</table>
+						
+						<div id="previewReportHtml"></div>
+					</div>
+				<!-- CONTENT PAGE ENDS HERE-->
+				
+				<!-- Modal Client -->
+				<div class="modal fade" id="client-modal" tabindex="-1"
+					role="dialog" aria-labelledby="client-modal" aria-hidden="true">
+					<div class="modal-dialog modal-lg" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="client-modal-label">Client</h5>
+								<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<div class="row card-body justify-content-end">
+									<div class="col-md-3">
+										<select id="clientSelector" name="clientSelector" class="custom-select">
+											<option value="cliName">Name</option>
+											<option value="cliCode">Client Id</option>
+										</select>
+									</div>
+									<div class="input-group col-md-3">
+										<input id="clientFilterValue" type="text" class="form-control">
+										<div class="input-group-append">
+											<button id="btnClientFilterSearch" class="btn btn-primary"
+												type="button" onclick="clientFilterSearch()">
+												<i class="fas fa-search"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+								<br>
+								<table id="tableClient" data-toggle="table" data-url=""
+									data-sortable="true" data-side-pagination="server"
+									data-pagination="true" data-page-size="5"
+									data-page-list="[5, 10, 25, 50, ALL]">
+									<thead>
+										<tr>
+											<th data-field="cliCode" data-sortable="true">Client ID</th>
+											<th data-field="cliName" data-sortable="true">Client
+												Name</th>
+											<th data-field="cliDataStatusStr">Status</th>
+										</tr>
+									</thead>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /Modal Client -->
+			</div>
+			<div class="modal fade" id="client-modal" tabindex="-1"
+				role="dialog" aria-labelledby="client-modal" aria-hidden="true">
+			</div>
+		</div>
+		<th:block th:replace="fragments/general :: copyright-footer"></th:block>
+	</div>
+	<!-- /#wrapper -->
+	<th:block th:replace="fragments/modal :: confirmation-save" />
+	<th:block th:replace="fragments/modal :: confirmation-upload-save" />
+	<th:block th:replace="fragments/modal :: loading-process" />
+	<th:block th:replace="fragments/general :: scroll-to-top"/>
+	<th:block th:replace="fragments/general :: logout-modal"/>
+	<th:block th:replace="fragments/import :: js-body"/>
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+/*<![CDATA[*/
+    var xhttp = new XMLHttpRequest();
+    
+	$('document').ready(function() {
+		$('#type').select2({ width: '100%' });
+		$('#clientSelector').select2({ width: '100%' });
+		inquiryExtension();
+		
+		rest('GET', '/gui-re-broker/marketing-report/production/get-dropdownTypeOfCover').done(function(data) {
+			$('#dropdownTypeCover').select2({
+				width : '100%',
+				data : data
+			});
+		});
+		$('#msgLoading').text("On Process...");
+		
+		new AutoNumeric('#exc', {
+		    decimalCharacter : '.',
+		    digitGroupSeparator : ',',
+		    maximumValue : '999999999'
+		});
+		
+		new AutoNumeric('#portion', {
+		    decimalCharacter : '.',
+		    digitGroupSeparator : ',',
+		    maximumValue : '999999999'
+		});
+		
+		new AutoNumeric('#cliAmount', {
+		    decimalCharacter : '.',
+		    digitGroupSeparator : ',',
+		    maximumValue : '999999999'
+		});
+		
+		new AutoNumeric('#reinAmount', {
+		    decimalCharacter : '.',
+		    digitGroupSeparator : ',',
+		    maximumValue : '999999999'
+		});
+		
+		/**
+		 * Button Cancel on GUI action 
+		 */
+		$('#btnCancel').click(function() {
+			reset();
+		});
+	});  
+	
+	function inquiryExtension() {
+		var type = $('#dropdownTypeCover').val();
+		var clientCode = $('#client').val();
+		
+		var url = /*[[@{/marketing/extension/inquiry}]]*/;
+		url += '?type=' + type;
+		url += '&clientCode=' + clientCode;
+		
+		$('#tableExtension').bootstrapTable('refreshOptions', {
+	  		theadClasses: 'thead-dark',
+	        url: url
+	    });
+	}
+	
+	$('#btnClientSearch').click(function() {			
+		$('#clientFilterValue').val('');
+		$('#clientSelector').val('cliName').trigger('change');
+		
+		clientFilterSearch();
+	});
+	
+	$('#tableClient').on('click-row.bs.table', function(e, row, $tr) {
+		$('#client').val(row.cliCode);
+		$('#clientDesc').val(row.cliName);
+		$('#client-modal').modal('hide');
+	});
+	
+	$('#btnSearch').click(function() {			
+		inquiryExtension();
+	});
+	
+	function back() {
+	    $('#titlePage').text( /*[[${titlePage}]]*/);
+	    $('#extensionCreateEdit').attr('hidden', true);
+	    $('#extensionIndexPage').removeAttr('hidden');
+	    $('#btnSave').removeAttr('disabled');
+	    $('#t7-upload').removeAttr('disabled');
+	    reset();
+	    $('#previewReport').attr('hidden', true);
+	 }
+	
+	/**
+	 * Dropdown Currency Initialize 
+	 */
+	function initDropdownCurrency() {
+		return $.ajax({
+			type: 'GET', global: false, dataType: 'json',
+			url: /*[[@{/static-data/dropdown-currency}]]*/
+		});
+	}
+	initDropdownCurrency().done(function(data) {
+		$('#dropdownCurr').select2({width: '100%', data: data});
+	});
+	
+	/**
+	 * Dropdown Format Initialize 
+	 */
+	function initDropdownFormat() {
+		return $.ajax({
+			type: 'GET', global: false, dataType: 'json',
+			url: /*[[@{/static-data/dropdown-format}]]*/
+		});
+	}
+	initDropdownFormat().done(function(data) {
+		$('#dropdownFormat').select2({width: '100%', data: data});
+	});
+	
+	function clientFilterSearch() {
+		var url = /*[[@{/static-data/client}]]*/;
+		var filterKey = $("#clientSelector").select2('val');
+		var filterValue = $("#clientFilterValue").val();
+		
+		url = url + "?cliType=-0";
+		if(filterValue != "")
+			url = url + "&filterKey="+filterKey+"&filterValue="+filterValue;
+		
+		$('#tableClient').bootstrapTable('refreshOptions', {
+		    theadClasses: 'thead-dark',
+		    url: url
+		});
+	}
+	
+	//Data table event on click-row
+	$('#tableExtension').on('click-row.bs.table',function(e, row, $tr) {
+		//Datepicker initialize
+	  	$('#transDate').datepicker({
+			dateFormat: 'dd/mm/yy',
+			changeMonth: true,
+			changeYear: true,
+			minDate: (/*[[${appDate}]]*/)
+		});
+	  	$('#periodFrom').datepicker({
+			dateFormat: 'dd/mm/yy',
+			changeMonth: true,
+			changeYear: true,
+			minDate: (/*[[${appDate}]]*/)
+		});
+	  	$('#periodTo').datepicker({
+			dateFormat: 'dd/mm/yy',
+			changeMonth: true,
+			changeYear: true,
+			minDate: (/*[[${appDate}]]*/)
+		});
+	  	$('#clientDate').datepicker({
+			dateFormat: 'dd/mm/yy',
+			changeMonth: true,
+			changeYear: true,
+			minDate: (/*[[${appDate}]]*/)
+		});
+	  	$('#reinDate').datepicker({
+			dateFormat: 'dd/mm/yy',
+			changeMonth: true,
+			changeYear: true,
+			minDate: (/*[[${appDate}]]*/)
+		});
+	  	$('#dueDate').datepicker({
+			dateFormat: 'dd/mm/yy',
+			changeMonth: true,
+			changeYear: true
+		});
+		
+		$('#titlePage').text(/*[[${titlePageEdit}]]*/);
+		$('#extensionCreateEdit').removeAttr('hidden');
+		$('#extensionIndexPage').attr('hidden', true);
+		
+		$('#ref').val(row.trxTrxId);
+		$('#refNum').val(row.trxVoucherId);
+		$('#rein').val(row.trxReins);
+		$('#cedant').val(row.cliName);
+		$('#typeofcov').val(row.tcDesc);
+		$('#dropdownCurr').select2().val(row.trxCurrId).trigger('change');
+		AutoNumeric.getAutoNumericElement('#exc').set(row.exRateValueStr);
+		$('#tsi').val(row.trxTsiAmountStr);
+		$("#transDate").datepicker('setDate', /*[[${appDate}]]*/);
+		$("#periodFrom").datepicker('setDate', /*[[${appDate}]]*/);
+		$("#periodTo").datepicker('setDate', /*[[${appDate}]]*/);
+		$("#clientDate").datepicker('setDate', /*[[${appDate}]]*/);
+		$("#reinDate").datepicker('setDate', /*[[${appDate}]]*/);
+		$("#dueDate").datepicker('setDate', /*[[${appDate}]]*/);
+		$('#interest').val("Extension - "+row.trxDescription);
+		$('#h_officer').val(row.trxOfficer);
+		$('#h_voucherId').val(row.trxVoucherId);
+		$('#h_currency').val(row.trxCurrId);
+		$('#h_interest').val(row.trxDescription);
+		$('#h_typeOfCov').val(row.trxCoverCode);
+		
+		
+		AutoNumeric.getAutoNumericElement('#portion').set('');
+		AutoNumeric.getAutoNumericElement('#cliAmount').set('');
+		AutoNumeric.getAutoNumericElement('#reinAmount').set('');
+		document.getElementById("DCNvoucher").checked = true;
+	});
+	
+	function validationRequired() {		
+		var field = [];
+		
+		var code = $('#dropdownCurr').val();
+		if(!code.trim())
+			field.push("Currency");
+		
+		var desc = $('#exc').val();
+		if(!desc.trim())
+			field.push("Exchange Rate");
+		
+		var curr = $('#tsi').val();
+		if(!curr.trim())
+			field.push("TSI Amount");
+		
+		var status = $('#portion').val();
+		if(!status.trim())
+			field.push("New Portion");
+		
+		var status = $('#transDate').val();
+		if(!status.trim())
+			field.push("Transaction Date");
+		
+		var status = $('#periodFrom').val();
+		if(!status.trim())
+			field.push("Period Date");
+		
+		var status = $('#periodTo').val();
+		if(!status.trim())
+			field.push("Period Date");
+		
+		var status = $('#due Date').val();
+		if(!status.trim())
+			field.push("Due Date");
+		
+		var status = $('#interest').val();
+		if(!status.trim())
+			field.push("Interest");
+		
+		return field;
+	}
+	
+	function showAlertFailed(msgAlert) {
+		$(location).attr('href','#page-top');
+		$('#alertFailedMsg').text(msgAlert);
+		$('#alertFailed').fadeTo(3000, 500).slideUp(500, function() {
+		    $('#alertFailed').slideUp(500);
+		});
+	}
+	
+	/**
+	 * Button Save Form on GUI action 
+	 */
+	$('#btnSave').click(function() {
+		var msgRequaired = /*[[${M_0008}]]*/;
+		
+		var val = validationRequired();
+		msgRequaired = msgRequaired + ": " + val + " ;";
+		
+		if(val.length>0) {
+			showAlertFailed(msgRequaired);
+		}else{
+			$('#btnSave').attr('disabled', true);
+			$('#btnModalYes').removeAttr('disabled');
+			$('#modalConfirmation').modal('show');
+		}
+	});
+	
+	/**
+	 * Modal Confirmation - YES 
+	 */
+	 $('#btnModalYes').click(function() {
+		$('#btnModalYes').attr('disabled', 'true');
+		$('#modalConfirmation').modal('hide');
+		save();
+	 });
+	
+	function showLoading() {
+		$('#modalLoading').modal('show');
+	}
+	
+	function closeLoading() {
+		$('#modalLoading').modal('hide');
+	}
+	
+	function save(){
+		var p_CurrId = $('#dropdownCurr').val();
+		var p_Officer = $('#h_officer').val(); 
+		var p_Client = $('#cedant').val();
+		var p_CoverCode = $('#h_typeOfCov').val();
+		var p_Reference = $('#refNum').val();
+		var p_Type = $('#ref').val();
+		var p_TrxTrxId = $('#ref').val();
+		var p_Reinsurance = $('#rein').val();
+		var p_ExchangeRate = $('#exc').val();
+		var p_ClientDate = $('#clientDate').val();
+		var p_StartDate = $('#periodFrom').val();
+		var p_EndDate = $('#periodTo').val();
+		var p_ReDate = $('#reinDate').val();
+		var p_DueDate = $('#dueDate').val();
+		var p_PremiumValue = $('#cliAmount').val();
+		var p_ReinsuranceAmt = $('#reinAmount').val();
+		var p_Interest = $('#interest').val();
+		var p_TsiAmount = $('#tsi').val();
+		var p_NewPortion = $('#portion').val();
+		var p_TrxVoucherId = $('#h_voucherId').val();
+		
+		var datas = {
+				p_CurrId : p_CurrId,
+				p_Officer : p_Officer,
+				p_Client : p_Client,
+				p_CoverCode : p_CoverCode,
+				p_Reference : p_Reference,
+				p_Type : p_Type,
+				p_TrxId : p_TrxTrxId,
+				p_Reinsurance : p_Reinsurance,
+				p_ExchangeRate : p_ExchangeRate,
+				p_ClientDate : p_ClientDate,
+				p_StartDate : p_StartDate,
+				p_EndDate : p_EndDate,
+				p_ReDate : p_ReDate,
+				p_ReinsuranceAmt : p_ReinsuranceAmt,
+				p_DueDate : p_DueDate,
+				p_Interest : p_Interest,
+				p_TsiAmount : p_TsiAmount,
+				p_NewPortion : 	p_NewPortion,
+				p_TrxVoucherId : p_TrxVoucherId,
+				p_PremiumValue : p_PremiumValue
+		}
+		$.ajax({
+			type: 'POST', 
+			global: false, 
+			dataType: 'json',  
+			contentType:'application/json',
+			url: /*[[@{/marketing/extension/save}]]*/, 
+			data: JSON.stringify(datas), 
+			success:function(result){
+				showAlertSuccess();
+				var isPrint = $('#DCNvoucher').prop('checked');
+				if(isPrint)
+ 					showPreviewReport(result); 
+	        },
+	        error:function(result){
+	        	showAlertFailed(/*[[${M_0006}]]*/);
+ 				$('#btnSave').removeAttr('disabled');
+	        }
+		}); 
+		
+		$('#btnModalyes').removeAttr('disabled');
+	 	$('#modalConfirmation').modal('hide');
+	}
+	
+	function showAlertSuccess() {
+		$(location).attr('href','#page-top');
+		$('#alertSuccess').fadeTo(2000, 500).slideUp(500, function() {
+		    $('#alertSuccess').slideUp(500);
+		});	
+	}
+	
+	function reset(){
+		$('#dropdownCurr').select2().val($('#h_currency').val()).trigger('change');
+		$("#transDate").datepicker('setDate', /*[[${appDate}]]*/);
+		$("#periodFrom").datepicker('setDate', /*[[${appDate}]]*/);
+		$("#periodTo").datepicker('setDate', /*[[${appDate}]]*/);
+		$("#clientDate").datepicker('setDate', /*[[${appDate}]]*/);
+		$("#reinDate").datepicker('setDate', /*[[${appDate}]]*/);
+		$("#dueDate").datepicker('setDate', /*[[${appDate}]]*/);
+		AutoNumeric.getAutoNumericElement('#exc').set('');
+		AutoNumeric.getAutoNumericElement('#portion').set('');
+		AutoNumeric.getAutoNumericElement('#cliAmount').set('');
+		AutoNumeric.getAutoNumericElement('#reinAmount').set('');
+		$('#interest').val($('#h_interest').val());
+		document.getElementById("DCNvoucher").checked = true;
+	}
+	
+	/**
+	 * Button Calendar 
+	 */
+	$('#btnTransDate').click(function() {
+		$('#transDate').datepicker('show');
+	});
+	$('#btnPeriodFrom').click(function() {
+		$('#periodFrom').datepicker('show');
+	});
+	$('#btnPeriodTo').click(function() {
+		$('#periodTo').datepicker('show');
+	});
+	$('#btnClientDate').click(function() {
+		$('#clientDate').datepicker('show');
+	});
+	$('#btnReinDate').click(function() {
+		$('#reinDate').datepicker('show');
+	});
+	$('#btnDueDate').click(function() {
+		$('#dueDate').datepicker('show');
+	});
+	
+	$('#btnModalNo').click(function() {
+		$('#btnSave').removeAttr('disabled');
+	});
+	$('#btnModalNoUpload').click(function() {
+		$('#t7-upload').removeAttr('disabled');
+	});
+	
+		/**
+		 * Modal Confirmation Upload - YES 
+		 */
+		 $('#btnModalYesUpload').click(function() {
+			$('#btnModalYesUpload').attr('disabled', 'true');
+			$('#modalConfirmationUpload').modal('hide');
+			showLoading();
+			t7AddData2();
+		 });
+		
+		$('#t7-upload').click(function() {
+			var msgRequaired = /*[[${M_0008}]]*/;
+			
+			var file = $('#t7-inputUpload').val();
+			var fmt = $('#dropdownFormat').val();
+			var coverCode = $('#h_typeOfCov').val();
+			//var isFormatMatch = false;
+			var isFormatMatch = true;
+			
+			/* if((fmt=='16'&&coverCode=="AJK") || (fmt=='16'&&coverCode=="CI") || (fmt=='13'&&coverCode=="MH")
+					|| (fmt=='13'&&coverCode=="CPM") || (fmt=='13'&&coverCode=="TCI")){
+				isFormatMatch = true;
+			} */
+			
+			var filename = $('#t7-inputUpload').val().split('\\').pop();
+			
+			if(!file.trim()){
+				msgRequaired = msgRequaired + ": " + "File" + " ;";
+				showAlertFailed(msgRequaired);
+			}
+			/* else if(!isFormatMatch){
+				showAlertFailed("Format and Type of Cover do not match!");
+			}else if(fmt=='16' && !filename.startsWith("AJK")){
+				showAlertFailed("Filename must startwith AJK_ !");
+			}else if(fmt=='13' && !filename.startsWith("BORDO")){
+				showAlertFailed("Filename must startwith BORDO_ !");
+			} */
+			else{
+				validateFileNameExist2().done(function(data) {
+					var message = data.isFileNameExist;
+					if(message){
+						showAlertFailed("File Name already exist!");
+					}else{
+						$('#t7-upload').attr('disabled', true);
+						$('#btnModalYesUpload').removeAttr('disabled');
+						$('#modalConfirmationUpload').modal('show');
+					}
+				}).fail(function() {
+					showAlertFailed(/[[${M_0006}]]/);
+				    $('#btnSave').removeAttr('disabled');
+				});
+			}
+		});
+	
+	function validateFileNameExist2(){
+		var fileName = $('#t7-inputUpload').val().trim();
+		var data = {
+				fileName: fileName
+		}
+		return $.ajax({
+			type: 'POST', 
+			global: false, 
+			dataType: 'json',  
+			contentType:'application/json',
+			url: /*[[@{/marketing/extension/isFileNameExist}]]*/, 
+			data: JSON.stringify(data)
+		});
+	}
+	 
+	 function t7AddData2() {
+		
+		//========== UPLOAD FILE ==========
+		var file_data = $('#t7-inputUpload').prop('files')[0];
+		
+		var form_data = new FormData();
+		var p_CurrId = $('#dropdownCurr').val();
+		var p_Officer = $('#h_officer').val();
+    	var p_CoverCode = $('#h_typeOfCov').val();
+		var p_Reference = $('#refNum').val();
+		var p_Type = $('#ref').val();
+		var p_ClientDate = $('#clientDate').val();
+		var p_ReDate = $('#reinDate').val();
+		var p_DueDate = $('#dueDate').val();
+		var p_TrxTrxId = $('#ref').val();
+		var p_TrxVoucherId = $('#h_voucherId').val();
+		var p_Interest = $('#interest').val();
+		var p_Format = $('#dropdownFormat').val();
+		var p_ExchangeRate = $('#exc').val();
+		var p_Client = $('#cedant').val();
+		var p_Reinsurance = $('#rein').val();
+		
+		form_data.append("file", file_data);
+		
+		$.ajax({
+		    url: /*[[@{/marketing/extension/upload-file}]]*/, 
+		    cache: false,
+		    contentType: false,
+		    processData: false,
+		    data: form_data,
+		    type: 'post',
+		    success: function(data) {
+		    	var id = create_UUID();
+		    	var arrayPath = $('#t7-inputUpload').val().split("\\");
+				
+				var file = data;
+				var data = {
+					file: file,
+					p_CurrId : p_CurrId,
+					p_Officer: p_Officer,
+					p_CoverCode : p_CoverCode,
+					p_Reference : p_Reference,
+					p_Type : p_Type,
+					p_ClientDate : p_ClientDate,
+					p_ReDate : p_ReDate,
+					p_TrxId : p_TrxTrxId,
+					p_TrxVoucherId : p_TrxVoucherId,
+					p_Interest : p_Interest,
+					p_Format : p_Format,
+					p_ExchangeRate : p_ExchangeRate,
+					p_Client : p_Client,
+					p_Reinsurance : p_Reinsurance,
+					p_DueDate : p_DueDate
+				}
+				
+				$.ajax({
+					type: 'POST', 
+					global: false, 
+					dataType: 'json',  
+					contentType:'application/json',
+					url: /*[[@{/marketing/extension/saveUpload}]]*/, 
+					data: JSON.stringify(data),
+				    success:function(result){
+						closeLoading();
+				    	showAlertSuccess();
+						var isPrint = $('#DCNvoucher').prop('checked');
+						if(isPrint)
+		 					showPreviewReport(result); 
+			        },
+			        error:function(result){
+			        	closeLoading();
+			        	showAlertFailed(/*[[${M_0006}]]*/);
+			        	$('#t7-upload').removeAttr('disabled');
+			        }
+				});
+			}
+		  });
+		//========== UPLOAD FILE ==========
+		
+		$('#t7-inputUpload').val('');
+		
+	};
+	
+	function validationUploadRequired() {
+		var field = [];
+		
+		if(!$('#t7-inputUpload').val().trim())
+			field.push("File");
+		
+		return field;
+	}
+	
+	function create_UUID() {
+	    var dt = new Date().getTime();
+	    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+	        var r = (dt + Math.random()*16)%16 | 0;
+	        dt = Math.floor(dt/16);
+	        return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+	    });
+	    return uuid;
+	}
+	
+	function printPreviewClosing(voucherId, insSub, clientName, type) {
+		var trxVoucherId = $('#refNum').val();
+		var portion = $('#portion').val();
+		var upload = $('#t7-inputUpload').val();
+		var interestDesc = $('#interest').val();
+		var descUpload = $('#description').val();
+		
+		if(upload != ""){
+			portion = "";
+		}
+		
+		if(descUpload != ""){
+			interestDesc = $('#interest').val() + " - " + $('#description').val();
+		}
+		
+		var url = /*[[@{/marketing/extension/closing-print}]]*/;
+		url += encodeURI('?voucherId=' + voucherId + '&type=' + type + '&trxVoucherId=' + trxVoucherId +
+				'&insSub=' + insSub + '&interestDesc=' + interestDesc);
+		window.open(url, '_blank');
+	}
+	
+	function exportPreviewClosing(voucherId, insSub, cliName, fileName, type) {	
+		var trxVoucherId = $('#refNum').val();
+		var portion = $('#portion').val();
+		var upload = $('#t7-inputUpload').val();
+		var interestDesc = $('#interest').val();
+		var descUpload = $('#description').val();
+		
+		if(upload != ""){
+			portion = "";
+		}
+		
+		if(descUpload != ""){
+			interestDesc = $('#interest').val() + " - " + $('#description').val();
+		}
+		
+		var url = /*[[@{/marketing/extension/closing-document}]]*/;
+		url += encodeURI('?voucherId=' + voucherId + '&cliName=' + cliName + '&type=' + type + '&trxVoucherId=' + trxVoucherId +
+				 '&fileName=' + fileName + '&insSub=' + insSub + '&interestDesc=' + interestDesc);
+		window.open(url, '_blank');
+	}
+	
+	function showPreviewReport(data) {	
+		var trxVoucherId = $('#refNum').val();
+		var upload = $('#t7-inputUpload').val();
+		var portion = $('#portion').val();
+		var interestDesc = $('#interest').val();
+		var descUpload = $('#description').val();
+				$('#tableSend').bootstrapTable('load', data);
+				
+				closingIds = [];
+				closingType = [];
+				closingIsComm = [];
+				closingAddDesc2 = [];
+				closingInsSub = [];
+				//closingInterDesc = [];
+				for(var i=0;i<data.length;i++) {
+				    	
+						closingIds.push(data[i].voucherId);
+						closingType.push(data[i].type);
+						closingIsComm.push(data[i].isComm);
+						closingInsSub.push(data[i].insSub);
+						
+						if(upload != ""){
+							closingAddDesc2.push("");
+						}else{
+							closingAddDesc2.push(portion);
+						}
+						
+						if(descUpload != ""){
+							interestDesc = $('#interest').val() + " - " + $('#description').val();
+						}
+						
+				}
+				
+				var url = /*[[@{/marketing/extension/closing-search}]]*/;
+				var param = encodeURI('ids=' + closingIds.toString() + '&type=' + closingType.toString() + '&trxVoucherId=' + trxVoucherId
+				+ '&insSub=' + closingInsSub.toString() + '&interestDesc=' + interestDesc);
+				
+				$('#previewReport').removeAttr('hidden');
+				$('#previewReportHtml').load(url, param); 		
+	}
+/*]]>*/
+</script>
+</html>

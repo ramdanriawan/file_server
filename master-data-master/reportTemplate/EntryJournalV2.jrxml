@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="EntryJournalV2" pageWidth="703" pageHeight="842" columnWidth="663" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dbfb7d88-c694-4555-8f46-63a4806c9acf">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+	<parameter name="P_VOUCHER_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_TOTAL_AMOUNT" class="java.lang.String"/>
+	<parameter name="P_BANK_ACCOUNT" class="java.lang.String"/>
+	<parameter name="P_TYPE" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT CO.CO_NAME, T1.GL_TYPE, T1.GL_TRX_CLIENT, T1.GL_TRX_INVOICE, T1.GL_TRX_DATE, T1.GL_REFF_ID,
+	REPLACE(
+	 REPLACE(
+	  REPLACE(
+	   REPLACE(T1.GL_TRX_DESC,'font-size:','foff-size:'),'font-family','foff-family'),
+			'<font face=','<foff face='),'</font>','</foff>') GL_TRX_DESC,
+	T2.GL_VOUCHER_ID, T2.GL_ACCOUNT, T2.GL_CURR_RATE,
+	T2.GL_ORG_CREDIT, T2.GL_ORG_DEBIT,
+	T2.GL_IDR_CREDIT, T2.GL_IDR_DEBIT,
+	SUBSTRING(T2.GL_DESCRIPTION, 1, 30) GL_DESCRIPTION,
+	COA.COA_CODE, COA.COA_DESCRIP,
+	CLI.CLI_NAME FROM TR0002 T2
+	INNER JOIN TR0001 T1 ON (T2.GL_VOUCHER_ID = T1.GL_VOUCHER_ID)
+	INNER JOIN MA0004 COA ON (COA.COA_CODE = T2.GL_ACCOUNT)
+	INNER JOIN MA0010 CO
+	LEFT JOIN MA0005 CLI ON (CLI.CLI_CODE = T1.GL_TRX_CLIENT)
+	WHERE T2.GL_VOUCHER_ID = $P{P_VOUCHER_ID}
+	AND T2.ID_KEY <> (SELECT MAX(tr2.ID_KEY) from TR0002 tr2, MA0004 ma4
+			WHERE tr2.GL_ACCOUNT = ma4.COA_CODE
+			and tr2.GL_VOUCHER_ID = $P{P_VOUCHER_ID}
+			and ma4.COA_BANK_BK = '1')
+	AND (T2.GL_ORG_CREDIT <> 0 OR T2.GL_ORG_DEBIT <> 0 OR T2.GL_IDR_CREDIT <> 0 OR T2.GL_IDR_DEBIT <> 0)]]>
+	</queryString>
+	<field name="CO_NAME" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="GL_TYPE" class="java.lang.String">
+		<fieldDescription><![CDATA[Tipe Jurnal]]></fieldDescription>
+	</field>
+	<field name="GL_TRX_CLIENT" class="java.lang.String">
+		<fieldDescription><![CDATA[Kode Client]]></fieldDescription>
+	</field>
+	<field name="GL_TRX_INVOICE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="GL_TRX_DATE" class="java.sql.Date">
+		<fieldDescription><![CDATA[Tgl Transaksi]]></fieldDescription>
+	</field>
+	<field name="GL_REFF_ID" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="GL_TRX_DESC" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="GL_VOUCHER_ID" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="GL_ACCOUNT" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="GL_CURR_RATE" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="GL_ORG_CREDIT" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="GL_ORG_DEBIT" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="GL_IDR_CREDIT" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="GL_IDR_DEBIT" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="GL_DESCRIPTION" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="COA_CODE" class="java.lang.String">
+		<fieldDescription><![CDATA[Kode COA]]></fieldDescription>
+	</field>
+	<field name="COA_DESCRIP" class="java.lang.String">
+		<fieldDescription><![CDATA[Nama COA]]></fieldDescription>
+	</field>
+	<field name="CLI_NAME" class="java.lang.String">
+		<fieldDescription><![CDATA[Nama Nasabah]]></fieldDescription>
+	</field>
+	<variable name="SUMMARY" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$P{P_TYPE}.equals("C")
+    ?
+(
+    $F{GL_ORG_CREDIT}.compareTo(new BigDecimal("0")) > 0 ?
+    $F{GL_ORG_CREDIT} : $F{GL_ORG_DEBIT}.negate()
+) :
+(
+    $F{GL_ORG_DEBIT}.compareTo(new BigDecimal("0")) > 0 ?
+    $F{GL_ORG_DEBIT} : $F{GL_ORG_CREDIT}.negate()
+)]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal("0")]]></initialValueExpression>
+	</variable>
+	<variable name="SUMMARY_IDR" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$P{P_TYPE}.equals("C")
+    ?
+(
+    $F{GL_IDR_CREDIT}.compareTo(new BigDecimal("0")) > 0 ?
+    $F{GL_IDR_CREDIT} : $F{GL_IDR_DEBIT}.negate()
+) :
+(
+    $F{GL_IDR_DEBIT}.compareTo(new BigDecimal("0")) > 0 ?
+    $F{GL_IDR_DEBIT} : $F{GL_IDR_CREDIT}.negate()
+)]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal("0")]]></initialValueExpression>
+	</variable>
+	<group name="header">
+		<groupHeader>
+			<band height="40">
+				<textField isStretchWithOverflow="true">
+					<reportElement isPrintRepeatedValues="false" x="197" y="0" width="295" height="20" uuid="3e00ed2f-ea05-4561-b3d5-2008b6be53a3"/>
+					<textElement textAlignment="Center"/>
+					<textFieldExpression><![CDATA[$F{GL_TYPE}.equals("PY")
+    ? "BANK/CASH PAYMENT VOUCHER" : "BANK/CASH RECEIVED VOUCHER"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="20">
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="100" height="20" uuid="d5734e7a-faa3-41d6-9a51-d37f274d8b0e"/>
+					<textFieldExpression><![CDATA[$F{GL_TYPE}.equals("PY")
+    ? "PAY TO" : "RECEIVED FROM"]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="521" y="0" width="31" height="20" uuid="1b3ae70e-c5be-4c80-bc99-002968858712"/>
+					<text><![CDATA[DATE]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="552" y="0" width="13" height="20" uuid="e6a0745e-d1cb-4d1e-8cae-be6f76ac527d"/>
+					<textElement textAlignment="Center"/>
+					<text><![CDATA[:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="565" y="0" width="98" height="20" uuid="160f7012-9fd9-451a-876c-7091d4fff6af"/>
+					<textFieldExpression><![CDATA[$F{GL_TRX_DATE}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="100" y="0" width="11" height="20" uuid="ecab1c54-0256-4175-85af-88cc2bb8ea89"/>
+					<textElement textAlignment="Center"/>
+					<text><![CDATA[:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="111" y="0" width="302" height="20" uuid="5822c7e3-68f2-4ab2-9002-5aab02792281"/>
+					<textElement>
+						<paragraph spacingAfter="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{GL_TRX_INVOICE} == null ? "" : $F{GL_TRX_INVOICE})
++ ($F{GL_TRX_INVOICE} != null && $F{GL_TRX_CLIENT} != null && !("").equals($F{GL_TRX_INVOICE}) && !("").equals($F{GL_TRX_CLIENT}) ? " - " : "")
++ ($F{GL_TRX_CLIENT} == null ? "" : $F{CLI_NAME})]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="20">
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="552" y="0" width="13" height="20" uuid="893a6d68-88c6-4543-a156-459771ed7511"/>
+					<textElement textAlignment="Center"/>
+					<text><![CDATA[:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="521" y="0" width="31" height="20" uuid="87aa5158-5cb6-464a-8d39-3aeea85e51e3"/>
+					<text><![CDATA[NO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="100" height="20" uuid="248ef246-f2c2-462f-9dd7-ab351fe1c3e4"/>
+					<text><![CDATA[TOTAL AMOUNT]]></text>
+				</staticText>
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="100" y="0" width="11" height="20" uuid="b51a502e-0ba2-41fc-b0b4-27539801e3c0"/>
+					<textElement textAlignment="Center"/>
+					<text><![CDATA[:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="565" y="0" width="98" height="20" uuid="70de1ab9-3414-4292-bcf0-cd730b74b5fe"/>
+					<textFieldExpression><![CDATA[$F{GL_VOUCHER_ID}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="111" y="0" width="243" height="20" uuid="83a77cc3-1259-4703-9229-a5d28e239fc1"/>
+					<textFieldExpression><![CDATA[$P{P_TOTAL_AMOUNT}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="20">
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="552" y="0" width="13" height="20" uuid="f3b778e5-79d8-46ed-8637-d2216b2515cd"/>
+					<textElement textAlignment="Center"/>
+					<text><![CDATA[:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="565" y="0" width="98" height="20" uuid="e668fca7-d154-403c-a98d-95f8cd18db79"/>
+					<textFieldExpression><![CDATA[$F{GL_REFF_ID}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="483" y="0" width="69" height="20" uuid="6c3b1995-20db-416a-b53f-5ff35e5600ec"/>
+					<text><![CDATA[REFERENCE]]></text>
+				</staticText>
+			</band>
+			<band height="30">
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="100" y="0" width="11" height="20" uuid="7d730364-054a-4364-b330-d418e60171bb"/>
+					<textElement textAlignment="Center"/>
+					<text><![CDATA[:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="111" y="0" width="552" height="20" uuid="ec5710ef-75a9-404d-baba-fcddbc582f82"/>
+					<textElement textAlignment="Justified" markup="html"/>
+					<textFieldExpression><![CDATA[$F{GL_TRX_DESC}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="100" height="20" uuid="e6b511e9-1518-42bb-9449-da9163b067ef"/>
+					<text><![CDATA[REMARKS]]></text>
+				</staticText>
+			</band>
+			<band height="20">
+				<staticText>
+					<reportElement stretchType="RelativeToTallestObject" x="413" y="0" width="125" height="20" uuid="8fe8ac7f-12e2-45e3-ba89-b318821e7b99"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false" pdfFontName="Helvetica-Bold"/>
+						<paragraph rightIndent="10"/>
+					</textElement>
+					<text><![CDATA[ORG AMOUNT]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToTallestObject" x="184" y="0" width="169" height="20" uuid="df56514f-339d-4ad5-af66-b037b3075b1f"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false" pdfFontName="Helvetica-Bold"/>
+						<paragraph leftIndent="10"/>
+					</textElement>
+					<text><![CDATA[DESCRIPTION]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="184" height="20" uuid="c152d071-e275-4708-8233-f81b1a2bd7a8"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font size="10" isBold="false" pdfFontName="Helvetica-Bold"/>
+						<paragraph leftIndent="10"/>
+					</textElement>
+					<text><![CDATA[ACCOUNT NAME]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToTallestObject" x="538" y="0" width="125" height="20" uuid="1207a667-2b21-4764-a535-3a82ca722af6"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false" pdfFontName="Helvetica-Bold"/>
+						<paragraph rightIndent="10"/>
+					</textElement>
+					<text><![CDATA[IDR AMOUNT]]></text>
+				</staticText>
+				<staticText>
+					<reportElement stretchType="RelativeToTallestObject" x="353" y="0" width="60" height="20" uuid="1433bf25-ccf4-4968-bda2-f05a08b96adf"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10" isBold="false" pdfFontName="Helvetica-Bold"/>
+						<paragraph rightIndent="10"/>
+					</textElement>
+					<text><![CDATA[RATE]]></text>
+				</staticText>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="40">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="0" width="663" height="20" uuid="6e56812a-74c4-41da-b959-388f46058ac4"/>
+				<textFieldExpression><![CDATA[$F{CO_NAME}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Prevent">
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="184" height="20" isRemoveLineWhenBlank="true" uuid="ab6db08b-2fad-47ee-b6b1-c83c3f946ad7"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+					<paragraph leftIndent="3" rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{COA_DESCRIP}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToTallestObject" x="413" y="0" width="125" height="20" isRemoveLineWhenBlank="true" uuid="e9579472-5bd5-4c1b-abb5-6cd205c8230b"/>
+				<box>
+					<leftPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_TYPE}.equals("C")
+    ?
+(
+    $F{GL_ORG_CREDIT}.compareTo(new BigDecimal("0")) != 0 ?
+    $F{GL_ORG_CREDIT} : $F{GL_ORG_DEBIT}.negate()
+) :
+(
+    $F{GL_ORG_DEBIT}.compareTo(new BigDecimal("0")) != 0 ?
+    $F{GL_ORG_DEBIT} : $F{GL_ORG_CREDIT}.negate()
+)]]></textFieldExpression>
+			</textField>
+			<frame>
+				<reportElement stretchType="RelativeToTallestObject" x="184" y="0" width="169" height="20" uuid="07a60ec6-0c1e-4083-93b1-6bb90664d503"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="169" height="20" isRemoveLineWhenBlank="true" uuid="eb09f91b-a08e-4b18-ae87-241baeb2ebd0"/>
+					<textElement verticalAlignment="Middle">
+						<font size="10"/>
+						<paragraph leftIndent="3"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{GL_DESCRIPTION}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToTallestObject" x="538" y="0" width="125" height="20" isRemoveLineWhenBlank="true" uuid="e87760f0-9fae-4571-88f6-97a761e757cb"/>
+				<box>
+					<leftPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_TYPE}.equals("C")
+    ?
+(
+    $F{GL_IDR_CREDIT}.compareTo(new BigDecimal("0")) != 0 ?
+    $F{GL_IDR_CREDIT} : $F{GL_IDR_DEBIT}.negate()
+) :
+(
+    $F{GL_IDR_DEBIT}.compareTo(new BigDecimal("0")) != 0 ?
+    $F{GL_IDR_DEBIT} : $F{GL_IDR_CREDIT}.negate()
+)]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToTallestObject" x="353" y="0" width="60" height="20" isRemoveLineWhenBlank="true" uuid="1564978e-d4bd-40fc-b34c-538791b2523c"/>
+				<box>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{GL_CURR_RATE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="160" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="538" height="20" isRemoveLineWhenBlank="true" uuid="da9c3938-e67e-4232-90e0-b01b23d6861c"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="false" pdfFontName="Helvetica-Bold"/>
+					<paragraph rightIndent="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TOTAL"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="40" width="212" height="20" isRemoveLineWhenBlank="true" uuid="7b1992cc-1daa-41ec-bc82-717e6233205b"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_BANK_ACCOUNT}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="413" y="40" width="170" height="20" isRemoveLineWhenBlank="true" uuid="68e72b6e-05c4-450b-8bd8-67ff5bc8cfc8"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["METHOD OF PAYMENT"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="413" y="60" width="170" height="20" isRemoveLineWhenBlank="true" uuid="6dc92b33-2f1a-44ac-9076-a4bd112e01c0"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["CHEQUE NO"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="413" y="80" width="125" height="20" isRemoveLineWhenBlank="true" uuid="7e67bc0f-d6f1-477d-bfe8-cd7fa49775aa"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["APPROVED BY"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="538" y="80" width="125" height="20" isRemoveLineWhenBlank="true" uuid="6c26d8d0-cd6b-4acf-979c-48ac656e405d"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["RECEIVED BY"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="413" y="100" width="125" height="60" uuid="f4e8510e-0416-4ea4-bee8-4c0fd8cd6d58"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="538" y="100" width="125" height="60" uuid="26555536-a58e-4712-b514-dcd27153b352"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="538" y="0" width="125" height="20" isRemoveLineWhenBlank="true" uuid="16a7ade3-3ab2-4679-a07d-2733a90a00d0"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10"/>
+					<paragraph rightIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{SUMMARY_IDR}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

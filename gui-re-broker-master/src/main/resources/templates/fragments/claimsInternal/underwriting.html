@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+</head>
+
+<body>
+
+	<th:block th:fragment="underwriting-tab">
+		<div class="card mb-3">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-12">
+						<table id="t3Table1" data-toolbar-align="right" data-toggle="table" data-sortable="true"
+							data-url="" data-side-pagination="server" data-pagination="true" data-page-size="5"
+							data-unique-id="idKey" data-pagination-v-align="top" data-page-list="[5, 10, 25, 50, ALL]">
+							<thead>
+								<tr>
+									<th data-field="trxInsId" data-visible="false">Insurer</th>
+									<th data-field="trxInsIdDesc">Insurer</th>
+									<th data-field="trxInsType">Position</th>
+									<th data-field="trxInsTypeVal" data-visible="false">Position</th>
+									<th data-field="trxInsShare" data-halign="right" data-align="right">Share</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+				
+<!-- 				<br> -->
+<!-- 				<br> -->
+
+<!-- 				<div class="row"> -->
+<!-- 					<div class="col-md-12"> -->
+<!-- 						<label>Finance History</label><br> -->
+<!-- 						<table id="t3Table2" data-toolbar-align="right" data-toggle="table" -->
+<!-- 							data-sortable="true" data-url="" data-side-pagination="server" data-pagination="true" -->
+<!-- 							data-page-size="5" data-unique-id="idKey" data-pagination-v-align="top" -->
+<!-- 							data-page-list="[5, 10, 25, 50, ALL]"> -->
+<!-- 							<thead> -->
+<!-- 								<tr> -->
+<!-- 									<th data-field="trxDate">Date</th> -->
+<!-- 									<th data-field="trxType">Type</th> -->
+<!-- 									<th data-field="trxVoucherId">Voucher</th> -->
+<!-- 									<th data-field="trxOldType">Type Ref</th> -->
+<!-- 									<th data-field="trxOldVoucherId">Voucher Ref</th> -->
+<!-- 									<th data-field="trxDescription">Description</th> -->
+<!-- 									<th data-field="trxCurrId">Curr</th> -->
+<!-- 									<th data-field="trxInvcAmount" data-halign="right" data-align="right">Amount</th> -->
+<!-- 									<th data-field="trxSetAmount" data-halign="right" data-align="right">Settlement</th> -->
+<!-- 								</tr> -->
+<!-- 							</thead> -->
+<!-- 						</table> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+
+			</div>
+		</div>
+		<script type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+			
+			/*]]>*/
+		</script>
+	</th:block>
+
+</body>
+
+</html>

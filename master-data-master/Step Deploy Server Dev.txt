@@ -1,0 +1,34 @@
+Deploy GUI Dev
+===========================================================================
+
+1. update common-re-broker, maven install
+2. update gui-re-broker
+3. update 'application.properties' menggunakan 'application.properties.dev'
+4. build package gui-re-broker
+5. copy gui-re-broker/target/gui-re-broker.jar ke server /app-dev/
+6. cd /app-dev/
+7. sudo lsof -n -i :8081  | awk '/LISTEN/{print $2}'
+8. kill -9 'hasil dari point 7'
+9. rm -Rf /app-dev/gui/*
+10. mv /app-dev/gui-re-broker.jar /app-dev/gui/
+11. cd /app-dev/gui/
+12. nohup java -jar gui-re-broker.jar > nohup.out &
+13. cek log tail -f /app-dev/gui/nohup.out
+
+Deploy Core Dev
+===========================================================================
+
+1. update common-re-broker, maven install
+2. update app-re-broker
+3.1 update 'application.properties' menggunakan 'application.properties.dev'
+3.2 update 'datasource.config' menggunakan 'datasource.config.dev'
+4. build package app-re-broker
+5. copy app-re-broker/target/app-re-broker.jar ke server /app-dev/
+6. cd /app-dev/
+7. sudo lsof -n -i :8281  | awk '/LISTEN/{print $2}'
+8. kill -9 'hasil dari point 7'
+9. rm -Rf /app-dev/core/*
+10. mv /app-dev/app-re-broker.jar /app-dev/core/
+11. cd /app-dev/core/
+12. nohup java -jar app-re-broker.jar > nohup.out &
+13. cek log tail -f /app-dev/core/nohup.out

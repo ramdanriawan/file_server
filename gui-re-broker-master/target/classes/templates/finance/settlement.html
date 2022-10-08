@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<th:block th:replace="fragments/import :: info-header" />
+<th:block th:replace="fragments/import :: css-header" />
+<th:block th:replace="fragments/import :: js-header" />
+
+<script th:src="@{/js/autoNumeric.min.js}"></script>
+</head>
+
+<body id="page-top">
+	<th:block th:replace="fragments/general :: navbar-header" />
+
+	<div id="wrapper">
+		<th:block th:replace="fragments/general :: menu" />
+
+		<div id="content-wrapper">
+			<div class="container-fluid">
+				<th:block th:replace="fragments/general :: panel-page" />
+
+				<!-- CONTENT PAGE -->
+				<div id="cart" class="card mb-3">
+					<div id="divContentHeader" class="card-header">
+						<b><span id="titlePage" th:text="${titlePage}"></span></b>
+					</div>
+					<div class="card-body">		
+						<div id="alertSuccess" class="alert alert-success" style="display: none;">
+							<strong>Success!</strong> <span id="alertSuccessMsg" th:text="${M_0005}"></span>
+						</div>
+						<div id="alertFailed" class="alert alert-danger" style="display: none;">
+							<strong>Failed!</strong> <span id="alertFailedMsg"></span>
+						</div>			
+						
+						<input type="hidden" id="h_voucherId" />
+						<input type="hidden" id="h_description" />
+						<input type="hidden" id="h_client" />
+						<input type="hidden" id="h_clientDesc" />
+						<input type="hidden" id="h_rate" />
+						
+						<div class="row">
+							<div class="col-md-2">
+								<label>Type</label> <br>
+								<select id="type" name="type" class="form-control col-md-12">
+									<option value="RC">Received</option>
+									<option value="PY">Payment</option>
+								</select>
+							</div>	
+				
+							<div class="col-md-3">
+								<th:block th:replace="fragments/lookup :: client" />
+							</div>	
+							
+							<div class="col-md-2">
+								<label>Bank</label> <br>
+								<select id="bank" name="bank" class="form-control">
+								</select>
+							</div>
+							<div class="col-md-1">
+								<label>Curr</label> <br>
+								<input id="currBank" name="currBank" type="text" class="form-control" hidden="true" disabled/>
+								<input id="currTrx" name="currTrx" type="text" class="form-control" disabled/>
+							</div>
+							<div class="col-md-2">
+								<label>Transaction Date</label> <br>
+								<div class="input-group">
+									<input id="transactionDate" name="transactionDate" type="text"
+										class="form-control" placeholder="dd/MM/yyyy" disabled>
+									<div class="input-group-append">
+										<button id='btnTransactionDate' class="btn btn-primary" type="button">
+											<i class="fas fa-calendar"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<label>Exchange</label> <br> 
+								<input type="text" class="form-control col-md-12" id="exchangeBank"
+									style="text-align: right;" placeholder="0.00">
+								<input type="text" class="form-control col-md-12" id="exchangeTrx"
+									style="text-align: right;" placeholder="0.00" hidden="true">
+							</div>		
+						</div>
+					
+						<br>
+						
+						<div id="formSettlement" hidden="true">
+							<div class="row">
+								<div class="col-md-3">
+									<label>Reference ID</label> <br> 
+									<input id="referenceId" name="referenceId" type="text" class="form-control col-md-12" maxlength="20">
+								</div>
+								<div class="col-md-2">
+									<label>Bank Fee</label> <br>
+									<input type="text" class="form-control col-md-12" id="bankFee"
+										style="text-align: right;" placeholder="0.00" disabled>
+								</div>
+							</div>
+							
+							<br>
+							
+							<div class="row">
+								<div class="col-md-3">
+									<label id="labelPyrc"></label><br>
+									<input type="text" class="form-control col-md-12" id="pyrc"
+										style="text-align: right;" placeholder="0.00" required>
+								</div>
+								<div class="col-md-3">
+									<label>Outstanding (ORG)</label> <br> 
+									<input type="text" class="form-control col-md-12" id="outstandingOrg"
+										style="text-align: right;" placeholder="0.00" disabled>
+								</div>
+								<div class="col-md-3">
+									<label>Outstanding (IDR)</label> <br>
+									<input type="text" class="form-control col-md-12" id="outstandingIdr"
+										style="text-align: right;" placeholder="0.00" disabled>
+								</div>
+							</div>
+							
+							<br>
+							
+							<div class="row">
+								<div class="col-md-3">
+									<label>Different</label> <br>
+									<input type="text" class="form-control col-md-12" id="different"
+										style="text-align: right;" placeholder="0.00" disabled>
+								</div>
+								<div class="col-md-1 custom-control custom-checkbox">
+									<label></label> <br>
+									<input type="checkbox" class="custom-control-input"
+										id="adjustment"> <label class="custom-control-label"
+										for="adjustment">Adjustment</label>
+								</div>
+								<div class="col-md-2">
+									<div class="custom-control custom-checkbox">
+										<input type="checkbox" class="custom-control-input" id="checkboxWht" disabled>
+										<label class="custom-control-label" for="checkboxWht">Withholding Tax</label>
+									</div>
+									<input type="text" class="form-control col-md-12" id="wht"
+										style="text-align: right;" placeholder="0.00" disabled>
+								</div>
+								<div class="col-md-3">
+									<label>Total</label> <br> 
+									<input type="text" class="form-control col-md-12" id="total"
+										style="text-align: right;" placeholder="0.00" disabled>
+								</div>
+								<div class="col-md-2 custom-control custom-checkbox">
+									<label></label> <br>
+									<input type="checkbox" class="custom-control-input"
+										id="printJournal"> <label class="custom-control-label"
+										for="printJournal">Print Voucher</label>
+								</div>
+							</div>
+							
+							<th:block th:replace="fragments/button :: btn-save-cancel" />
+							
+							<br>
+							
+							<div id="previewJournal" class="card-body" hidden="true">
+								<div class="row justify-content-end">
+									<button id="btnExportXls" class="btn btn-success col-md-2">
+										Export to Excel</button>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+									<button id="btnPrint" class="btn btn-secondary col-md-1">
+										Print</button>
+								</div>
+								
+								<div id="previewJournalHtml" class="viewHtml"></div>
+								
+								<br>
+								
+								<div class="row justify-content-center">
+									<button id="btnClosePreviewJournal" type="button" class="btn btn-danger col-md-2">Close</button>
+								</div>
+							</div>
+							
+						</div>
+						
+						<br>
+						
+						<div class="row justify-content-center">
+							<button id="btnSettlement" type="button" class="btn btn-primary col-md-2">Settlement</button>
+						</div>
+						
+						<br>
+					
+						<table id="tableSettlement" data-toolbar-align="right"
+							data-toggle="table" data-sortable="true" data-url=""
+							data-side-pagination="server" data-pagination="true"
+							data-page-size="5" data-page-list="[5, 10, 25, 50, ALL]"
+							data-pagination-V-Align="top">
+							<thead>
+								<tr>
+									<th data-checkbox="true" data-hcheckbox="false" data-halign="center" data-align="center">Action</th>
+									<th data-field="trxOldVoucherId" data-sortable="true">DC Note No.</th>
+									<th data-field="trxType" data-sortable="true">Type</th>
+									<th data-field="trxVoucherId" data-sortable="true">Voucher ID</th>
+									<th data-field="trxDate" data-sortable="true">Date</th>
+									<th data-field="trxDueDate" data-sortable="true">Due Date</th>
+									<th data-field="age">Age</th>
+									<th data-field="trxCountInv" data-sortable="true">Ver</th>
+									<th data-field="trxClientDesc">Client</th>
+									<th data-field="trxCoverCode" data-sortable="true">Cover</th>
+									<th data-field="trxDescription" data-sortable="true">Description</th>
+									<th data-field="trxCurrId" data-sortable="true">Curr</th>
+									<th data-field="trxOrgAmount" data-halign="right"
+											data-align="right" data-sortable="true">Amount</th>
+									<th data-field="outstanding" data-halign="right"
+											data-align="right" >Outstanding</th>
+									<th data-field="settled" data-halign="center" data-align="center">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Settled&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+								</tr>
+							</thead>
+						</table>
+						
+					</div>
+				</div>		
+						
+			</div>
+			<!-- /.container-fluid -->
+			<th:block th:replace="fragments/general :: copyright-footer"></th:block>
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	
+	<!-- /#wrapper -->
+	<th:block th:replace="fragments/modal :: confirmation-save" />
+	<th:block th:replace="fragments/general :: scroll-to-top" />
+	<th:block th:replace="fragments/general :: logout-modal" />
+	<th:block th:replace="fragments/import :: js-body" />
+
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+		
+	var isSettlement = false;
+	var datas;
+		
+	$(function() {
+		$('#type').select2({ width: '100%' });
+		$('#bank').select2({ width: '100%' });
+		
+		function initDropdownBank() {
+			return $.ajax({
+				type: 'GET', global: false, dataType: 'json',
+				url: /*[[@{/static-data/dropdown-bank}]]*/
+			});
+		}
+		initDropdownBank().done(function(data) {
+			$('#bank').select2({width: '100%', data: data}).trigger('change');
+		});
+		
+		inquirySettlement();
+		$('#printJournal').prop('checked', true);
+	});
+	
+	$('#transactionDate').datepicker({
+		dateFormat: 'dd/mm/yy',
+		changeMonth: true,
+		changeYear: true,
+	}).datepicker('setDate', /*[[${appDate}]]*/);
+	
+	$('#btnTransactionDate').click(function() {
+		$('#transactionDate').datepicker('show');
+	});
+	
+	new AutoNumeric('#outstandingOrg', {
+	    decimalCharacter : '.',
+	    digitGroupSeparator : ',',
+	    maximumValue : '10000000000000000000'
+	});
+	new AutoNumeric('#outstandingIdr', {
+	    decimalCharacter : '.',
+	    digitGroupSeparator : ',',
+	    maximumValue : '10000000000000000000'
+	});
+	new AutoNumeric('#wht', {
+	    decimalCharacter : '.',
+	    digitGroupSeparator : ',',
+	    maximumValue : '10000000000000000000'
+	});
+	new AutoNumeric('#exchangeBank', {
+	    decimalCharacter : '.',
+	    digitGroupSeparator : ',',
+	    maximumValue : '10000000000000000000'
+	});
+	new AutoNumeric('#exchangeTrx', {
+	    decimalCharacter : '.',
+	    digitGroupSeparator : ',',
+	    maximumValue : '10000000000000000000'
+	}).set('0.00');
+	new AutoNumeric('#bankFee', {
+	    decimalCharacter : '.',
+	    digitGroupSeparator : ',',
+	    maximumValue : '10000000000000000000',
+	    minimumValue : '0'
+	});
+	new AutoNumeric('#pyrc', {
+	    decimalCharacter : '.',
+	    digitGroupSeparator : ',',
+	    maximumValue : '10000000000000000000'
+	});
+	new AutoNumeric('#total', {
+	    decimalCharacter : '.',
+	    digitGroupSeparator : ',',
+	    maximumValue : '10000000000000000000'
+	});
+	new AutoNumeric('#different', {
+	    decimalCharacter : '.',
+	    digitGroupSeparator : ',',
+	    maximumValue : '10000000000000000000'
+	});
+	
+	$('#type, #clientDesc').change(function() {
+		inquirySettlement();
+	});
+	
+	$('#bank').change(function() {
+		getCurr($('#bank').val()).done(function(data) {
+			$('#currBank').val(data);
+		});
+		getExchangeDateCoa($('#transactionDate').val(), $('#bank').val()).done(function(data) {
+	    	AutoNumeric.getAutoNumericElement('#exchangeBank').set(data);
+	    	$('#exchangeBank').change();
+	    });
+	});
+	
+	$('#transactionDate').datepicker({
+	    onChange: function(dateText) {
+	    	$(this).change();
+	    }
+	});
+	$('#transactionDate').change(function() {
+		getExchangeDateCurr($('#transactionDate').val(), $('#currTrx').val()).done(function(data1) {
+			AutoNumeric.getAutoNumericElement('#exchangeTrx').set(data1);
+	    	
+	    	getExchangeDateCoa($('#transactionDate').val(), $('#bank').val()).done(function(data2) {
+		    	AutoNumeric.getAutoNumericElement('#exchangeBank').set(data2);
+		    	$('#exchangeBank').change();
+		    });
+	    });
+	});
+	
+	$('#exchangeBank').change(function() {
+		if(isSettlement)
+			doCalculate();
+	});
+	
+	$('#btnSettlement').click(function() {
+		doSettlement();
+	});
+	
+	$('#pyrc').change(function() {
+		if(AutoNumeric.getAutoNumericElement('#pyrc').get() == '')
+			AutoNumeric.getAutoNumericElement('#pyrc').set('0.00');
+		
+		var type = $('#type').val();
+			
+// 		if(type == "PY") {
+// 			 var py = parseFloat(AutoNumeric.getAutoNumericElement('#pyrc').get());
+			 
+// 			 var exchangeBank = parseFloat(AutoNumeric.getAutoNumericElement('#exchangeBank').get());
+// 			 var outstandingIdr = parseFloat(AutoNumeric.getAutoNumericElement('#outstandingIdr').get()); 
+			 
+// 			 var max = outstandingIdr / exchangeBank; 
+			
+// 			 if(py > max)
+// 				 AutoNumeric.getAutoNumericElement('#pyrc').set(max);
+// 		}
+		
+		doCalculate();
+	});
+	
+	$('#bankFee').change(function() {
+		if(AutoNumeric.getAutoNumericElement('#bankFee').get() == '')
+			AutoNumeric.getAutoNumericElement('#bankFee').set('0.00');
+		
+		doCalculate();
+	});
+	
+	$('#checkboxWht').change(function() {
+		if($('#checkboxWht').prop('checked') == false)
+			AutoNumeric.getAutoNumericElement('#wht').set('0.00');
+		
+		doCalculate();
+	});
+	
+	$('#btnSave').click(function() {
+		var msgNotValidPyrc = validationPyrc();
+		var msgNotValidExchange = validationExchange();
+		if(msgNotValidPyrc != null) {
+			showAlertFailed(msgNotValidPyrc);
+		}else if(msgNotValidExchange != null) {
+			showAlertFailed(msgNotValidExchange);
+		}else {
+			$('#btnModalYes').removeAttr('disabled');
+			$('#modalConfirmation').modal('show');
+		}
+	});
+
+	$('#btnExportXls').click(function() {
+		exportXsl();
+	});
+	
+	$('#btnPrint').click(function() {
+		print();
+	});
+	
+	$('#btnClosePreviewJournal').click(function() {
+		location.reload();
+	});
+	
+	$('#btnCancel').click(function() {
+		location.reload();
+	});
+	
+	function getCurr(coaCode) {
+		var url = /*[[@{/static-data/currCoa}]]*/;
+		url += "?coaCode=" + coaCode;
+		
+		return $.ajax({
+	        url: url
+	    });
+	}
+	
+	function getExchangeDateCurr(date, curr) {
+		var url = /*[[@{/static-data/exchangeNonEom}]]*/;
+		url += "?date=" + date;
+		url += "&curr=" + curr;
+		
+		return $.ajax({
+	        url: url
+	    });
+	}
+	
+	function getExchangeDateCoa(date, coaCode) {
+		var url = /*[[@{/static-data/exchangeCoaNonEom}]]*/;
+		url += "?date=" + date;
+		url += "&coaCode=" + coaCode;
+		
+		return $.ajax({
+	        url: url
+	    });
+	}
+	
+	function inquirySettlement() {
+		var url = /*[[@{/finance/settlement/inquiry}]]*/;
+		url += '?type=' + $('#type option:selected').val() + '&client=' + $('#client').val();
+		
+		$('#tableSettlement').bootstrapTable('refreshOptions', {
+	  		paginationSuccessivelySize: 3,
+	        theadClasses: 'thead-dark',
+	        url: url,
+	        onPreBody: function (data) {
+		    	for(var i=0; i<data.length; i++) {   
+		    		var idSettled = "settled_" + data[i].idKey;
+		    		data[i].settled = "<input type=\"text\" id=\"" + idSettled + "\" name=\"settledInput\" class=\"form-control\" style=\"text-align: right;\">"
+		    	}
+	        	return false;
+	        },
+	        onLoadSuccess: function (data) {
+	        	var rows = data.rows;
+	        	for(var i=0; i<rows.length; i++) { 
+	        		var idSettled = "settled_" + rows[i].idKey;
+					
+					var out = rows[i].outstanding.replace("(", "").replace(")", "").replace(/,/g, '');				
+					
+					var minimumValue = parseFloat(out);
+					var maximumValue = parseFloat(out);
+					
+					if(minimumValue > 0)
+						minimumValue *= -1;
+					if(maximumValue < 0)
+						maximumValue *= -1;
+						
+		    		new AutoNumeric('#'+idSettled, {
+					    decimalCharacter : '.',
+					    digitGroupSeparator : ',',
+					    minimumValue : minimumValue,
+					    maximumValue : maximumValue
+					});
+		    		
+					AutoNumeric.getAutoNumericElement('#'+idSettled).set(0.00);
+				}
+
+	            return true;
+	        }
+	    });
+		
+		$('input[name = "btSelectAll"]').remove();
+	}
+	
+	function validationPyrc() {
+// 		var pyrc = AutoNumeric.getAutoNumericElement('#pyrc').get();
+// 		if(!pyrc.trim())
+// 			pyrc = parseFloat('0');
+// 		else
+// 			pyrc = parseFloat(pyrc.replace(/,/g, ""));
+		
+// 		if(pyrc<=0)
+// 			return $('#labelPyrc').text() + " must greater than 0!";
+		
+		return null;
+	}
+	
+	function validationExchange() {
+		var exchangeBank = parseFloat(AutoNumeric.getAutoNumericElement('#exchangeBank').get().replace(/,/g, ""));
+		
+		if(exchangeBank<=0)
+			return "Exchange must greater than 0!";
+		
+		return null;
+	}
+	
+	function showAlertFailed(msgAlert) {
+		$(location).attr('href','#page-top');
+		$('#alertFailedMsg').text(msgAlert);
+		$('#alertFailed').fadeTo(3000, 500).slideUp(500, function() {
+		    $('#alertFailed').slideUp(500);
+		});
+	}
+	
+	function showAlertSuccess() {
+		$(location).attr('href','#page-top');
+		$('#alertSuccess').fadeTo(2000, 500).slideUp(500, function() {
+		    $('#alertSuccess').slideUp(500);
+		});	
+	}
+	
+	function doCalculate() {
+		var exchangeBank = parseFloat(AutoNumeric.getAutoNumericElement('#exchangeBank').get());
+		var outstandingOrg = parseFloat(AutoNumeric.getAutoNumericElement('#outstandingOrg').get());
+		var outstandingIdr = parseFloat(AutoNumeric.getAutoNumericElement('#outstandingIdr').get());
+		var wht = parseFloat(AutoNumeric.getAutoNumericElement('#wht').get());
+		
+    	var pyrc = AutoNumeric.getAutoNumericElement('#pyrc').get();
+		if(!pyrc.trim())
+			pyrc = parseFloat('0');
+		else
+			pyrc = parseFloat(pyrc);
+		
+		var bankFee = AutoNumeric.getAutoNumericElement('#bankFee').get();
+		if(!bankFee.trim())
+			bankFee = parseFloat('0');
+		else
+			bankFee = parseFloat(bankFee);
+		
+    	if($('#type').val() == 'PY' && $('#checkboxWht').prop('checked') == true) {
+    		var rate =  parseFloat($('#h_rate').val().replace(/,/g, ""))/100;
+    		
+    		var pyrcIdr = pyrc * exchangeBank;
+    		if(pyrcIdr > outstandingIdr)
+    			pyrcIdr = outstandingIdr;
+    		
+    		wht = rate * pyrcIdr;
+    		
+    		AutoNumeric.getAutoNumericElement('#wht').set(wht / exchangeBank);
+    	}
+    	
+    	wht = parseFloat(AutoNumeric.getAutoNumericElement('#wht').get());
+    	var total = pyrc + bankFee - wht;
+    	AutoNumeric.getAutoNumericElement('#total').set(total);
+    	
+    	//different
+    	var currTrx = $('#currTrx').val();
+    	var currBank = $('#currBank').val();
+    	
+    	
+    	var exchangeTrx = AutoNumeric.getAutoNumericElement('#exchangeTrx').get();
+    	var pyrcIdr = pyrc * exchangeBank;
+    	
+    	var different;
+    	if(currTrx == currBank)
+    		different = outstandingOrg - pyrc;
+    	else	
+    		different = outstandingOrg - (pyrcIdr/exchangeTrx);
+    	AutoNumeric.getAutoNumericElement('#different').set(different);
+	}
+	
+	function doSettlement() {		
+		var rows = $('#tableSettlement').bootstrapTable('getAllSelections');
+		
+		if(rows.length == 0) {
+			showAlertFailed("No data selected!");
+			return rows.length;
+		}
+		
+		var messageNotValid = null;
+		var type = rows[0].trxType;
+		var curr = rows[0].trxCurrId;
+		var client = rows[0].trxClient;
+		var clientDesc = rows[0].trxClientDesc;
+		
+		for(var i=1;i<rows.length;i++) {
+			if((type != rows[i].trxType)
+					|| (curr != rows[i].trxCurrId) 
+					|| (client != rows[i].trxClient)) {
+				messageNotValid = "Data can't be process. Cause 'Type', 'Client' and 'Curr' must be equal!";
+				break;
+			}
+		}
+		
+		if(messageNotValid != null) {
+			showAlertFailed(messageNotValid);
+			return messageNotValid;
+		}
+		
+		for(var i=0;i<rows.length;i++) {
+			var idSettled = "settled_" + rows[i].idKey; 
+			var value = parseFloat(AutoNumeric.getAutoNumericElement('#' + idSettled).get().replace(/,/g, ''));
+			if(value == 0.00) {
+				messageNotValid = "Settled value cannot be zero!";
+				break;
+			}
+		}
+		
+		if(messageNotValid != null) {
+			showAlertFailed(messageNotValid);
+			return messageNotValid;
+		}
+		
+		isSettlement = true;
+		datas = rows;
+		
+		$('input[name = "btSelectItem"]').prop('disabled', true);
+		$('input[name = "settledInput"]').prop('disabled', true);
+		
+		var type = $('#type').val();
+		if(type == "PY")
+			$('#bankFee').removeAttr('disabled');
+			
+		var totalOutstanding = 0;
+		var totalOutstandingIdr = 0;
+		for(var i=0;i<rows.length;i++) {
+			var idSettled = "settled_" + rows[i].idKey; 
+			var settled = parseFloat(AutoNumeric.getAutoNumericElement('#' + idSettled).get().replace(/,/g, ''));
+
+			totalOutstanding += settled;
+			totalOutstandingIdr += settled * rows[i].trxCurrRate;
+		}
+		
+		$('#h_client').val(client);
+		$('#h_clientDesc').val(clientDesc);
+		$('#currTrx').val(curr);
+		AutoNumeric.getAutoNumericElement('#outstandingOrg').set(totalOutstanding);
+		AutoNumeric.getAutoNumericElement('#outstandingIdr').set(totalOutstandingIdr);
+		
+		var urlTaxRate = /*[[@{/static-data/taxRate}]]*/;
+		urlTaxRate += "?clientCode="+$('#h_client').val();
+		
+		AutoNumeric.getAutoNumericElement('#bankFee').set('0.00');
+		AutoNumeric.getAutoNumericElement('#pyrc').set('0.00');
+		AutoNumeric.getAutoNumericElement('#total').set('0.00');
+		AutoNumeric.getAutoNumericElement('#different').set('0.00');
+
+		$('#checkboxWht').prop('checked', false);
+		AutoNumeric.getAutoNumericElement('#wht').set('0.00');
+		if($('#type').val() == 'RC') {			
+			$('#labelPyrc').text('Received');
+			$('#checkboxWht').prop('disabled', true);
+		}else {
+			$('#labelPyrc').text('Payment');
+			$('#checkboxWht').prop('disabled', false);
+		}
+		
+		$.ajax({
+	        url: urlTaxRate
+	    }).done(function(data) {
+	    	$('#h_rate').val(data);
+	    });
+		
+		getExchangeDateCurr($('#transactionDate').val(), $('#currTrx').val()).done(function(data1) {
+			 AutoNumeric.getAutoNumericElement('#exchangeTrx').set(data1);
+		});
+		
+		$('#formSettlement').removeAttr('hidden');
+		$('#type').prop('disabled', true);
+		$('#btnClientSearch').prop('disabled', true);
+		$('#btnSettlement').prop('disabled', true);
+		return rows.length;
+	}
+	
+	$('#btnModalYes').click(function() {
+		$('#btnSave').attr('disabled', 'true');
+		$('#btnModalYes').attr('disabled', 'true');
+		$('#modalConfirmation').modal('hide');
+		doSave();
+	});
+	
+	function doSave() {
+		save().done(function(data) {
+			var status = data.status;
+			
+			if(status == "OK") {
+				showAlertSuccess();
+				$("#h_voucherId").val(data.result);
+				$("#h_description").val(data.message.description);
+				
+				if($('#printJournal').prop('checked') == true) {
+					$('#btnSave').attr('disabled', 'true');
+					showPreviewJournal();
+				}else {
+					$('#btnCancel').click();
+				}
+			}else if(status == "Precondition Failed") {
+				showAlertFailed(data.msgValidation);
+			}else {
+				showAlertFailed(/*[[${M_0006}]]*/);
+				$('#btnSave').prop('disabled', false);
+				$('#btnModalYes').prop('disabled', false);
+			}
+		});
+	}
+	
+	function save() {
+		var type =  $('#type option:selected').val();
+		var typeDesc = $('#type option:selected').text();
+		var client = $('#h_clientDesc').val();
+		var clientCode = $('#h_client').val();
+		var currTrx = $('#currTrx').val();
+		var currBank = $('#currBank').val();
+		var exchangeBank = $('#exchangeBank').val();
+		var exchangeTrx = $('#exchangeTrx').val();
+		var transactionDate = $('#transactionDate').val();
+		
+		var outstandingOrg = AutoNumeric.getAutoNumericElement('#outstandingOrg').get();
+		var outstandingIdr = AutoNumeric.getAutoNumericElement('#outstandingIdr').get();
+		var bankCode = $('#bank option:selected').val();
+		
+		var bankFee = AutoNumeric.getAutoNumericElement('#bankFee').get();
+		if(!bankFee.trim())
+			bankFee = parseFloat('0');
+		else
+			bankFee = parseFloat(bankFee);
+		
+		var pyrc = AutoNumeric.getAutoNumericElement('#pyrc').get();
+		var taxRate = $('#h_rate').val()/100;
+		var wht = AutoNumeric.getAutoNumericElement('#wht').get();
+
+		var total = AutoNumeric.getAutoNumericElement('#total').get();
+		var different = AutoNumeric.getAutoNumericElement('#different').get();
+		var referenceId = $('#referenceId').val();
+		var adjustment = $('#adjustment').prop('checked');
+		
+		var isWht = $('#checkboxWht').prop('checked');
+		
+		var rows = $('#tableSettlement').bootstrapTable('getAllSelections');
+		
+		var rowsData = [];
+		for(var i = 0;i<rows.length;i++) {
+			var idSettled = "settled_" + rows[i].idKey;			
+			rows[i].settledValue = AutoNumeric.getAutoNumericElement('#'+idSettled).get();
+			
+			rowsData.push(rows[i]);
+		}
+		
+		var datas = {
+			type: type,
+			typeDesc: typeDesc,
+			client: client,
+			clientCode: clientCode,
+			currTrx: currTrx,
+			currBank: currBank,
+			exchangeTrx: exchangeTrx,
+			exchangeBank: exchangeBank,
+			transactionDate: transactionDate,
+			outstandingOrg: outstandingOrg,
+			outstandingIdr: outstandingIdr,
+			bankCode: bankCode,
+			bankFee: bankFee,
+			pyrc: pyrc,
+			wht: wht,
+			taxRate: taxRate,
+			total: total,
+			different: different,
+			referenceId: referenceId,
+			adjustment: adjustment,
+			isWht: isWht,
+			rows: rowsData
+		}
+		 	
+		return $.ajax({type: 'POST', global: false, dataType: 'json',  
+			contentType:'application/json',
+			url: /*[[@{/finance/settlement/save}]]*/, 
+			data: JSON.stringify(datas), 
+			success: function (data) {
+			}
+		});
+	}
+	
+	function showPreviewJournal() {		
+		var type = $('#type').val();
+		var voucher = $("#h_voucherId").val();
+		var transaction = /*[[${appDate}]]*/;
+		var dueDate = /*[[${appDate}]]*/;
+		var voucherId = type+"-"+voucher;
+		var client = $('#client').val();
+		var description = $('#h_description').val();
+		
+		var url = /*[[@{/finance/settlement/search}]]*/;
+		var param = "";
+		param += 'voucher=' + voucher;
+		param += '&transactionDate=' + transaction;
+		param += '&dueDate=' + dueDate;
+		param += '&voucherId=' + voucherId;
+		param += '&client=' + client;
+		param += '&description=' + description;
+		
+		param = encodeURI(param);
+		
+		$('#previewJournal').removeAttr('hidden');
+		$('#previewJournalHtml').load(url, param);
+	}
+	
+	function exportXsl(voucher) {
+		var type = $('#type').val();
+		var voucher = $("#h_voucherId").val();
+		var transaction = /*[[${appDate}]]*/;
+		var dueDate = /*[[${appDate}]]*/;
+		var voucherId = type+"-"+voucher;
+		var client = $('#client').val();
+		var description = $('#h_description').val();
+		
+		var url = /*[[@{/finance/settlement/export-excel}]]*/;
+		var param = "";
+		param += '?voucher=' + voucher;
+		param += '&transactionDate=' + transaction;
+		param += '&dueDate=' + dueDate;
+		param += '&voucherId=' + voucherId;
+		param += '&client=' + client;
+		param += '&description=' + description;
+		
+		param = encodeURI(param);
+		
+		window.open(url+param, '_blank');
+	}
+	
+	function print(voucher) {
+		var type = $('#type').val();
+		var voucher = $("#h_voucherId").val();
+		var transaction = /*[[${appDate}]]*/;
+		var dueDate = /*[[${appDate}]]*/;
+		var voucherId = type+"-"+voucher;
+		var client = $('#client').val();
+		var description = $('#h_description').val();
+		
+		var url = /*[[@{/finance/settlement/view-pdf}]]*/;
+		var param = "";
+		param += '?voucher=' + voucher;
+		param += '&transactionDate=' + transaction;
+		param += '&dueDate=' + dueDate;
+		param += '&voucherId=' + voucherId;
+		param += '&client=' + client;
+		param += '&description=' + description;
+		
+		param = encodeURI(param);
+		
+		window.open(url+param, '_blank');
+	}
+	
+	$('#tableSettlement').on('check.bs.table', function (e, row) {
+		var idSettled = "settled_" + row.idKey;		
+		
+		var outstanding = row.outstanding;
+		if(outstanding.includes("(") && outstanding.includes(")"))	//handle negatif
+			outstanding = "-" + outstanding.replace("(", "").replace(")", "");
+		
+		AutoNumeric.getAutoNumericElement('#'+idSettled).set(outstanding);
+	});
+	
+	$('#tableSettlement').on('uncheck.bs.table', function (e, row) {
+		var idSettled = "settled_" + row.idKey;		
+		AutoNumeric.getAutoNumericElement('#'+idSettled).set('0.00');
+	});
+	
+	/*]]>*/
+</script>
+
+</html>

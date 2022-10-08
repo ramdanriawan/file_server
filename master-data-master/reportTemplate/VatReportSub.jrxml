@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.11.0.final using JasperReports Library version 6.11.0-0c4056ccaa4d25a5a8c45672d2f764ea3498bebb  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="VatReportSub" pageWidth="480" pageHeight="20" columnWidth="480" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="526a2ae9-7dcc-4676-ba02-dabe6d6c5d49">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<parameter name="transactionDate" class="java.lang.String"/>
+	<parameter name="to" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+	CURR_ID.CURR,
+    (SELECT SUM(vlv2.ORIGINAL_AMOUNT_CGOS_ORG) from VIEW_LAPORAN_VAT vlv2 where DATE(vlv2.trx_date) >= $P{transactionDate} and DATE(vlv2.trx_date) <=  $P{to} and vlv2.CURR = CURR_ID.CURR) AS SUM_ORIGINAL_AMOUNT_CGOS ,
+    (SELECT SUM(vlv3.ORIGINAL_AMOUNT_VAT_ORG) from VIEW_LAPORAN_VAT vlv3 where DATE(vlv3.trx_date) >= $P{transactionDate} and DATE(vlv3.trx_date) <= $P{to} and vlv3.CURR = CURR_ID.CURR) AS SUM_ORIGINAL_AMOUNT_VAT ,
+    (SELECT SUM(vlv4.IDR_AMOUNT_CGOS_ORG) from VIEW_LAPORAN_VAT vlv4 where DATE(vlv4.trx_date) >= $P{transactionDate} and DATE(vlv4.trx_date) <=  $P{to} and vlv4.CURR = CURR_ID.CURR) AS SUM_IDR_AMOUNT_CGOS ,
+    (SELECT SUM(vlv5.IDR_AMOUNT_VAT_ORG) from VIEW_LAPORAN_VAT vlv5 where DATE(vlv5.trx_date) >= $P{transactionDate} and DATE(vlv5.trx_date) <= $P{to} and vlv5.CURR = CURR_ID.CURR) AS SUM_IDR_AMOUNT_VAT   
+FROM   
+	(SELECT DISTINCT(vlv.CURR) FROM VIEW_LAPORAN_VAT vlv where DATE(vlv.trx_date) >= $P{transactionDate} and DATE(vlv.trx_date) <= $P{to}) CURR_ID]]>
+	</queryString>
+	<field name="CURR" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="CURR"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tr0012"/>
+	</field>
+	<field name="SUM_ORIGINAL_AMOUNT_CGOS" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="SUM_ORIGINAL_AMOUNT_CGOS"/>
+	</field>
+	<field name="SUM_ORIGINAL_AMOUNT_VAT" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="SUM_ORIGINAL_AMOUNT_VAT"/>
+	</field>
+	<field name="SUM_IDR_AMOUNT_CGOS" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="SUM_IDR_AMOUNT_CGOS"/>
+	</field>
+	<field name="SUM_IDR_AMOUNT_VAT" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="SUM_IDR_AMOUNT_VAT"/>
+	</field>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField textAdjust="StretchHeight">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="80" height="20" uuid="7b2a4cd9-65c1-45d8-bbea-b48d5d06fbcd">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{CURR}]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="80" y="0" width="110" height="20" uuid="97163f7d-b0f0-45ef-8232-603d85eb5a55">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{SUM_ORIGINAL_AMOUNT_CGOS}.toString().contains("(") ?
+"("+NumberFormat.getCurrencyInstance().format(new BigDecimal($F{SUM_ORIGINAL_AMOUNT_CGOS}.toString().replace("(", "").replace(")", ""))).replace("$", "")+")"  : NumberFormat.getCurrencyInstance().format((new BigDecimal($F{SUM_ORIGINAL_AMOUNT_CGOS}.toString()))).replace("$", "")]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="190" y="0" width="100" height="20" uuid="b2c83eca-cfef-4f4d-8c33-d3a5c2aba721"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{SUM_ORIGINAL_AMOUNT_VAT}.toString().contains("(") ?
+"("+NumberFormat.getCurrencyInstance().format(new BigDecimal($F{SUM_ORIGINAL_AMOUNT_VAT}.toString().replace("(", "").replace(")", ""))).replace("$", "")+")"  : NumberFormat.getCurrencyInstance().format((new BigDecimal($F{SUM_ORIGINAL_AMOUNT_VAT}.toString()))).replace("$", "")]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="290" y="0" width="100" height="20" uuid="daa7fce0-254e-47c4-abf7-642555c95ca7"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{SUM_IDR_AMOUNT_CGOS}.toString().contains("(") ?
+"("+NumberFormat.getCurrencyInstance().format(new BigDecimal($F{SUM_IDR_AMOUNT_CGOS}.toString().replace("(", "").replace(")", ""))).replace("$", "")+")"  : NumberFormat.getCurrencyInstance().format((new BigDecimal($F{SUM_IDR_AMOUNT_CGOS}.toString()))).replace("$", "")]]></textFieldExpression>
+			</textField>
+			<textField textAdjust="StretchHeight">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="390" y="0" width="100" height="20" uuid="612f9e93-b1f9-4d75-9905-8586dc2ca6a0"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{SUM_IDR_AMOUNT_VAT}.toString().contains("(") ?
+"("+NumberFormat.getCurrencyInstance().format(new BigDecimal($F{SUM_IDR_AMOUNT_VAT}.toString().replace("(", "").replace(")", ""))).replace("$", "")+")"  : NumberFormat.getCurrencyInstance().format((new BigDecimal($F{SUM_IDR_AMOUNT_VAT}.toString()))).replace("$", "")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

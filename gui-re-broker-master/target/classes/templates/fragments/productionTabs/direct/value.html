@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+	<th:block th:fragment="value-tab">
+		<div class="card mb-3">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-2">
+						<label>Sum Insured</label>
+					</div>
+					<div class="col-md-10">
+						<label>: </label>
+						<label id="t5d-labelCurr"></label>
+						<label id="t5d-labelSumInsured"></label>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label>Premium</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-premium" id="t5d-premium"
+							class="form-control" style="text-align: right;"/>
+					</div>
+					<div class="col-md-3">
+						<label>Brokerage Fee excl tax</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-brokerage" id="t5d-brokerage"
+							class="form-control" style="text-align: right;"/>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label>Others 1</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-others1" id="t5d-others1"
+							class="form-control" style="text-align: right;"/>
+					</div>
+					<div class="col-md-3">
+						<label>Others</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-others" id="t5d-others"
+							class="form-control" style="text-align: right;"/>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label>Policy Cost</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-policyCost" id="t5d-policyCost"
+							class="form-control" style="text-align: right;"/>
+					</div>
+					<div class="col-md-3">
+						<label>Commision Out</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-commisionOut" id="t5d-commisionOut"
+							class="form-control" style="text-align: right;"/>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label>Others 2</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-others2" id="t5d-others2"
+							class="form-control" style="text-align: right;"/>
+					</div>
+					<div class="col-md-3">
+						<label style="text-align: right; display: block">Net Income</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-netIncome" id="t5d-netIncome"
+							class="form-control" style="text-align: right;" disabled/>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label>Stamp Duty</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-stampDuty" id="t5d-stampDuty"
+							class="form-control" style="text-align: right;"/>
+					</div>
+					<div class="col-md-3">
+						<label></label>
+					</div>
+					<div class="col-md-3">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label>Others 3</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-others3" id="t5d-others3"
+							class="form-control" style="text-align: right;"/>
+					</div>
+					<div class="col-md-3">
+						<label>Tax In (B Fee)</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-taxInBfee" id="t5d-taxInBfee"
+							class="form-control" style="text-align: right;"/>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label style="text-align: right; display: block">Gross</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-gross" id="t5d-gross"
+							class="form-control" style="text-align: right;" disabled/>
+					</div>
+					<div class="col-md-3">
+						<label>Tax In (others)</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-taxInOthers" id="t5d-taxInOthers"
+							class="form-control" style="text-align: right;"/>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label>Admin Fee</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-adminFee" id="t5d-adminFee"
+							class="form-control" style="text-align: right;"/>
+					</div>
+					<div class="col-md-3">
+						<label>Withholding Tax</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-withholdingTax" id="t5d-withholdingTax"
+							class="form-control" style="text-align: right;" disabled/>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label>Admin Cost</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-adminCost" id="t5d-adminCost"
+							class="form-control" style="text-align: right;"/>
+					</div>
+					<div class="col-md-3">
+						<label></label>
+					</div>
+					<div class="col-md-3">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label>Others 4</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-others4" id="t5d-others4"
+							class="form-control" style="text-align: right;"/>
+					</div>
+					<div class="col-md-3">
+						<label>Net pay to u/w</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-netpayToUW" id="t5d-netpayToUW"
+							class="form-control" style="text-align: right;" disabled/>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label style="text-align: right; display: block">Gross Total</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-grossTtl" id="t5d-grossTtl"
+							class="form-control" style="text-align: right;" disabled/>
+					</div>
+					<div class="col-md-3">
+						<label>Net pay to Bank</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-netpayToBank" id="t5d-netpayToBank"
+							class="form-control" style="text-align: right;" disabled/>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label>Discount</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-discount" id="t5d-discount"
+							class="form-control" style="text-align: right;"/>
+					</div>
+					<div class="col-md-3">
+						<label></label>
+					</div>
+					<div class="col-md-3">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label>Bank Fee</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-bankFee" id="t5d-bankFee"
+							class="form-control" style="text-align: right;"/>
+					</div>
+					<div class="col-md-3">
+						<label></label>
+					</div>
+					<div class="col-md-3">
+						<button class="btn btn-success" id="t5-btnSave">Save</button>
+						&nbsp;&nbsp;
+						<button class="btn btn-danger" id="t5-btnReset">Reset</button>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label></label>
+					</div>
+					<div class="col-md-3">
+						<div class="input-group">
+							<input id="t5-clientDesc" name="t5-clientDesc" type="text"
+								class="form-control" disabled> 
+							<input id="t5-client" name="t5-client" type="text" 
+								class="form-control" hidden="true" disabled/>
+	
+							<div class="input-group-append">
+								<button id='t5-btnClientSearch' class="btn btn-primary"
+									type="button" data-toggle="modal"
+									data-target="#bank-modal">
+									<i class="fas fa-search"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+					</div>
+					<div class="col-md-3">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label>Total</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-total" id="t5d-total"
+							class="form-control" style="text-align: right;" disabled/>
+					</div>
+					<div class="col-md-3">
+					</div>
+					<div class="col-md-3">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label>Tax (PPn)</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-taxPPn" id="t5d-taxPPn"
+							class="form-control" style="text-align: right;" disabled/>
+					</div>
+					<div class="col-md-3">
+						<label></label>
+					</div>
+					<div class="col-md-3">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						<label>Net Total</label>
+					</div>
+					<div class="col-md-3">
+						<input type="text" name="t5d-netTotal" id="t5d-netTotal"
+							class="form-control" style="text-align: right;" disabled/>
+					</div>
+					<div class="col-md-3">
+						<label></label>
+					</div>
+					<div class="col-md-3">
+					</div>
+				</div>
+			
+			</div>
+		</div>
+		
+		<!-- Modal Bank -->
+		<div class="modal fade" id="bank-modal" tabindex="-1"
+			role="dialog" aria-labelledby="bank-modal" aria-hidden="true">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="bank-modal-label">Client</h5>
+						<button id="t5-btnCloseClientModal" type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="row card-body justify-content-end">
+							<div class="col-md-3">
+								<select id="bankSelector" name="bankSelector"
+									class="custom-select">
+									<option value="cliName">Name</option>
+									<option value="cliCode">Client Id</option>
+								</select>
+							</div>
+							<div class="input-group col-md-3">
+								<input id="bankFilterValue" type="text" class="form-control">
+								<div class="input-group-append">
+									<button id="bankFilterSearchBtn" class="btn btn-primary"
+										type="button" onclick="bankFilteredSearch()">
+										<i class="fas fa-search"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+						
+						<table id="tableBank" data-toggle="table" data-url=""
+							data-sortable="true" data-side-pagination="server"
+							data-pagination="true" data-page-size="5"
+							data-page-list="[5, 10, 25, 50, ALL]"
+							data-pagination-V-Align="top">
+							<thead>
+								<tr>
+									<th data-field="cliCode" data-sortable="true">Client ID</th>
+									<th data-field="cliName" data-sortable="true">Client
+										Name</th>
+									<th data-field="cliTypeDesc">Type</th>
+									<th data-field="cliDataStatusStr">Status</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /Modal Client -->
+
+		<script type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+				
+			var isEdit_t5dbrokerage = false;
+			var isEdit_t5dtaxinBfee = false;
+			var isEdit_t5dtaxinOthers = false;
+			
+			$(function() {
+				$('#bankSelector').select2({width: '100%'});
+				
+				new AutoNumeric('#t5d-premium', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-premium').set('0.00');
+				
+				new AutoNumeric('#t5d-brokerage', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-brokerage').set('0.00');
+				
+				new AutoNumeric('#t5d-others1', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-others1').set('0.00');
+				
+				new AutoNumeric('#t5d-others', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-others').set('0.00');
+				
+				new AutoNumeric('#t5d-policyCost', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-policyCost').set('0.00');
+				
+				new AutoNumeric('#t5d-commisionOut', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-commisionOut').set('0.00');
+				
+				new AutoNumeric('#t5d-others2', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-others2').set('0.00');
+				
+				new AutoNumeric('#t5d-netIncome', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-netIncome').set('0.00');
+				
+				new AutoNumeric('#t5d-stampDuty', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-stampDuty').set('0.00');
+				
+				new AutoNumeric('#t5d-others3', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-others3').set('0.00');
+				
+				new AutoNumeric('#t5d-taxInBfee', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-taxInBfee').set('0.00');
+				
+				new AutoNumeric('#t5d-gross', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-gross').set('0.00');
+				
+				new AutoNumeric('#t5d-taxInOthers', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-taxInOthers').set('0.00');
+				
+				new AutoNumeric('#t5d-adminFee', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-adminFee').set('0.00');
+				
+				new AutoNumeric('#t5d-withholdingTax', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-withholdingTax').set('0.00');
+				
+				new AutoNumeric('#t5d-adminCost', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-adminCost').set('0.00');
+				
+				new AutoNumeric('#t5d-others4', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-others4').set('0.00');
+				
+				new AutoNumeric('#t5d-netpayToUW', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-netpayToUW').set('0.00');
+				
+				new AutoNumeric('#t5d-grossTtl', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-grossTtl').set('0.00');
+				
+				new AutoNumeric('#t5d-netpayToBank', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-netpayToBank').set('0.00');
+				
+				new AutoNumeric('#t5d-discount', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-discount').set('0.00');
+				
+				new AutoNumeric('#t5d-bankFee', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-bankFee').set('0.00');
+				
+				new AutoNumeric('#t5d-total', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-total').set('0.00');
+				
+				new AutoNumeric('#t5d-taxPPn', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-taxPPn').set('0.00');
+				
+				new AutoNumeric('#t5d-netTotal', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5d-netTotal').set('0.00');
+			});
+			
+			$('#t5-btnCloseClientModal').click(function() {
+				$('#t5-client').val('');
+				$('#t5-clientDesc').val('').trigger('change');
+			});
+				
+			$('#t5-btnClientSearch').click(function() {			
+				$('#bankFilterValue').val('');
+				$('#bankSelector').val('cliName').trigger('change');
+				
+				var url = /*[[@{/static-data/client}]]*/;
+				url = url + "?cliType=2";
+				$('#tableBank').bootstrapTable('refreshOptions', {
+				    theadClasses: 'thead-dark',
+				    url: url
+				});
+			});
+			
+			function bankFilteredSearch() {
+				var url = /*[[@{/static-data/client}]]*/;
+				var filterKey = $("#bankSelector").select2('val');
+				var filterValue = $("#bankFilterValue").val();
+				
+				url = url + "?cliType=2";
+				if(filterValue != "")
+					url = url + "&filterKey="+filterKey+"&filterValue="+filterValue;
+				
+				$('#tableBank').bootstrapTable('refreshOptions', {
+				    theadClasses: 'thead-dark',
+				    url: url
+				});
+			}
+			
+			$('#tableBank').on('click-row.bs.table',function(e, row, $tr) {
+				$('#t5-client').val(row.cliCode);
+				$('#t5-clientDesc').val(row.cliName).trigger('change');
+				$('#bank-modal').modal('hide');
+			});
+			
+			$('#t5d-premium, #t5d-policyCost, #t5d-stampDuty, #t5d-adminFee, #t5d-others1, #t5d-others2, #t5d-others3, #t5d-others4, #t5d-bankFee, #t5d-adminCost, #t5d-discount').on('keyup paste change', function() {
+				calculateValue();
+				isEdit_t5dtaxinOthers = false;
+			});
+			
+			$('#t5d-others, #t5d-commisionOut').on('keyup paste change', function() {				
+				calculateNetIncome();
+				calculateTaxInBfee();
+				calculateWht();
+				calculateNetpayToUW();
+			});
+			
+			$('#t5d-brokerage').on('keyup paste change', function() {				
+				calculateNetIncome();
+				calculateTaxInBfee();
+				calculateWht();
+				calculateNetpayToUW();
+				
+				isEdit_t5dbrokerage = true;
+				isEdit_t5dtaxinBfee = false;	
+			});
+			
+			$('#t5d-taxInBfee').on('keyup paste change', function() {	
+				isEdit_t5dtaxinBfee = true;	
+				calculateNetpayToUW();
+			});
+			
+			$('#t5d-taxInOthers').on('keyup paste change', function() {		
+				isEdit_t5dtaxinOthers = true;	
+			});
+			
+			$('#value-tab').on('click', function() {
+				calculateValue();
+			});
+			
+			function setT5DSumInsured() {
+				var curr = $('#t2-curr').val();
+				var sumInsured = AutoNumeric.getAutoNumericElement('#t2-tsi').get();
+				
+				$('#t5d-labelCurr').text(curr);
+				$('#t5d-labelSumInsured').text(formatterT1_2.format(sumInsured).replace('$', ''));
+			}
+			
+			function initValue() {
+				setT5DSumInsured();
+				
+				calculatePremium();
+				calculatePolicyCost();
+				calculateStampDuty();
+				calculateGross();
+				calculateAdminFee();
+				calculateGrossTotal();
+				calculateTotal();
+				calculateNetTotal();
+				calculateBFeeExTax();
+				calculateOthers();
+				calculateCommOut();
+				calculateNetIncome();
+				calculateTaxInBfee();
+				calculateTaxInOthers();
+				calculateWht();
+				calculateNetpayToUW();
+				calculateNetpayToBank();
+			}
+			
+			function calculateValue() {
+				setT5DSumInsured();
+				
+				calculateGross();
+				calculateGrossTotal();
+				calculateTotal();
+				calculateNetTotal();
+				calculateBFeeExTax();
+				calculateOthers();
+				calculateCommOut();
+				calculateNetIncome();
+				calculateTaxInBfee();
+				calculateTaxInOthers();
+				calculateWht();
+				calculateNetpayToUW();
+				calculateNetpayToBank();
+			}
+			
+			function calculatePremium() {				
+				var sumInsured = AutoNumeric.getAutoNumericElement('#t2-tsi').get();
+				var premi = AutoNumeric.getAutoNumericElement('#t2-premiumRate').get();
+				
+				AutoNumeric.getAutoNumericElement('#t5d-premium').set(sumInsured*(premi/100));
+				
+				calculateValue();
+			}
+			
+			function calculatePolicyCost() {
+				var exchangeRate = AutoNumeric.getAutoNumericElement('#t1-exchangeRate').get();
+				
+				var t5PolicyCost = policyCost/exchangeRate;
+				AutoNumeric.getAutoNumericElement('#t5d-policyCost').set(t5PolicyCost);
+				
+				calculateValue();
+			}
+			
+			function calculateStampDuty() {
+				var exchangeRate = AutoNumeric.getAutoNumericElement('#t1-exchangeRate').get();
+				
+				var t5StampDuty = stampDuty/exchangeRate;
+				AutoNumeric.getAutoNumericElement('#t5d-stampDuty').set(t5StampDuty);
+				
+				calculateValue();
+			}
+			
+			function calculateAdminFee() {
+				var exchangeRate = AutoNumeric.getAutoNumericElement('#t1-exchangeRate').get();
+				
+				var t5AdminFee = adminFee/exchangeRate;
+				AutoNumeric.getAutoNumericElement('#t5d-adminFee').set(t5AdminFee);
+				
+				calculateValue();
+			}
+			
+			function calculateGross() {
+				var t5Premium = AutoNumeric.getAutoNumericElement('#t5d-premium').get();
+				var t5Others1 = AutoNumeric.getAutoNumericElement('#t5d-others1').get();
+				var t5PolicyCost = AutoNumeric.getAutoNumericElement('#t5d-policyCost').get();
+				var t5Others2 = AutoNumeric.getAutoNumericElement('#t5d-others2').get();
+				var t5StampDuty = AutoNumeric.getAutoNumericElement('#t5d-stampDuty').get();
+				var t5Others3 = AutoNumeric.getAutoNumericElement('#t5d-others3').get();
+				
+				var others = parseFloat(t5Others1)+parseFloat(t5Others2)+parseFloat(t5Others3);
+				var t5Gross = parseFloat(t5Premium)+parseFloat(t5PolicyCost)+parseFloat(t5StampDuty)+others;
+				
+				AutoNumeric.getAutoNumericElement('#t5d-gross').set(t5Gross);
+			}
+			
+			function calculateGrossTotal() {				
+				var t5Gross = AutoNumeric.getAutoNumericElement('#t5d-gross').get();
+				var t5AdminFee = AutoNumeric.getAutoNumericElement('#t5d-adminFee').get();
+				var t5AdminCost = AutoNumeric.getAutoNumericElement('#t5d-adminCost').get();
+				var t5Others4 = AutoNumeric.getAutoNumericElement('#t5d-others4').get();
+				
+				var t5GrossTotal = parseFloat(t5Gross)+parseFloat(t5AdminFee)+parseFloat(t5AdminCost)+parseFloat(t5Others4);
+				AutoNumeric.getAutoNumericElement('#t5d-grossTtl').set(t5GrossTotal);
+			}
+			
+			function calculateTotal() {				
+				var t5GrossTotal = AutoNumeric.getAutoNumericElement('#t5d-grossTtl').get();
+				var t5Discount = AutoNumeric.getAutoNumericElement('#t5d-discount').get();
+				var t5BankFee = AutoNumeric.getAutoNumericElement('#t5d-bankFee').get();
+				
+				var t5Total = parseFloat(t5GrossTotal)-parseFloat(t5Discount)+parseFloat(t5BankFee);
+				AutoNumeric.getAutoNumericElement('#t5d-total').set(t5Total);
+			}
+			
+			function calculateNetTotal() {	
+				var t5TaxPPn = '0.00';
+				var t5Total = AutoNumeric.getAutoNumericElement('#t5d-total').get();
+				
+				if(isUsePpn.toUpperCase() === 'Y')
+					t5TaxPPn = t5Total * (ppn/100);
+				AutoNumeric.getAutoNumericElement('#t5d-taxPPn').set(t5TaxPPn);
+				AutoNumeric.getAutoNumericElement('#t5d-netTotal').set(parseFloat(t5Total)+parseFloat(t5TaxPPn));
+			}
+			
+			function calculateBFeeExTax() {		
+				if(isEdit_t5dbrokerage)
+					return AutoNumeric.getAutoNumericElement('#t5d-brokerage').get();
+				
+				var bFeeExTax = 0.00;
+				var sumInsured = AutoNumeric.getAutoNumericElement('#t2-tsi').get();
+				
+				var insurance = $('#t4-addTable').bootstrapTable('getData');
+				for(var i=0;i<insurance.length;i++) {
+					var premi = sumInsured * (insurance[i].share/100) * (insurance[i].premiumRate/100);
+					var bFeeExTaxPart = premi * (insurance[i].bFee/100);
+					bFeeExTax = bFeeExTax + bFeeExTaxPart;
+				}
+				
+				if(!$('#t2-includeTax').is(":checked"))
+					bFeeExTax = bFeeExTax/taxRate009;
+				
+				AutoNumeric.getAutoNumericElement('#t5d-brokerage').set(bFeeExTax);
+			}
+			
+			function calculateOthers() {	
+				var t5Others1 = AutoNumeric.getAutoNumericElement('#t5d-others1').get();
+				var t5Others2 = AutoNumeric.getAutoNumericElement('#t5d-others2').get();
+				var t5Others3 = AutoNumeric.getAutoNumericElement('#t5d-others3').get();
+				var t5AdminFee = AutoNumeric.getAutoNumericElement('#t5d-adminFee').get();
+				var t5AdminCost = AutoNumeric.getAutoNumericElement('#t5d-adminCost').get();
+				var t5Others4 = AutoNumeric.getAutoNumericElement('#t5d-others4').get();
+				
+				var others = parseFloat(t5Others1)+parseFloat(t5Others2)+parseFloat(t5Others3)+parseFloat(t5Others4)+parseFloat(t5AdminFee)+parseFloat(t5AdminCost);
+				others = others/taxRate012;
+				AutoNumeric.getAutoNumericElement('#t5d-others').set(others);
+			}
+			
+			function calculateCommOut() {	
+				var commOut = 0.00;
+				var premium = AutoNumeric.getAutoNumericElement('#t5d-premium').get();
+				
+				var comm = $('#t3-addTable').bootstrapTable('getData');
+				for(var i=0;i<comm.length;i++) {
+					var commission = parseFloat(comm[i].commission.replace(/,/g, ""));
+					var commissionAmount = parseFloat(comm[i].commissionAmount.replace(/,/g, ""));
+					
+					if(commission > 0)
+						commOut += premium * (commission/100);
+					else
+						commOut += commissionAmount;
+				}
+				
+				AutoNumeric.getAutoNumericElement('#t5d-commisionOut').set(commOut);
+			}
+			
+			function calculateNetIncome() {	
+				var bfee = AutoNumeric.getAutoNumericElement('#t5d-brokerage').get();
+				var others = AutoNumeric.getAutoNumericElement('#t5d-others').get();
+				var commOut = AutoNumeric.getAutoNumericElement('#t5d-commisionOut').get();
+				
+				var netIncome = parseFloat(bfee) + parseFloat(others) - parseFloat(commOut);
+				AutoNumeric.getAutoNumericElement('#t5d-netIncome').set(netIncome);
+			}
+			
+			function calculateTaxInBfee() {	
+				if(isEdit_t5dtaxinBfee)
+					return AutoNumeric.getAutoNumericElement('#t5d-taxInBfee').get();
+				
+				var bfee = AutoNumeric.getAutoNumericElement('#t5d-brokerage').get();
+				
+				var taxInBfee = parseFloat(bfee) * (ppn/100);
+				AutoNumeric.getAutoNumericElement('#t5d-taxInBfee').set(taxInBfee);
+			}
+			
+			function calculateTaxInOthers() {	
+				if(isEdit_t5dtaxinOthers)
+					return AutoNumeric.getAutoNumericElement('#t5d-taxInOthers').get();
+				
+				var others = AutoNumeric.getAutoNumericElement('#t5d-others').get();
+				
+				var taxInOthers = parseFloat(others) * (taxRate011/100);
+				AutoNumeric.getAutoNumericElement('#t5d-taxInOthers').set(taxInOthers);
+			}
+			
+			function calculateWht() {				
+				var wht = 0.00;
+				var insurance = $('#t4-addTable').bootstrapTable('getData');
+				for(var i=0;i<insurance.length;i++) {
+					if(insurance[i].type == "0") {
+						wht = insurance[i].wht;
+						break;
+					}
+				}
+				
+				var brokerage = AutoNumeric.getAutoNumericElement('#t5d-brokerage').get();
+				
+				AutoNumeric.getAutoNumericElement('#t5d-withholdingTax').set(brokerage*(wht/100));
+			}
+			
+			function calculateNetpayToUW() {					
+				var premium = AutoNumeric.getAutoNumericElement('#t5d-premium').get();
+				var t5PolicyCost = AutoNumeric.getAutoNumericElement('#t5d-policyCost').get();
+				var t5StampDuty = AutoNumeric.getAutoNumericElement('#t5d-stampDuty').get();
+				var bf = AutoNumeric.getAutoNumericElement('#t5d-brokerage').get();
+				var taxBf = AutoNumeric.getAutoNumericElement('#t5d-taxInBfee').get();
+				var wht = AutoNumeric.getAutoNumericElement('#t5d-withholdingTax').get();
+				
+				var netpayToUw = parseFloat(premium) + parseFloat(t5PolicyCost) + parseFloat(t5StampDuty) - parseFloat(bf) - parseFloat(taxBf) + parseFloat(wht);
+				
+				AutoNumeric.getAutoNumericElement('#t5d-netpayToUW').set(netpayToUw);
+			}
+			
+			function calculateNetpayToBank() {	
+				var netpayToBank = AutoNumeric.getAutoNumericElement('#t5d-bankFee').get();
+				
+				AutoNumeric.getAutoNumericElement('#t5d-netpayToBank').set(netpayToBank);
+			}
+					
+			/*]]>*/
+		</script>
+	</th:block>
+
+</body>
+
+</html>
+
+

@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<th:block th:replace="fragments/import :: info-header" />
+<th:block th:replace="fragments/import :: css-header" />
+<th:block th:replace="fragments/import :: js-header" />
+
+<link href="css/jquery-ui.min.css" th:href="@{/css/richtext.min.css}"
+	rel="stylesheet">
+
+<style>
+.richText .richText-editor {
+	height: 125px;
+}
+</style>
+
+<script th:src="@{/js/autoNumeric.min.js}"></script>
+
+</head>
+
+<body id="page-top">
+	<th:block th:replace="fragments/general :: navbar-header" />
+
+	<div id="wrapper">
+		<th:block th:replace="fragments/general :: menu" />
+
+		<div id="content-wrapper">
+			<div class="container-fluid">
+				<th:block th:replace="fragments/general :: panel-page" />
+
+				<!-- CONTENT PAGE -->
+				<div id="cart" class="card mb-3">
+					<div id="divContentHeader" class="card-header">
+						<b><span id="titlePage" th:text="${titlePage}"></span></b>
+					</div>
+					<div class="card-body">
+						<div id="alertSuccess" class="alert alert-success"
+							style="display: none;">
+							<strong>Success!</strong> <span id="alertSuccessMsg"
+								th:text="${M_0005}"></span>
+						</div>
+						<div id="alertFailed" class="alert alert-danger"
+							style="display: none;">
+							<strong>Failed!</strong> <span id="alertFailedMsg"></span>
+						</div>
+						<div id="productionIndex">
+							<div class="row justify-content-end">
+								<div class="col-md-2">
+									<button id="productionCreate" class="btn btn-primary col-md-12"
+										onclick="create()">
+										<i class="fa fa-plus"></i> Create
+									</button>
+								</div>
+							</div>
+							<br>
+							<div class="row justify-content-end">
+								<div class="input-group col-md-2">
+									<input id="productionFilterValue" name="productionFilterValue"
+										type="text" class="form-control">
+									<div class="input-group-append">
+										<button class="btn btn-primary" type="button"
+											onclick="productionFilteredSearch()">
+											<i class="fas fa-search"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+							<br>
+							<table id="tableProduction" data-toolbar-align="right"
+								data-toggle="table" data-sortable="true" data-url=""
+								data-side-pagination="server" data-pagination="true"
+								data-page-size="5" data-page-list="[5, 10, 25, 50, ALL]">
+								<thead>
+									<tr>
+										<th data-field="requestId" data-sortable="true">Request ID</th>
+										<th data-field="aging">Aging</th>
+										<th data-field="client" data-sortable="true">Client</th>
+										<th data-field="typeOfCover" data-sortable="true">Type of Cover</th>
+										<th data-field="curr">Curr</th>
+										<th data-field="amount" data-halign="right" data-align="right">Amount</th>
+										<th data-field="status">Status</th>
+										<th data-field="action" data-halign="center" data-align="center">Action</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+						<div id="productionCreateForm" th:fragment="productionTab" hidden="true">
+							<div class="row justify-content-end">
+								<div class="col-md-2">
+									<button id="btnBack" class="btn btn-danger col-md-12">
+										<i class="fa fa-chevron-left"></i> Back
+									</button>
+								</div>
+							</div>
+							<div class="card-body">
+								<input type="hidden" id="createBy"/>
+								<input type="hidden" id="createOn"/>
+								<input type="hidden" id="trxDataStatus"/>
+								<div class="row">
+									<div class="col-md-2">Request Id</div>
+									RQ -
+									<div class="col-md-2">
+										<input type="text" name="requestId" id="requestId"
+											class="form-control" disabled />
+									</div>
+								</div>
+								<br>
+								<ul class="nav nav-tabs" id="myTab" role="tablist">
+									<li class="nav-item"><a class="nav-link active"
+										id="client-information-tab" data-toggle="tab"
+										href="#clientInformation" role="tab"
+										aria-controls="clientInformation" aria-selected="true">Client
+											Information</a></li>
+									<li class="nav-item"><a class="nav-link"
+										id="interest-insured-tab" data-toggle="tab"
+										href="#interestInsured" role="tab"
+										aria-controls="interestInsured" aria-selected="false">Interest
+											Insured</a></li>
+									<li class="nav-item"><a class="nav-link" id="comm-out-tab"
+										data-toggle="tab" href="#commOut" role="tab"
+										aria-controls="commOut" aria-selected="false">Comm Out</a></li>
+									<li class="nav-item"><a class="nav-link"
+										id="reinsurance-tab" data-toggle="tab" href="#reinsurance"
+										role="tab" aria-controls="reinsurance" aria-selected="false">Insurance</a></li>
+									<li class="nav-item"><a class="nav-link" id="value-tab"
+										data-toggle="tab" href="#value" role="tab"
+										aria-controls="value" aria-selected="false">Value</a></li>
+									<li class="nav-item"><a class="nav-link" id="tc-tab"
+										data-toggle="tab" href="#tc" role="tab" aria-controls="tc"
+										aria-selected="false">TC</a></li>
+									<li class="nav-item"><a class="nav-link"
+										id="check-list-tab" data-toggle="tab" href="#checkList"
+										role="tab" aria-controls="checkList" aria-selected="false">Checklist</a></li>
+									<li class="nav-item"><a class="nav-link" id="view-tab"
+										data-toggle="tab" href="#view" role="tab" aria-controls="view"
+										aria-selected="false">View</a></li>
+								</ul>
+								<div class="tab-content" id="myTabContent">
+									<div class="tab-pane fade show active" id="clientInformation"
+										role="tabpanel" aria-labelledby="client-information-tab">
+
+										<th:block
+											th:replace="fragments/productionTabs/direct/clientInformation :: client-information-tab" />
+
+									</div>
+									<div class="tab-pane fade" id="interestInsured" role="tabpanel"
+										aria-labelledby="interest-insured-tab">
+										<th:block
+											th:replace="fragments/productionTabs/direct/interestInsured :: interest-insured-tab" />
+									</div>
+									<div class="tab-pane fade" id="commOut" role="tabpanel"
+										aria-labelledby="comm-out-tab">
+										<th:block
+											th:replace="fragments/productionTabs/direct/comOut::comm-out-tab" />
+
+
+									</div>
+									<div class="tab-pane fade" id="reinsurance" role="tabpanel"
+										aria-labelledby="reinsurance-tab">
+										<th:block
+											th:replace="fragments/productionTabs/direct/reinsurance:: reinsurance-tab" />
+
+
+									</div>
+									<div class="tab-pane fade" id="value" role="tabpanel"
+										aria-labelledby="value-tab">
+										<th:block
+											th:replace="fragments/productionTabs/direct/value:: value-tab" />
+
+
+									</div>
+									<div class="tab-pane fade" id="tc" role="tabpanel"
+										aria-labelledby="tc-tab">
+										<th:block th:replace="fragments/productionTabs/direct/tc:: tc-tab" />
+
+									</div>
+									<div class="tab-pane fade" id="checkList" role="tabpanel"
+										aria-labelledby="check-list-tab">
+										<th:block
+											th:replace="fragments/productionTabs/direct/checklist:: check-list-tab" />
+
+
+									</div>
+									<div class="tab-pane fade" id="view" role="tabpanel"
+										aria-labelledby="view-tab">
+										<th:block
+											th:replace="fragments/productionTabs/direct/view:: view-tab" />
+
+
+									</div>
+								</div>
+							</div>
+							
+							<div id="previewReport" class="card-body" hidden="true">
+								<div class="row justify-content-center">
+									<button id="btnSendPreview" class="btn btn-success col-md-1">
+										Send Email</button>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+									<button id="btnBackPreview" class="btn btn-danger col-md-1">
+										Close</button>
+								</div>
+								
+								<br>
+								
+								<table id="tableSend" data-toolbar-align="right"
+									data-toggle="table" data-pagination="true" data-page-size="10">
+									<thead>
+										<tr>
+											<th data-field="action" data-halign="center" data-align="center">Action</th>
+											<th data-field="name">Name</th>
+											<th data-field="document">Document</th>
+										</tr>
+									</thead>
+								</table>
+								
+								<div id="previewReportHtml"></div>
+							</div>
+							<div id="buttonSave">
+								<th:block th:replace="fragments/button :: btn-save-validate" />
+							</div>
+							<div id="buttonSave2" hidden="true">
+								<th:block th:replace="fragments/button :: btn-save" />
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+			
+			<!-- Modal Validation -->
+			<div class="modal fade" id="validation-modal" tabindex="-1"
+				role="dialog" aria-labelledby="validation-modal" aria-hidden="true">
+				<div class="modal-dialog modal-lg" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="client-modal-label">Validation</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							
+						<div class="row">
+							<div class="col-md-10">
+								<label><b>Client Information</b></label>
+							</div>
+							<div class="col-md-10">
+								<label id="valCI"></label>
+							</div>
+							
+							<br>
+							<br>
+							
+							<div class="col-md-10">
+								<label><b>Interest Insured</b></label>
+							</div>
+							<div class="col-md-10">
+								<label id="valII"></label>
+							</div>
+							
+							<br>
+							<br>
+							
+							<div class="col-md-10">
+								<label><b>Reinsurance</b></label>
+							</div>
+							<div class="col-md-10">
+								<label id="valReins"></label>
+							</div>
+							
+							<br>
+							<br>
+							
+							<div class="col-md-10">
+								<label><b>Value</b></label>
+							</div>
+							<div class="col-md-10">
+								<label id="valValue"></label>
+							</div>
+							
+							<br>
+							<br>
+							
+							<div class="col-md-10">
+								<label><b>Checklist - Payment Method</b></label>
+							</div>
+							<div class="col-md-10">
+								<label id="valCPM"></label>
+							</div>
+						</div>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Modal Validation -->
+			
+			<!-- /.container-fluid -->
+			<th:block th:replace="fragments/general :: copyright-footer"></th:block>
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<!-- /#wrapper -->
+
+	<th:block th:replace="fragments/general :: scroll-to-top" />
+	<th:block th:replace="fragments/general :: logout-modal" />
+	<th:block th:replace="fragments/import :: js-body" />
+
+	<script th:src="@{/js/jquery.richtext.js}"></script>
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var isInitEdit = false;
+	
+	var t2PremiumRate = 0.00;
+	var t2BFee = 0.00;
+	var isUsePpn = 'N';
+	
+	var policyCost = 0.00;
+	if(/*[[${pPolicyCost}]]*/ != null)
+		policyCost = parseFloat(/*[[${pPolicyCost}]]*/);
+	var stampDuty = 0.00;
+	if(/*[[${pStampDuty}]]*/ != null)
+		stampDuty = parseFloat(/*[[${pStampDuty}]]*/);
+	var adminFee = 0.00;
+	if(/*[[${pAdminFee}]]*/ != null)
+		adminFee = parseFloat(/*[[${pAdminFee}]]*/);
+	var ppn = 0.00;
+	if(/*[[${pPpn}]]*/ != null)
+		ppn = parseFloat(/*[[${pPpn}]]*/);
+	var taxRate009 = 0.00;
+	if(/*[[${taxRate009}]]*/ != null)
+		taxRate009 = parseFloat(/*[[${taxRate009}]]*/);
+	var taxRate011 = 0.00;
+	if(/*[[${taxRate011}]]*/ != null)
+		taxRate011 = parseFloat(/*[[${taxRate011}]]*/);
+	var taxRate012 = 0.00;
+	if(/*[[${taxRate012}]]*/ != null)
+		taxRate012 = parseFloat(/*[[${taxRate012}]]*/);
+	
+	var pSysdate7 = parseFloat(/*[[${pSysdate7}]]*/);
+	var isValidUserLevel = /*[[${isValidUserLevel}]]*/;
+	
+	$('#t1-insuredName').richText({id: 't1-insuredName'});	
+	$('#t2-interestInsured').richText({id: 't2-interestInsured'});
+	$('#t2-location').richText({id: 't2-location'});
+	$('#t6-or').richText({id: 't6-or'});
+		
+	function create() {
+		$('#titlePage').text(/*[[${titlePageCreate}]]*/);
+		$('#productionCreateForm').removeAttr('hidden');
+		$('#productionIndex').attr('hidden', true);
+		
+		$('#createBy').val('');
+		$('#createOn').val('');
+		
+		//Tab1 default
+		AutoNumeric.getAutoNumericElement('#t2-ppw').set('0');
+		AutoNumeric.getAutoNumericElement('#t2-validity').set('0');
+		
+		initValue();
+	}
+	
+	$('#btnBack').click(function() {
+		location.reload();
+	});
+	
+	$('#btnSave').click(function() {
+		var client = $('#t1-client').val();
+		
+		var valValue = validationValue();
+		
+		if(client=="")
+			showAlertFailed("Client can't empty.");
+		else if(valValue.length > 0)
+			alert("Bank is required (Tab Value)")
+		else
+			doSave(false);
+	});
+	
+	$(function() {
+		productionFilteredSearch();
+		
+		if(isValidUserLevel == 'true')
+			$('#t8-closing').removeAttr('disabled');
+		else
+			$('#t8-closing').attr('disabled', true);
+	});
+	
+	function productionFilteredSearch() {
+		var urlInq = /*[[@{/marketing/direct-production/inquiry}]]*/;
+		urlInq = urlInq + '?filterValue=' + $('#productionFilterValue').val();
+		
+		$('#tableProduction').bootstrapTable('refreshOptions', {
+	  		paginationSuccessivelySize: 3,
+	        theadClasses: 'thead-dark',
+	        url: urlInq
+	    });
+	}
+	
+	function edit(requestId, trxDataStatus) {		
+		$('#trxDataStatus').val(trxDataStatus);		
+		
+		var data = {
+			trxVoucherId: requestId
+		}
+		
+		$.ajax({ 
+	        type: 'POST',
+	        dataType: 'json',
+	        contentType: 'application/json',
+	        data:JSON.stringify(data),
+	        url: /*[[@{/marketing/direct-production/inquiryModify}]]*/,
+	    }).then(function(result) {    
+	    	isInitEdit = true;
+	    	
+	    	var t1Data = result.t1Data;
+	    	setT1Data(t1Data);
+	    	
+	    	var t2Data = result.t2Data;
+	    	setT2Data(t2Data);
+	    	
+	    	var t3Data = result.t3Data;
+	    	setT3Data(t3Data);
+	    	
+	    	var t4Data = result.t4Data;
+	    	setT4Data(t4Data);
+	    	
+	    	var t5Data = result.t5Data;
+	    	setT5Data(t5Data);
+	    	var t5DataExt = result.t5DataExt;
+	    	if(t5DataExt.length > 0) {
+		    	$('#t5-client').val(t5DataExt[0].trxBankCode);
+				$('#t5-clientDesc').val(t5DataExt[0].trxBankCodeDesc).trigger('change');
+	    	}
+	    	
+	    	var t6Data = result.t6Data;
+	    	setT6Data(t6Data);
+	    	
+	    	var t7Data1 = result.t7Data1;
+	    	var t7Data2 = result.t7Data2;
+	    	setT7Data(t7Data1, t7Data2);
+
+	    	t7UpdateDropdownFor();
+		    $('#titlePage').text(/*[[${titlePageEdit}]]*/);
+			$('#productionCreateForm').removeAttr('hidden');
+			$('#productionIndex').attr('hidden', true);
+	    });	
+	}
+	
+	function remove(requestId) {
+		var isDelete = confirm("Are you sure?");
+		
+		if(isDelete == true) {
+			deleteData(requestId);
+			location.reload();
+		}
+	}
+	
+	function doSave(isSend) {
+		$('#btnSave').attr('disabled', 'true');
+		
+		save().done(function(data) {
+			var status = data.status;
+			var message = data.message;
+			
+			$('#createBy').val(message.createBy);
+	    	$('#createOn').val(message.createOn);
+	    	$('#requestId').val(message.voucherId);
+			
+			if(status == "OK" && !isSend)
+				showAlertSuccess();
+			else if(isSend)
+				showPreviewReport();
+			else if(status != "OK")
+				showAlertFailed(/*[[${M_0006}]]*/);
+
+			$('#btnSave').removeAttr('disabled');
+		}).fail(function() {
+			showAlertFailed(/*[[${M_0006}]]*/);
+		    $('#btnSave').removeAttr('disabled');
+		});
+	}
+	
+	function deleteData(requestId) {		
+		var data = {
+			trxVoucherId: requestId
+		}
+		
+		return $.ajax({type: 'POST', global: false, dataType: 'json',  
+			contentType:'application/json',
+			url: /*[[@{/marketing/direct-production/delete}]]*/, 
+			data: JSON.stringify(data), 
+			success: function (data) {
+			}
+		});
+	}
+	
+	function save() {
+		var trxVoucherId = $('#requestId').val();
+		var createBy = $('#createBy').val();
+		var createOn = $('#createOn').val();
+		var t1Data = getT1Data();
+		var t2Data = getT2Data();
+		var t3Data = getT3Data();
+		var t4Data = getT4Data();
+		var t5Data = getT5Data();
+		var t6Data = getT6Data();
+		var t7Data = getT7Data();
+
+		var transactionDate = $('#t1-transactionDate').val();
+		var datas = {
+			createBy: createBy,
+			createOn: createOn,
+			trxVoucherId: trxVoucherId,
+			t1Data: t1Data,
+			t2Data: t2Data,
+			t3Data: t3Data,
+			t4Data: t4Data,
+			t5Data: t5Data,
+			t6Data: t6Data,
+			t7Data: t7Data,
+			transactionDate: transactionDate
+		}
+		
+		return $.ajax({type: 'POST', global: false, dataType: 'json',  
+			contentType:'application/json',
+			url: /*[[@{/marketing/direct-production/save}]]*/, 
+			data: JSON.stringify(datas), 
+			success: function (data) {
+			}
+		});
+	}
+	
+	function getT1Data() {		
+		var client = $('#t1-client').val();
+		var share = AutoNumeric.getAutoNumericElement('#t1-share').get();
+		var curr = $('#t1-curr').val();
+		var insuredName = $('#richText-t1-insuredName').html();
+		var amount = AutoNumeric.getAutoNumericElement('#t1-amount').get();
+		var paymentMethod = $('#t1-paymentMethod').val();
+		var officer = $('#t1-officer').val();
+		var directPayment = $('#t1-directPayment').val();
+		var remarks = $('#t1-remarks').val();
+		var exchangeRate = AutoNumeric.getAutoNumericElement('#t1-exchangeRate').get();
+		var totalSumInsured = AutoNumeric.getAutoNumericElement('#t1-totalSumInsured').get();
+		
+		var t1Data = {
+			client: client,
+			share: share,
+			curr: curr,
+			insuredName: insuredName,
+			amount: amount,
+			paymentMethod: paymentMethod,
+			officer: officer,
+			directPayment: directPayment,
+			remarks: remarks,
+			exchangeRate: exchangeRate,
+			totalSumInsured: totalSumInsured
+		}
+		
+		return t1Data;
+	}
+	
+	function getT2Data() {
+		var typeOfCover = $('#t2-typeOfCover').val();
+		var interestInsured = $('#richText-t2-interestInsured').html();
+		var location = $('#richText-t2-location').html();
+		var curr = $('#t2-curr').val();
+		var sumInsured = AutoNumeric.getAutoNumericElement('#t2-tsi').get();
+		var ppw = $('#t2-ppw').val();
+		var validity = $('#t2-validity').val();
+		var premiumRate = AutoNumeric.getAutoNumericElement('#t2-premiumRate').get();
+		var bFee = AutoNumeric.getAutoNumericElement('#t2-brkrfee').get();
+		var weighted = AutoNumeric.getAutoNumericElement('#t2-weighted').get();
+		var inclTax = '0';
+		if($('#t2-includeTax').prop("checked") == true)
+			inclTax = '1';
+		var exchangeRate = AutoNumeric.getAutoNumericElement('#t1-exchangeRate').get();
+		var insuredPeriod = $('#t2-insuredPeriod').val();
+		var insuredPeriodTo = $('#t2-insuredPeriodTo').val();
+		
+		if($('#t2-ipDuration').prop('checked') == true)
+			insuredPeriod = $('#t2-durationStart').val();
+		
+		var duration = AutoNumeric.getAutoNumericElement('#t2-durationSize').get();
+		var remarks = $('#t2-remarks').val();
+		
+		var t2Data = {
+			typeOfCover: typeOfCover,
+			interestInsured: interestInsured,
+			location: location,
+			curr: curr,
+			sumInsured: sumInsured,
+			ppw: ppw,
+			validity: validity,
+			premiumRate: premiumRate,
+			bFee: bFee,
+			weighted: weighted,
+			inclTax: inclTax,
+			exchangeRate: exchangeRate,
+			insuredPeriod: insuredPeriod,
+			insuredPeriodTo: insuredPeriodTo,
+			duration: duration,
+			remarks: remarks
+		}
+		
+		return t2Data;
+	}
+	
+	function getT3Data() {		
+		var rows = $('#t3-addTable').bootstrapTable('getData');
+		
+		var t3DataTable = [];
+		for(var i=0; i<rows.length; i++) {
+			t3DataTable.push(rows[i]);
+		}
+		
+		var t3Data = {
+			t3DataTable: t3DataTable
+		}
+		
+		return t3Data;
+	}
+	
+	function getT4Data() {		
+		var rows = $('#t4-addTable').bootstrapTable('getData');
+		
+		var t4DataTable = [];
+		for(var i=0; i<rows.length; i++) {
+			t4DataTable.push(rows[i]);
+		}
+		
+		var t4Data = {
+			t4DataTable: t4DataTable
+		}
+		
+		return t4Data;
+	}
+	
+	function getT5Data() {		
+		var bank = $('#t5-client').val();
+		
+		var t5Data = {
+			sumInsured: AutoNumeric.getAutoNumericElement('#t2-tsi').get(),
+			premium: AutoNumeric.getAutoNumericElement('#t5d-premium').get(),
+			policyCost: AutoNumeric.getAutoNumericElement('#t5d-policyCost').get(),
+			stampDuty: AutoNumeric.getAutoNumericElement('#t5d-stampDuty').get(),
+			others1: AutoNumeric.getAutoNumericElement('#t5d-others1').get(),
+			others2: AutoNumeric.getAutoNumericElement('#t5d-others2').get(),
+			others3: AutoNumeric.getAutoNumericElement('#t5d-others3').get(),
+			adminFee: AutoNumeric.getAutoNumericElement('#t5d-adminFee').get(),
+			adminCost: AutoNumeric.getAutoNumericElement('#t5d-adminCost').get(),
+			others4: AutoNumeric.getAutoNumericElement('#t5d-others4').get(),
+			bankFee: AutoNumeric.getAutoNumericElement('#t5d-bankFee').get(),
+			bank: bank,
+			grossTotal: AutoNumeric.getAutoNumericElement('#t5d-grossTtl').get(),
+			discount: AutoNumeric.getAutoNumericElement('#t5d-discount').get(),
+			taxPpn: AutoNumeric.getAutoNumericElement('#t5d-taxPPn').get(),
+			netTotal: AutoNumeric.getAutoNumericElement('#t5d-netTotal').get(),
+			brokerageFee: AutoNumeric.getAutoNumericElement('#t5d-brokerage').get(),
+			others: AutoNumeric.getAutoNumericElement('#t5d-others').get(),
+			commisionOut: AutoNumeric.getAutoNumericElement('#t5d-commisionOut').get(),
+			netIncome: AutoNumeric.getAutoNumericElement('#t5d-netIncome').get(),
+			taxinBfee: AutoNumeric.getAutoNumericElement('#t5d-taxInBfee').get(),
+			taxinOthers: AutoNumeric.getAutoNumericElement('#t5d-taxInOthers').get(),
+			witholdingTax: AutoNumeric.getAutoNumericElement('#t5d-withholdingTax').get(),
+			netPayToUwriter: AutoNumeric.getAutoNumericElement('#t5d-netpayToUW').get(),
+			isModifyBrokerageFee: isEdit_t5dbrokerage,
+			isModifyTaxinBfee: isEdit_t5dtaxinBfee,
+			isModifyTaxinOthers: isEdit_t5dtaxinOthers
+		};
+		
+		return t5Data;
+	}
+	
+	function getT6Data() {		
+		var rows = $('#t6-addTable').bootstrapTable('getData');
+		
+		var t6DataTable = [];
+		for(var i=0; i<rows.length; i++) {
+			t6DataTable.push(rows[i]);
+		}
+		
+		var t6Data = {
+			t6DataTable: t6DataTable
+		}
+		
+		return t6Data;
+	}
+	
+	function getT7Data() {		
+		var rows1 = $('#t7-addTable-1').bootstrapTable('getData');
+		
+		var t7DataTable1 = [];
+		for(var i=0; i<rows1.length; i++) {
+			t7DataTable1.push(rows1[i]);
+		}
+		
+		var rows2 = $('#t7-addTable-2').bootstrapTable('getData');
+		
+		var t7DataTable2 = [];
+		for(var i=0; i<rows2.length; i++) {
+			t7DataTable2.push(rows2[i]);
+		}
+		
+		var t7Data = {
+			t7DataTable1: t7DataTable1,
+			t7DataTable2: t7DataTable2
+		}
+		
+		return t7Data;
+	}
+	
+	function setT1Data(t1Data) {
+		var requestId;
+    	var createBy;
+    	var createOn;
+    	var transactionDate;
+    	for(var i=0; i<t1Data.length; i++) {
+    		requestId = t1Data[i].trxVoucherId;
+    		createBy = t1Data[i].createBy;
+    		createOn = t1Data[i].createOnMillis;
+    		transactionDate = t1Data[i].trxDateStr;
+    		
+    		$('#t1-client').val(t1Data[i].trxClient);
+    		$('#t1-clientDesc').val(t1Data[i].clientDesc);
+    		AutoNumeric.getAutoNumericElement('#t1-share').set(t1Data[i].trxShare);
+    		$('#t1-curr').val(t1Data[i].trxCurrId).trigger('change.select2');
+    		AutoNumeric.getAutoNumericElement('#t1-totalSumInsured').set(t1Data[i].trxTsiAmount);
+    		$('#richText-t1-insuredName').html(t1Data[i].trxInsuredName);
+    		AutoNumeric.getAutoNumericElement('#t1-exchangeRate').set(t1Data[i].trxCurrRate);
+    		$('#t1-paymentMethod').val(t1Data[i].trxPayMthd).trigger('change.select2');
+    		AutoNumeric.getAutoNumericElement('#t1-amount').set(t1Data[i].trxSumInsured);
+    		$('#t1-officer').val(t1Data[i].trxOfficer).trigger('change.select2');
+    		$('#t1-directPayment').val(t1Data[i].trxDiretPy).trigger('change.select2');
+    		$('#t1-remarks').val(t1Data[i].trxRemarks);
+    		AutoNumeric.getAutoNumericElement('#t2-ppw').set(t1Data[i].trxPpwCli);
+    		AutoNumeric.getAutoNumericElement('#t2-validity').set(t1Data[i].trxPeriodVld);
+
+			AutoNumeric.getAutoNumericElement('#t4-tsi').set(t1Data[i].trxSumInsured);
+    	}
+    	$('#t1-clientDesc').trigger('change');
+    	
+    	trxDateGlobal = transactionDate;
+    	$('#t1-transactionDate').datepicker('setDate', transactionDate);
+    	
+    	$('#createBy').val(createBy);
+    	$('#createOn').val(createOn);    	
+    	$('#requestId').val(requestId);
+	}
+	
+	function setT2Data(t2Data) {    	
+		for(var i=0; i<t2Data.length; i++) {
+	    	$('#t2-typeOfCover').val(t2Data[i].trxCoverCode).trigger('change.select2');;
+			$('#richText-t2-interestInsured').html(t2Data[i].trxInsInsured);
+			$('#richText-t2-location').html(t2Data[i].trxInsLocation);
+			$('#t2-curr').val(t2Data[i].trxCurrId).trigger('change.select2');
+			AutoNumeric.getAutoNumericElement('#t2-tsi').set(t2Data[i].trxSumInsured);
+			AutoNumeric.getAutoNumericElement('#t2-ppw').set(t2Data[i].trxPpw);
+			AutoNumeric.getAutoNumericElement('#t2-validity').set(t2Data[i].trxQuoValid);
+			AutoNumeric.getAutoNumericElement('#t2-premiumRate').set(t2Data[i].trxPremiumRate);
+			AutoNumeric.getAutoNumericElement('#t2-brkrfee').set(t2Data[i].trxBfeeSell);
+			AutoNumeric.getAutoNumericElement('#t2-weighted').set(t2Data[i].trxWeightRate);
+			$('#t2-remarks').val(t2Data[i].trxRemarks);
+			
+			var inclTax = t2Data[i].trxCombined;
+			if(inclTax == '0')
+				$('#t2-includeTax').prop('checked', false);
+			else
+				$('#t2-includeTax').prop('checked', true);
+		
+			var insStart = t2Data[i].trxInsStartStr;
+			var insEnd = t2Data[i].trxInsEndStr;
+			var duration = t2Data[i].trxInsDur;
+			
+			$('#t2-insuredPeriod').val(insStart);
+			$('#t2-insuredPeriodTo').val(insEnd);
+			$('#t2-durationStart').val(insStart);
+			AutoNumeric.getAutoNumericElement('#t2-durationSize').set(duration);
+			
+			if(insStart == insEnd && duration == 0) {
+				$('#t2-ipTba').attr('checked', true);
+				$('#t2-ipTba').trigger('change');
+			}else if(insStart != null && insEnd != null) {
+				$('#t2-ipRange').attr('checked', true);
+				$('#t2-ipRange').trigger('change');
+			}else {
+				$('#t2-ipDuration').attr('checked', true);
+				$('#t2-ipDuration').trigger('change');
+			}
+		}
+		
+		actionTypeOfCoverChange(true);
+	}
+	
+	function setT3Data(t3Data) {
+		com = 0;
+		listT3AddObject = [];
+		
+    	var t3DataTable = [];
+    	for(var i=0; i<t3Data.length; i++) {    		
+    		var id = create_UUID();
+    		var action = "<button class=\"btn btn-danger\" onclick=\"t3RemoveAdd('"+id+"')\">" 
+			+ "<i class=\"fa fa-trash\"></i>" 
+			+ "</button>";
+			
+    		var data = {
+   				id : id,
+   				nameId : t3Data[i].trxSaCode,
+   				name : t3Data[i].trxSaCodeDesc,
+   				taxId : t3Data[i].trxSaTaxId,
+   				commission : formatterT1_4.format(t3Data[i].trxCommPct).replace('$', ''),
+   				commissionAmount : formatterT1_2.format(t3Data[i].trxCommAmt).replace('$', ''),
+   				action:action
+    		};
+    		
+    		com = com + t3Data[i].trxCommAmt;
+    		t3DataTable.push(data);
+    	}
+    	listT3AddObject = t3DataTable;
+    	
+    	$('#t3-addTable').bootstrapTable('load', t3DataTable);
+	}
+	
+	function setT4Data(t4Data) {
+    	var t4DataTable = [];
+    	for(var i=0; i<t4Data.length; i++) {    		
+    		var id = create_UUID();
+    		var action = "<button class=\"btn btn-danger\" onclick=\"t4RemoveAdd('"+id+"')\">" 
+			+ "<i class=\"fa fa-trash\"></i>" 
+			+ "</button>";
+			
+			var type = t4Data[i].trxInsType;
+			var typeDesc = "";
+			if(type != null) {
+				if(type == "0")
+					typeDesc = "Lead";
+				else if(type == "1")
+					typeDesc = "Co Reins";
+			}
+			var addObject = {
+				id: id,
+				reinsuranceId: t4Data[i].trxInsId,
+				reinsurance: t4Data[i].trxInsIdDesc,
+				type: t4Data[i].trxInsType,
+				typeDesc: typeDesc,
+				share: formatterT1_4.format(t4Data[i].trxInsShare).replace('$', ''),
+				curr: t4Data[i].trxCurrId,
+				amount: formatterT1_2.format(t4Data[i].trxInsAmt).replace('$', ''),
+				premiumRate: formatterT1_4.format(t4Data[i].trxInsPremium).replace('$', ''),
+				bFee: formatterT1_4.format(t4Data[i].trxInsBfee).replace('$', ''),
+				payment: t4Data[i].trxInsPaymethdDesc,
+				paymentId: t4Data[i].trxInsPaymethd,
+				remarks: t4Data[i].trxInsRemarks,
+				wht: t4Data[i].wht,
+				action: action
+			};
+    		
+    		t4DataTable.push(addObject);
+    	}
+    	
+    	$('#t4-addTable').bootstrapTable('load', t4DataTable);
+    	
+    	setReinsuranceT7();
+	}
+	
+	function setT5Data(t5Data) {
+		for(var i=0; i<t5Data.length; i++) {
+			$('#t5d-labelCurr').text($('#t2-curr').val());
+			$('#t5d-labelSumInsured').text(formatterT1_2.format(t5Data[i].trxSumInsured).replace('$', ''));
+			AutoNumeric.getAutoNumericElement('#t5d-premium').set(t5Data[i].trxPremiumBuy);
+			AutoNumeric.getAutoNumericElement('#t5d-policyCost').set(t5Data[i].trxPolAmount);
+			AutoNumeric.getAutoNumericElement('#t5d-stampDuty').set(t5Data[i].trxSdutyAmount);
+			
+			calculateGross();
+			
+			AutoNumeric.getAutoNumericElement('#t5d-others1').set(t5Data[i].trxOthers1Amount);
+			AutoNumeric.getAutoNumericElement('#t5d-others2').set(t5Data[i].trxOthers2Amount);
+			AutoNumeric.getAutoNumericElement('#t5d-others3').set(t5Data[i].trxOthers3Amount);
+			AutoNumeric.getAutoNumericElement('#t5d-adminFee').set(t5Data[i].trxAdminAmount);
+			AutoNumeric.getAutoNumericElement('#t5d-adminCost').set(t5Data[i].trxComAmount);
+			AutoNumeric.getAutoNumericElement('#t5d-others4').set(t5Data[i].trxOthers4Amount);
+			AutoNumeric.getAutoNumericElement('#t5d-bankFee').set(t5Data[i].trxBankAmount);
+			
+			AutoNumeric.getAutoNumericElement('#t5d-grossTtl').set(t5Data[i].trxGrossAmount);
+			AutoNumeric.getAutoNumericElement('#t5d-discount').set(t5Data[i].trxDiscSell);
+			calculateTotal()
+			
+			AutoNumeric.getAutoNumericElement('#t5d-taxPPn').set(t5Data[i].trxTaxinCl);
+			AutoNumeric.getAutoNumericElement('#t5d-netTotal').set(t5Data[i].trxNetTtl);
+			AutoNumeric.getAutoNumericElement('#t5d-brokerage').set(t5Data[i].trxBrkrFee);
+			AutoNumeric.getAutoNumericElement('#t5d-others').set(t5Data[i].trxOthersAmount);
+			AutoNumeric.getAutoNumericElement('#t5d-commisionOut').set(t5Data[i].trxComoAmount);
+			AutoNumeric.getAutoNumericElement('#t5d-netIncome').set(t5Data[i].trxIncAmount);
+			AutoNumeric.getAutoNumericElement('#t5d-taxInBfee').set(t5Data[i].trxTaxinBf);
+			AutoNumeric.getAutoNumericElement('#t5d-taxInOthers').set(t5Data[i].trxTaxinOth);
+			AutoNumeric.getAutoNumericElement('#t5d-withholdingTax').set(t5Data[i].trxWithAmount);
+			AutoNumeric.getAutoNumericElement('#t5d-netpayToUW').set(t5Data[i].trxNetTou);
+			
+			if(t5Data[i].isModifyTrxBrkrFee != null)
+				isEdit_t5dbrokerage = t5Data[i].isModifyTrxBrkrFee;
+			if(t5Data[i].isModifyTrxTaxinBf != null)
+				isEdit_t5dtaxinBfee = t5Data[i].isModifyTrxTaxinBf;
+			if(t5Data[i].isModifyTrxTaxinOth != null)
+				isEdit_t5dtaxinOthers = t5Data[i].isModifyTrxTaxinOth;
+		
+			calculateNetpayToBank();
+		}
+	}
+	
+	function setT6Data(t6Data) {
+    	var t6DataTable = [];
+    	for(var i=0; i<t6Data.length; i++) {    		
+    		var idKey = create_UUID();
+    		var action = "<button class=\"btn btn-danger\" onclick=\"t6Remove('"+idKey+"')\">" 
+			+ "<i class=\"fa fa-trash\"></i>" 
+			+ "</button>";
+			
+			var addObject = {
+					idKey : idKey,
+					tcGroup : t6Data[i].trxTcCode,
+					tcDetails : t6Data[i].trxTcData,
+					action : action
+			};
+    		
+    		t6DataTable.push(addObject);
+    	}
+    	
+    	$('#t6-addTable').bootstrapTable('load', t6DataTable);
+	}
+	
+	function setT7Data(t7Data1, t7Data2) {
+		var t7DataTable1 = [];
+    	for(var i=0; i<t7Data1.length; i++) {    		
+    		var id = create_UUID();
+    		var action = "<button class=\"btn btn-danger\" onclick=\"t7RemoveData1('"+id+"')\">" 
+			+ "<i class=\"fa fa-trash\"></i>" 
+			+ "</button>";
+			
+			var data = {
+				id: id,
+				typeId: t7Data1[i].trxPrClient,
+				type: t7Data1[i].trxPrClientDesc,
+				payDate: t7Data1[i].trxPrDateStr,
+				portion: formatterT1_4.format(t7Data1[i].trxPrShare).replace('$', ''),
+				action: action
+			}
+    		
+    		t7DataTable1.push(data);
+    	}
+    	
+    	$('#t7-addTable-1').bootstrapTable('load', t7DataTable1);
+    	
+    	var t7DataTable2 = [];
+    	for(var i=0; i<t7Data2.length; i++) {    		
+    		var id = create_UUID();
+    		var action = "<button class=\"btn btn-danger\" onclick=\"t7RemoveData2('"+id+"')\">" 
+			+ "<i class=\"fa fa-trash\"></i>" 
+			+ "</button>";
+			
+			var data = {
+				id: id,
+				documentId: t7Data2[i].trxDocId,
+				document: t7Data2[i].docDesc,
+				status: t7Data2[i].docStatus,
+				file: t7Data2[i].trxDocName,
+				path: t7Data2[i].trxDocFolder,
+				typeOfCover: t7Data2[i].trxPrClient,
+				action: action
+			};
+    		
+    		t7DataTable2.push(data);
+    	}
+    	
+    	$('#t7-addTable-2').bootstrapTable('load', t7DataTable2);
+	}
+	
+	function showAlertFailed(msgAlert) {
+		$(location).attr('href','#page-top');
+		$('#alertFailedMsg').text(msgAlert);
+		$('#alertFailed').fadeTo(3000, 500).slideUp(500, function() {
+		    $('#alertFailed').slideUp(500);
+		});
+	}
+	
+	function showAlertSuccess(msgAlert) {
+		$(location).attr('href','#page-top');
+		$('#alertSuccessMsg').text(msgAlert);
+		$('#alertSuccess').fadeTo(2000, 500).slideUp(500, function() {
+		    $('#alertSuccess').slideUp(500);
+		});	
+	}
+	
+	//=============== TAB VIEW SEND ===============//
+	
+	$('#btnBackPreview').click(function() {
+		$('#t8-placingSlip').prop('disabled', false);
+		$('#t8-quotation').prop('disabled', false);
+		$('#t8-closing').prop('disabled', false);
+		
+		$('#previewReport').prop('hidden', true);
+	});
+	
+	$('#t8-send').click(function() {		
+		var valCI = validationCI();
+		$('#valCI').text(valCI);
+		
+		var valII = validationII();
+		$('#valII').text(valII);
+		
+		var valReins = validationReins();
+		$('#valReins').text(valReins);
+		
+		var valValue = validationValue();
+		$('#valValue').text(valValue);
+		
+		var valCPM = validationCPM();
+		$('#valCPM').text(valCPM);
+		
+		if(valCI.length>0 || valII.length>0 || valReins.length>0 || valValue.length>0 || valCPM.length>0) {
+			$('#validation-modal').modal('show');
+			
+			return false;
+		}
+
+		doSave(true);
+	});
+	
+	$('#btnSendPreview').click(function() {		
+		var valCI = validationCI();
+		$('#valCI').text(valCI);
+		
+		var valII = validationII();
+		$('#valII').text(valII);
+		
+		var valReins = validationReins();
+		$('#valReins').text(valReins);
+		
+		var valValue = validationValue();
+		$('#valValue').text(valValue);
+		
+		var valCPM = validationCPM();
+		$('#valCPM').text(valCPM);
+		
+		if(valCI.length>0 || valII.length>0 || valReins.length>0 || valValue.length>0 || valCPM.length>0) {
+			$('#validation-modal').modal('show');
+			
+			return false;
+		}
+
+		sendEmail();
+	});
+	
+	function validationCI() {
+		var val = [];
+		
+		var client = $('#t1-client').val();
+		if(client == "")
+			val.push(" Client is required");
+		
+		var insuredName = $('#richText-t1-insuredName').html().replace(/<(.|\n)*?>/g, '');
+		if(insuredName == "")
+			val.push(" Insured Name is required");
+		
+		var paymentMethod = $('#t1-paymentMethod').val();
+		if(paymentMethod == "")
+			val.push(" Payment Method is required");
+		
+		var transactionDate = $('#t1-transactionDate').val();
+		if(transactionDate == "")
+			val.push(" Transaction Date is required");
+		
+		var officer = $('#t1-officer').val();
+		if(officer == "")
+			val.push(" Officer is required");
+		
+		var directPayment = $('#t1-directPayment').val();
+		if(directPayment == "")
+			val.push(" Direct Payment is required");
+		
+		var amount = AutoNumeric.getAutoNumericElement('#t1-amount').get();
+		if(amount <= 0.00)
+			val.push(" Amount must greater than zero");
+		
+		return val;
+	}
+	
+	function validationII() {
+		var val = [];
+		
+		var typeOfCover = $('#t2-typeOfCover').val();
+		if(typeOfCover == "")
+			val.push(" Type of Cover is required");
+		
+		var interestInsured = $('#richText-t2-interestInsured').html().replace(/<(.|\n)*?>/g, '');
+		if(interestInsured == "")
+			val.push(" Interest Insured is required");
+		
+		var location = $('#richText-t2-location').html().replace(/<(.|\n)*?>/g, '');
+		if(location == "")
+			val.push(" Location is required");
+		
+		var curr = $('#t2-curr').val();
+		if(curr == "")
+			val.push(" Curr is required");
+
+		var ppw = $('#t2-ppw').val();
+		if(ppw == "")
+			val.push(" PPW is required");
+		
+		var periodOfValidity = $('#t2-validity').val();
+		if(periodOfValidity == "")
+			val.push(" Validity is required");
+		
+		var period = $("input[name='t2-ip']:checked").val();
+		if(period === 'duration') {
+			var durationSize = AutoNumeric.getAutoNumericElement('#t2-durationSize').get();	
+			var durationStart = $('#t2-durationStart').val();
+			
+			if(durationSize == '')
+				val.push(" Duration is required");
+			if(durationStart == '')
+				val.push(" Start is required");
+		}
+		
+		var premiumRate = AutoNumeric.getAutoNumericElement('#t2-premiumRate').get();
+		if(premiumRate == "")
+			val.push(" Premium Rate is required");
+		
+		var brkrfee = AutoNumeric.getAutoNumericElement('#t2-brkrfee').get();
+		if(brkrfee == "")
+			val.push(" Brokerage Fee is required");
+		
+		var weighted = AutoNumeric.getAutoNumericElement('#t2-weighted').get();
+		if(weighted == "")
+			val.push(" Weighted is required");
+		
+		var tsi = AutoNumeric.getAutoNumericElement('#t2-tsi').get();
+		if(tsi <= 0.00)
+			val.push(" TSI must greater than zero");
+		
+		return val;
+	}
+	
+	function validationReins() {
+		var val = [];
+		
+		var rows = $('#t4-addTable').bootstrapTable('getData');
+		
+		if(rows.length == 0)
+			val.push(" Table reinsurance can't empty");
+		
+		return val;
+	}
+	
+	function validationValue() {
+		var val = [];
+		
+		var bankFee = AutoNumeric.getAutoNumericElement('#t5d-bankFee').get();
+		
+		if(bankFee > 0 && $('#t5-client').val() == "")
+			val.push(" Bank is required");
+		
+		return val;
+	}
+	
+	function validationCPM() {
+		var val = [];
+		
+		var rows1 = $('#t7-addTable-1').bootstrapTable('getData');
+		
+		if(rows1.length == 0)
+			val.push(" Table payment method can't empty");
+		
+		let mapFor = new Map();
+		
+		var listFor = getListFor();
+		for(var i=0; i<listFor.length; i++) {
+			for(var j=0; j<rows1.length; j++) {
+				if(listFor[i].id == rows1[j].typeId) {
+					var portion = mapFor.get(listFor[i].id);
+					if(portion == null)
+						portion = 0.00;
+										
+					portion += parseFloat(rows1[j].portion.replace(/,/g, ''));	
+					mapFor.set(listFor[i].id, portion);
+				}
+			}
+		}
+		
+		for(var i=0; i<listFor.length; i++) {
+			var portion = mapFor.get(listFor[i].id);
+			if(Math.round(portion) != 100) {
+				val.push(" Total portion " + listFor[i].text + " must equal 100%");
+			}
+		}
+		
+		return val;
+	}
+	
+	$('#btnValidate').click(function() {
+		var valCI = validationCI();
+		$('#valCI').text(valCI);
+		
+		var valII = validationII();
+		$('#valII').text(valII);
+		
+		var valReins = validationReins();
+		$('#valReins').text(valReins);
+		
+		var valValue = validationValue();
+		$('#valValue').text(valValue);
+		
+		var valCPM = validationCPM();
+		$('#valCPM').text(valCPM);
+		
+		if(valCI.length>0 || valII.length>0 || valReins.length>0 || valValue.length>0 || valCPM.length>0) {
+			$('#validation-modal').modal('show');
+			
+			return false;
+		}
+	});
+	
+	function showPreviewReport() {		
+		var trxVoucherId = $('#requestId').val();
+		if(trxVoucherId=="")
+			return null;
+		
+		var isPlacing = $('#t8-placingSlip').is(':checked');
+		var isQuotation = $('#t8-quotation').is(':checked');
+		var isClosing = $('#t8-closing').is(':checked');
+		
+		var process;
+		
+		var remarks;
+		if(isPlacing) {
+			process = "placing";
+			
+			remarks = $('#t8-placingSlipRemarks').val();
+			if(remarks=="") {
+				alert("Remarks 'Palacing Slip' must be fill!");
+				return null;
+			}	
+		}else if(isQuotation) {
+			process = "quotation";
+			
+			remarks = $('#t8-quotationRemarks').val();
+			if(remarks=="") {
+				alert("Remarks 'Quotation' must be fill!");
+				return null;
+			}			
+		}else if(isClosing) {			
+			remarks = $('#t8-closingRemarks').val();
+			var clientDate = $('#t8-clientConfirmationDate').val();
+			var clientInfo = $('#t8-clientConfirmationInfo').val();
+			var isValidDate = validationTrxDate();
+			if(clientDate=="" || clientInfo == "") {
+				alert("Client Confirmation must be fill!");
+				return null;
+			}else if(remarks=="") {
+				alert("Remarks 'Closing' must be fill!");
+				return null;
+			}else if(!isValidDate) {
+				alert('Please Change Transaction Date (EOM)');
+				return null;
+			}
+			
+			$('#t8-placingSlip').prop('disabled', true);
+			$('#t8-quotation').prop('disabled', true);
+			$('#t8-closing').prop('disabled', true);
+
+			var transactionDate = $('#t1-transactionDate').val();
+			var paramClosing = {
+				"trxVoucherId": trxVoucherId,
+				"remarks": remarks,
+				"clientConfirmationDate": clientDate,
+				"transactionDate": transactionDate
+			};
+			
+			var url = /*[[@{/marketing/direct-production/closing}]]*/;
+			$.ajax({
+				type: 'POST', global: false, dataType: 'json',  
+				contentType:'application/json',
+				url: url, 
+				data: JSON.stringify(paramClosing), 
+				success: function (data) {
+				}
+			}).done(function(data) {
+				$('#trxDataStatus').val(11);
+				$('#tableSend').bootstrapTable('load', data);
+				
+				var url = /*[[@{/marketing/direct-production/closing-search}]]*/;
+				var param = 'trxVoucherId=' + trxVoucherId;
+				
+				param = encodeURI(param);
+				
+				$('#previewReport').removeAttr('hidden');
+				$('#previewReportHtml').load(url, param);
+			}).fail(function() {
+				showAlertFailed('Cannot Closing');
+			});
+			
+			return null;
+		}else {
+			return null;
+		}
+		
+		$('#t8-placingSlip').prop('disabled', true);
+		$('#t8-quotation').prop('disabled', true);
+		$('#t8-closing').prop('disabled', true);
+		
+		var param = {
+			"trxVoucherId": trxVoucherId,
+			"process": process
+		};
+		
+		$.ajax({
+			type: 'POST', global: false, dataType: 'json',  
+			contentType:'application/json',
+			url: /*[[@{/marketing/direct-production/inquirySend}]]*/, 
+			data: JSON.stringify(param), 
+			success: function (data) {
+			}
+		}).done(function(data) {
+			$('#tableSend').bootstrapTable('load', data);
+			
+			var url = /*[[@{/marketing/direct-production/search}]]*/;
+			var param = 'trxVoucherId=' + trxVoucherId + '&process=' + process;
+			
+			param = encodeURI(param);
+			
+			$('#previewReport').removeAttr('hidden');
+			$('#previewReportHtml').load(url, param);
+		}).fail(function() {
+			showAlertFailed('Cannot get data');
+		});
+		
+	}
+	
+	function printPreview(trxVoucherId, code, process, document) {		
+		var url = /*[[@{/marketing/direct-production/print}]]*/;
+		var param = '?trxVoucherId=' + trxVoucherId + '&process=' + process + '&code=' + code + '&document=' + document;
+		
+		param = encodeURI(param);
+		
+		window.open(url+param, '_blank');
+	}
+	
+	function printPreviewClosing(voucherId, insSub, clientName, type) {
+		var trxVoucherId = $('#requestId').val();
+		
+		var url = /*[[@{/marketing-report/production/closing-print}]]*/;
+		var param = '?voucherId=' + voucherId + '&type=' + type + '&trxVoucherId=' + trxVoucherId + '&insSub=' + insSub;
+		
+		param = encodeURI(param);
+		
+		window.open(url+param, '_blank');
+	}
+	
+	function exportPreview(trxVoucherId, code, process, document, file) {		
+		var url = /*[[@{/marketing/direct-production/document}]]*/;
+		var param = '?trxVoucherId=' + trxVoucherId + '&process=' + process + '&code=' + code + '&document=' + document+ '&file=' + file;
+		
+		param = encodeURI(param);
+		
+		window.open(url+param, '_blank');
+	}
+	
+	function exportPreviewClosing(voucherId, insSub, cliName, fileName, type) {		
+		var trxVoucherId = $('#requestId').val();
+		
+		var url = /*[[@{/marketing-report/production/closing-document}]]*/;
+		var param = '?voucherId=' + voucherId + '&cliName=' + cliName + '&type=' + type + '&trxVoucherId=' + trxVoucherId + '&fileName=' + fileName + '&insSub=' + insSub;
+		
+		param = encodeURI(param);
+		
+		window.open(url+param, '_blank');
+	}
+	
+	function sendEmail() {		
+		var trxVoucherId = $('#requestId').val();
+		if(trxVoucherId=="")
+			return null;
+		
+		var isPlacing = $('#t8-placingSlip').is(':checked');
+		var isQuotation = $('#t8-quotation').is(':checked');
+		var isClosing = $('#t8-closing').is(':checked');
+		
+		var process;
+		
+		if(isPlacing) {
+			process = "placing";
+			
+			remarks = $('#t8-placingSlipRemarks').val();
+			if(remarks=="") {
+				alert("Remarks 'Palacing Slip' must be fill!");
+				return null;
+			}	
+		}else if(isQuotation) {
+			process = "quotation";
+			
+			remarks = $('#t8-quotationRemarks').val();
+			if(remarks=="") {
+				alert("Remarks 'Quotation' must be fill!");
+				return null;
+			}			
+		}else {
+			return null;
+		}
+		
+		var param = {
+			"trxVoucherId": trxVoucherId,
+			"process": process,
+			"remarks": remarks
+		};
+
+		$.ajax({
+			type: 'POST', global: false, dataType: 'json',  
+			contentType:'application/json',
+			url: /*[[@{/marketing/direct-production/send-email}]]*/, 
+			data: JSON.stringify(param), 
+			success: function (data) {
+			}
+		}).done(function(data) {
+			$('#trxDataStatus').val(data.trxDataStatus);
+			
+			showAlertSuccess('Send email finish.');
+		}).fail(function() {
+			showAlertFailed('Cannot send email');
+		});
+		
+	}
+	
+	const formatterT1_2 = new Intl.NumberFormat('en-US', {
+			style: 'currency',
+			currency: 'USD',
+			minimumFractionDigits: 2
+	});
+	
+	const formatterT1_4 = new Intl.NumberFormat('en-US', {
+			style: 'currency',
+			currency: 'USD',
+			minimumFractionDigits: 4
+	});
+	
+	function create_UUID() {
+	    var dt = new Date().getTime();
+	    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+	        var r = (dt + Math.random()*16)%16 | 0;
+	        dt = Math.floor(dt/16);
+	        return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+	    });
+	    
+	    return uuid;
+	}
+	
+	function validationTrxDate() {
+		var isValid = false;
+		
+		var trxDate = $('#t1-transactionDate').val();
+		if(trxDate == null || trxDate == '')
+			return false;
+		
+		var param = {
+			'trxDate': trxDate
+		};
+
+		$.ajax({
+			type: 'POST', global: false, dataType: 'json', async: false,  
+			contentType:'application/json',
+			url: /*[[@{/marketing-report/production/isValidTrxDate}]]*/, 
+			data: JSON.stringify(param), 
+			success: function (data) {
+			}
+		}).done(function(data) {
+			isValid = data;
+		}).fail(function() {
+			showAlertFailed('Failed validation for Transaction Date');
+		});
+		
+		return isValid;
+	}
+		
+	/*]]>*/
+</script>
+
+</html>

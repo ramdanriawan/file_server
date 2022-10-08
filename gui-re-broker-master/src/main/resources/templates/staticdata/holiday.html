@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<th:block th:replace="fragments/import :: info-header"/>
+	<th:block th:replace="fragments/import :: css-header"/>
+	<th:block th:replace="fragments/import :: js-header"/>
+</head>
+
+<body id="page-top">
+	<th:block th:replace="fragments/general :: navbar-header"/>
+	
+	<div id="wrapper">
+		<th:block th:replace="fragments/general :: menu"/>
+		
+    	<div id="content-wrapper">
+      		<div class="container-fluid">
+      		<th:block th:replace="fragments/general :: panel-page"/>
+
+			<!-- CONTENT PAGE -->
+			<div class="card mb-3">
+          	 <div class="card-header">
+              	<b><span id="titlePage" th:text="${titlePage}"></span></b>
+             </div>
+             
+             <!-- INQUIRY -->
+	         <div id="holidayInquiry" class="card-body">     
+			  	<div class="row card-body justify-content-end">
+					<button id="btnCreate" class="btn btn-primary col-md-2">
+						<i class="fa fa-plus"></i> Create
+					</button>
+				</div>
+				
+	            <table
+				  id="tableHoliday"
+				  data-toggle="table"
+				  data-sortable="true"
+				  data-url=""
+				  data-side-pagination="server"
+				  data-pagination="true"
+				  data-page-size="5"
+				  data-page-list="[5, 10, 25, 50, ALL]">
+				  <thead>
+				    <tr>
+				      <th data-field="holiDateFormat" data-sortable="true">Date</th>
+				      <th data-field="holiDesc" data-sortable="true">Description</th>
+				      <th data-field="holiDataStatusDesc">Status</th>
+				    </tr>
+				  </thead>
+				</table>
+	         </div>
+	         
+         	 <div id="holidayCreateEdit" class="card-body" hidden="true">
+         	 	<div id="alertSuccess" class="alert alert-success" style="display: none;">
+			   		<strong>Success!</strong> <span id="alertSuccessMsg" th:text="${M_0005}"></span>
+				</div>
+				<div id="alertFailed" class="alert alert-danger" style="display: none;">
+			   		<strong>Failed!</strong> <span id="alertFailedMsg"></span>
+				</div>
+		    	
+		    	<input type="hidden" id="h_isCreate"/>
+		    	
+		    	<div class="row card-body justify-content-end">
+					<button id="btnBack" class="btn btn-danger col-md-2">
+						<i class="fa fa-chevron-left"></i> Back
+					</button>
+				</div>
+
+				<form id="formInput" class="form-horizontal">
+				  <div class="form-group">
+				    <label class="col-sm-4" for="datepickerHoliDate">Date</label>
+			    	<div class="input-group col-sm-3">
+						<input type="text" class="form-control" id="datepickerHoliDate" placeholder="dd-MM-yyyy" 
+		      				maxlength="10" disabled>
+		      			<div id="btnDatepickerHoliDate" class="input-group-append">
+							<button class="btn btn-primary" type="button">
+								<span class="fa fa-calendar"></span>
+							</button>
+						</div>
+					</div>
+				    <input type="hidden" id="h_datepickerHoliDate"/>
+				  </div>
+				  <div class="form-group">
+				    <label class="col-sm-4" for="textDesc">Description</label>
+				    <div class="col-sm-6"> 
+				      <input type="text" class="form-control" id="textDesc" maxlength="50">
+				      <input type= "hidden" id="h_textDesc"/>
+				    </div>
+				  </div>
+				  <div class="form-group">
+				    <label class="col-sm-4" for="dropdownStatus">Status</label>
+				    <div class="col-sm-3"> 
+				      <select id="dropdownStatus" class="select2" style="width:100%">
+				      </select>
+				      <input type= "hidden" id="h_dropdownStatus" value="11"/>
+				    </div>
+				  </div>
+				</form>
+				<th:block th:replace="fragments/button :: btn-save-cancel"/>
+			 </div>
+			</div>
+			
+			<th:block th:replace="fragments/general :: copyright-footer"></th:block>
+			
+	   		</div>
+      		<!-- /.container-fluid -->
+    	</div>
+    	<!-- /.content-wrapper -->
+	</div>
+  	<!-- /#wrapper -->
+	
+	<th:block th:replace="fragments/modal :: confirmation-save"/>
+	<th:block th:replace="fragments/general :: scroll-to-top"/>
+	<th:block th:replace="fragments/general :: logout-modal"/>
+	<th:block th:replace="fragments/import :: js-body"/>
+
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	
+	$(function() {		
+		//Dropdown server side initialize
+		function initializeDropdown() {
+			return $.ajax({
+				type: 'GET', global: false, dataType: 'json',
+				url: /*[[@{/static-data/dropdown-status}]]*/
+			});
+		}
+		initializeDropdown().done(function(data) {
+			$('#dropdownStatus').select2({data: data});
+		});
+		
+		//Datepicker initialize
+	  	$('#datepickerHoliDate').datepicker({
+	  		dateFormat: 'dd-mm-yy',
+	  		minDate: new Date(/*[[${appDateNextDP}]]*/)
+	  	});
+		$('#datepickerHoliDate').val(/*[[${appDateNext}]]*/);
+		$('#h_datepickerHoliDate').val(/*[[${appDateNext}]]*/);
+		
+		//Data table initialize
+	  	$('#tableHoliday').bootstrapTable('refreshOptions', {
+	  		paginationSuccessivelySize: 3,
+	        theadClasses: 'thead-dark',
+	        url: /*[[@{/static-data/holiday/inquiry}]]*/
+	    });
+	  	
+	});
+	
+	//Event button on click
+	$('#btnDatepickerHoliDate').click(function() {
+		$('#datepickerHoliDate').datepicker('show');
+	});
+	$('#btnCreate').click(function() {
+		createEdit(/*[[${titlePageCreate}]]*/);
+		$('#h_isCreate').val('true');
+	});
+	$('#btnBack').click(function() {
+		inquiry();
+	});
+	$('#btnSave').click(function() {
+		if(validationRequired()) {
+			$('#btnModalYes').removeAttr('disabled');
+			$('#modalConfirmation').modal('show');
+		}else {
+			showAlertFailed(/*[[${M_0008}]]*/);
+		}
+	});
+	$('#btnCancel').click(function() {
+		$('#textDesc').val($('#h_textDesc').val());
+		$('#datepickerHoliDate').val($('#h_datepickerHoliDate').val());
+		$('#dropdownStatus').select2().val($('#h_dropdownStatus').val()).trigger('change');
+	});
+	$('#btnModalYes').click(function() {
+		$('#btnModalYes').attr('disabled', 'true');
+		$('#modalConfirmation').modal('hide');
+		doSave();
+	});
+	
+	//Data table event on click-row
+  	$('#tableHoliday').on('click-row.bs.table',function(e, row, $tr) {
+  		createEdit(/*[[${titlePageEdit}]]*/);
+  		$('#btnDatepickerHoliDate').prop('hidden', true);
+  		$('#datepickerHoliDate').val(row.holiDateFormat);
+  		$('#textDesc').val(row.holiDesc);
+		$('#dropdownStatus').select2().val(row.holiDataStatus).trigger('change');
+		
+		$('#h_isCreate').val('false');
+		$('#h_datepickerHoliDate').val(row.holiDateFormat);
+		$('#h_textDesc').val(row.holiDesc);
+		$('#h_dropdownStatus').val(row.holiDataStatus);
+  	});
+	
+	function createEdit(title){
+		$('#titlePage').text(title);
+		$('#holidayCreateEdit').removeAttr('hidden');
+		$('#holidayInquiry').attr('hidden', 'true');
+	}
+
+	function inquiry(){
+		$('#titlePage').text(/*[[${titlePage}]]*/);
+		$('#holidayInquiry').removeAttr('hidden');
+		$('#holidayCreateEdit').attr('hidden', 'true');
+		
+		clear();
+	}
+	
+	function clear(){
+  		$('#btnDatepickerHoliDate').prop('hidden', false);
+  		$('#datepickerHoliDate').val(/*[[${appDateNext}]]*/);
+  		$('#textDesc').val('');
+  		$('#dropdownStatus').select2().val('11').trigger('change');		//Active
+  		
+  		$('#h_textDesc').val('');
+		$('#h_datepickerHoliDate').val(/*[[${appDateNext}]]*/);
+		$('#h_dropdownStatus').val('11');
+	}
+	
+	function showAlertSuccess() {
+		$('#alertSuccess').fadeTo(2000, 500).slideUp(500, function() {
+		    $('#alertSuccess').slideUp(500);
+		    location.reload();
+		});
+	}
+	
+	function showAlertFailed(msgAlert) {
+		$('#alertFailedMsg').text(msgAlert);
+		$('#alertFailed').fadeTo(3000, 500).slideUp(500, function() {
+		    $('#alertFailed').slideUp(500);
+		});
+	}
+	
+	function validationRequired() {
+		var date = $('#datepickerHoliDate').val();
+		var desc = $('#textDesc').val();
+		var status = $('#dropdownStatus').select2().val();
+		
+		if(date.trim() && desc.trim() && status.trim()) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+	
+	function save() {
+		var date = $("#datepickerHoliDate").val();
+		var desc = $("#textDesc").val();
+		var status = $("#dropdownStatus").select2().val();
+		var isCreate = $("#h_isCreate").val();
+		var json = {
+			holiDate: date,
+			holiDesc: desc,
+			holiDataStatus: status,
+			isCreate: isCreate
+		};
+		
+		return $.ajax({type: 'POST', global: false, dataType: 'json',  
+			contentType:'application/json',
+			url: /*[[@{/static-data/holiday/save}]]*/, 
+			data: JSON.stringify(json), 
+			success: function (data) {
+			}
+		});
+	}
+	
+	function doSave() {
+		save().done(function(isSuccess) {
+			if(isSuccess)
+				showAlertSuccess();
+			else
+				showAlertFailed(/*[[${M_0006}]]*/);
+		});
+	}
+
+	/*]]>*/
+</script>
+
+</html>

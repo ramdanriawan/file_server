@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<th:block th:replace="fragments/import :: info-header"/>
+	<th:block th:replace="fragments/import :: css-header"/>
+	<th:block th:replace="fragments/import :: js-header"/>
+</head>
+
+<body id="page-top">
+	<th:block th:replace="fragments/general :: navbar-header"/>
+	
+  	<div id="wrapper">
+		<th:block th:replace="fragments/general :: menu"/>
+		
+    	<div id="content-wrapper">
+      		<div class="container-fluid">
+      		<th:block th:replace="fragments/general :: panel-page"/>
+
+				
+				<!-- CONTENT PAGE -->
+        
+
+      		</div>
+      		<!-- /.container-fluid -->
+			<th:block th:replace="fragments/general :: copyright-footer"></th:block>
+    	</div>
+    	<!-- /.content-wrapper -->
+	</div>
+  	<!-- /#wrapper -->
+
+	<th:block th:replace="fragments/general :: scroll-to-top"/>
+	<th:block th:replace="fragments/general :: logout-modal"/>
+	<th:block th:replace="fragments/import :: js-body"/>
+
+</body>
+
+</html>

@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="EntryJournalXls" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="842" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="dbfb7d88-c694-4555-8f46-63a4806c9acf">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<parameter name="voucher" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="transactionDate" class="java.lang.String"/>
+	<parameter name="companyName" class="java.lang.String"/>
+	<parameter name="dueDate" class="java.lang.String"/>
+	<parameter name="client" class="java.lang.String"/>
+	<parameter name="voucherId" class="java.lang.String"/>
+	<parameter name="printedDate" class="java.lang.String"/>
+	<parameter name="printedBy" class="java.lang.String"/>
+	<parameter name="description" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select tr1.gl_trx_desc, trx.gl_account, coa.coa_descrip, trx.gl_curr_id, trx.gl_curr_rate,  trx.gl_org_debit, trx.gl_idr_debit, trx.gl_org_credit, trx.gl_idr_credit from TR0001 tr1, TR0002 trx, MA0004 coa  where trx.gl_voucher_id = $P{voucher}
+and trx.gl_voucher_id = tr1.gl_voucher_id
+and coa.coa_code = trx.gl_account]]>
+	</queryString>
+	<field name="gl_trx_desc" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gl_account" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="coa_descrip" class="java.lang.String">
+		<fieldDescription><![CDATA[Nama COA]]></fieldDescription>
+	</field>
+	<field name="gl_curr_id" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gl_curr_rate" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gl_org_debit" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gl_idr_debit" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gl_org_credit" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gl_idr_credit" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="totalDebit" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{gl_idr_debit}]]></variableExpression>
+	</variable>
+	<variable name="totalCredit" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{gl_idr_credit}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="120">
+			<textField>
+				<reportElement x="742" y="40" width="100" height="20" uuid="a0d78288-f50b-4280-9f9f-bcc95edc2cd8"/>
+				<textFieldExpression><![CDATA[$P{printedBy}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="727" y="20" width="15" height="20" uuid="cd1abd44-f3d6-424a-88e9-2fade283cfb4"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField pattern="MM/dd/yyyy HH:mm">
+				<reportElement x="742" y="20" width="100" height="20" uuid="d288a02d-3b90-46f9-9b38-f4d146a7516c"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="60" width="71" height="20" uuid="b72c22d0-ab6f-4c9b-9619-18ad1faa4d92"/>
+				<text><![CDATA[Voucher Id]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="84" y="100" width="758" height="20" uuid="60591788-9e20-4c64-aa01-11a307767f21"/>
+				<textElement textAlignment="Justified" markup="html"/>
+				<textFieldExpression><![CDATA[$F{gl_trx_desc}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="40" width="71" height="20" uuid="6ba7a258-3c7a-4042-9e5d-308d3d691497"/>
+				<text><![CDATA[Due Date]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="84" y="80" width="208" height="20" uuid="72df97f9-0a7a-431c-85e2-02ac4fdf9753"/>
+				<textFieldExpression><![CDATA[$P{client}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="84" y="20" width="208" height="20" uuid="fa840156-a457-4362-8308-e5b1289317c9"/>
+				<textFieldExpression><![CDATA[$P{transactionDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="292" height="20" uuid="b31d730a-b077-4ebd-a458-7b824827ec22"/>
+				<textFieldExpression><![CDATA[$P{companyName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="20" width="71" height="20" uuid="2dfca578-8a45-4e3e-854c-461ab5b5544d"/>
+				<text><![CDATA[Transaction Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="727" y="40" width="15" height="20" uuid="5883baf0-a9a8-41fc-9f77-d84910ebdcd4"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="84" y="40" width="208" height="20" uuid="a904b00b-08ba-4b73-9b23-553b16a22136"/>
+				<textFieldExpression><![CDATA[$P{dueDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="71" y="20" width="13" height="20" uuid="f20ae85b-9c57-4553-954c-d178c126def8"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="642" y="40" width="85" height="20" uuid="e1f391f9-4c71-415f-a62c-a68ab96614ba"/>
+				<text><![CDATA[Printed By]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="100" width="71" height="20" uuid="a50a1ba6-9215-498f-9860-99f7831fb145"/>
+				<text><![CDATA[Description]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="71" y="40" width="13" height="20" uuid="b103aa49-a078-4b53-bef5-6c903c83f2b6"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="642" y="20" width="85" height="20" uuid="65a33080-9c32-425c-8a1f-a2d1ae76cc85"/>
+				<text><![CDATA[Printed Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="80" width="71" height="20" uuid="6446573f-1973-48e1-9588-c5b58dfe2a41"/>
+				<text><![CDATA[Client]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="71" y="80" width="13" height="20" uuid="862c1d18-24c0-49d5-9d94-0f51f02cd8d6"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="84" y="60" width="208" height="20" uuid="8ded9865-3e37-476d-a973-9ca7ccf14feb"/>
+				<textFieldExpression><![CDATA[$P{voucherId}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="71" y="100" width="13" height="20" uuid="c479e7ee-f5a9-40a6-bcf8-933839f77372"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="71" y="60" width="13" height="20" uuid="680bc459-022f-456f-8c03-16ac1a4247e3"/>
+				<text><![CDATA[:]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="71" height="20" uuid="8a4e55a6-e7f0-451d-a709-94f4d44150e8"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[COA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="71" y="0" width="221" height="20" uuid="c152d071-e275-4708-8233-f81b1a2bd7a8"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Description]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="292" y="0" width="50" height="20" uuid="3ad4bee1-3040-469f-bab8-e53d2b649880"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Curr]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="342" y="0" width="100" height="20" uuid="1c0944ee-2c99-4ad1-9e0f-32608ca6976b"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Exchange]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="442" y="0" width="100" height="20" uuid="a339e0b4-6478-4fa9-8ab6-ffd4075a876a"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Debit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="542" y="0" width="100" height="20" uuid="fef67494-4e58-4848-b57c-a068192656e1"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Debit(IDR)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="642" y="0" width="100" height="20" uuid="ad40bd3a-e355-4a87-bda0-7cc1d7cbf132"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Credit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="742" y="0" width="100" height="20" uuid="bd403913-016e-4595-b2f5-144d92e795c3"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Credit(IDR)]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="71" height="20" isRemoveLineWhenBlank="true" uuid="ef8fa0b6-1d1a-459a-abd1-8f68d92faa2f">
+					<printWhenExpression><![CDATA[($F{gl_org_debit} == null
+    ? new BigDecimal("0") : $F{gl_org_debit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_idr_debit} == null
+    ? new BigDecimal("0") : $F{gl_idr_debit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_org_credit} == null
+    ? new BigDecimal("0") : $F{gl_org_credit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_idr_credit} == null
+    ? new BigDecimal("0") : $F{gl_idr_credit})
+    .compareTo(new BigDecimal("0")) > 0]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{gl_account}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="71" y="0" width="221" height="20" isRemoveLineWhenBlank="true" uuid="95957057-c56e-4718-b053-0630553372c4">
+					<printWhenExpression><![CDATA[($F{gl_org_debit} == null
+    ? new BigDecimal("0") : $F{gl_org_debit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_idr_debit} == null
+    ? new BigDecimal("0") : $F{gl_idr_debit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_org_credit} == null
+    ? new BigDecimal("0") : $F{gl_org_credit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_idr_credit} == null
+    ? new BigDecimal("0") : $F{gl_idr_credit})
+    .compareTo(new BigDecimal("0")) > 0]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{coa_descrip}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="292" y="0" width="50" height="20" isRemoveLineWhenBlank="true" uuid="2c505b32-5949-4399-8fb2-b9ec6f06af41">
+					<printWhenExpression><![CDATA[($F{gl_org_debit} == null
+    ? new BigDecimal("0") : $F{gl_org_debit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_idr_debit} == null
+    ? new BigDecimal("0") : $F{gl_idr_debit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_org_credit} == null
+    ? new BigDecimal("0") : $F{gl_org_credit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_idr_credit} == null
+    ? new BigDecimal("0") : $F{gl_idr_credit})
+    .compareTo(new BigDecimal("0")) > 0]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{gl_curr_id}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;(###0.00)">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="342" y="0" width="100" height="20" isRemoveLineWhenBlank="true" uuid="4a9fd827-8028-4f33-9df8-9a0d07cfebfa">
+					<printWhenExpression><![CDATA[($F{gl_org_debit} == null
+    ? new BigDecimal("0") : $F{gl_org_debit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_idr_debit} == null
+    ? new BigDecimal("0") : $F{gl_idr_debit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_org_credit} == null
+    ? new BigDecimal("0") : $F{gl_org_credit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_idr_credit} == null
+    ? new BigDecimal("0") : $F{gl_idr_credit})
+    .compareTo(new BigDecimal("0")) > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{gl_curr_rate}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;(###0.00)">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="442" y="0" width="100" height="20" isRemoveLineWhenBlank="true" uuid="5da891fa-7545-4624-bdf1-168d99990ac0">
+					<printWhenExpression><![CDATA[($F{gl_org_debit} == null
+    ? new BigDecimal("0") : $F{gl_org_debit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_idr_debit} == null
+    ? new BigDecimal("0") : $F{gl_idr_debit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_org_credit} == null
+    ? new BigDecimal("0") : $F{gl_org_credit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_idr_credit} == null
+    ? new BigDecimal("0") : $F{gl_idr_credit})
+    .compareTo(new BigDecimal("0")) > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{gl_org_debit}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;(###0.00)">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="542" y="0" width="100" height="20" isRemoveLineWhenBlank="true" uuid="ac2b21a3-58ce-4578-84af-b87f384ef84f">
+					<printWhenExpression><![CDATA[($F{gl_org_debit} == null
+    ? new BigDecimal("0") : $F{gl_org_debit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_idr_debit} == null
+    ? new BigDecimal("0") : $F{gl_idr_debit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_org_credit} == null
+    ? new BigDecimal("0") : $F{gl_org_credit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_idr_credit} == null
+    ? new BigDecimal("0") : $F{gl_idr_credit})
+    .compareTo(new BigDecimal("0")) > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{gl_idr_debit}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;(###0.00)">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="642" y="0" width="100" height="20" isRemoveLineWhenBlank="true" uuid="4bab129c-c23d-4053-97e7-49b6a19d875b">
+					<printWhenExpression><![CDATA[($F{gl_org_debit} == null
+    ? new BigDecimal("0") : $F{gl_org_debit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_idr_debit} == null
+    ? new BigDecimal("0") : $F{gl_idr_debit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_org_credit} == null
+    ? new BigDecimal("0") : $F{gl_org_credit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_idr_credit} == null
+    ? new BigDecimal("0") : $F{gl_idr_credit})
+    .compareTo(new BigDecimal("0")) > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{gl_org_credit}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;(###0.00)">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="742" y="0" width="100" height="20" isRemoveLineWhenBlank="true" uuid="a9508a42-0672-4fe9-82d0-807eb01ddf76">
+					<printWhenExpression><![CDATA[($F{gl_org_debit} == null
+    ? new BigDecimal("0") : $F{gl_org_debit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_idr_debit} == null
+    ? new BigDecimal("0") : $F{gl_idr_debit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_org_credit} == null
+    ? new BigDecimal("0") : $F{gl_org_credit})
+    .compareTo(new BigDecimal("0")) > 0 ||
+($F{gl_idr_credit} == null
+    ? new BigDecimal("0") : $F{gl_idr_credit})
+    .compareTo(new BigDecimal("0")) > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{gl_idr_credit}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="20" splitType="Stretch">
+			<textField pattern="###0.00;(###0.00)">
+				<reportElement x="542" y="0" width="100" height="20" uuid="a9369564-04e7-43a3-82e5-b662fbf24586"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{totalDebit} == null ?
+new BigDecimal("0") : $V{totalDebit}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;(###0.00)">
+				<reportElement x="742" y="0" width="100" height="20" uuid="360d129c-34aa-4360-ada3-cf3022097f9e"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{totalCredit} == null ? new BigDecimal("0") : $V{totalCredit}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="442" y="0" width="100" height="20" uuid="62cb641c-e2c4-499d-9a4a-c78b9ad8476d"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

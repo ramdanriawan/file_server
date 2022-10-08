@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+
+<head>
+	<th:block th:replace="fragments/import :: info-header" />
+	<th:block th:replace="fragments/import :: css-header" />
+	<th:block th:replace="fragments/import :: js-header" />
+</head>
+
+
+
+<body id="page-top">
+	<th:block th:replace="fragments/general :: navbar-header" />
+
+	<div id="wrapper">
+		<th:block th:replace="fragments/general :: menu" />
+
+		<div id="content-wrapper">
+			<div class="container-fluid">
+				<th:block th:replace="fragments/general :: panel-page" />
+
+
+				<!-- CONTENT PAGE -->
+				<div id="cart" class="card mb-3">
+					<div id="divContentHeader" class="card-header">
+						<b><span id="titlePage" th:text="${titlePage}"></span></b>
+					</div>
+					<div class="card-body">
+						<div id="userManagementIndex">
+							<br>
+							<div class="row">
+								<div class="col-md-12" align="right">
+									<button class="btn btn-primary col-sm-1" type="button" onclick="create()">
+										Create
+									</button>
+								</div>
+
+							</div>
+
+							</br>
+							<table id="tableUser" data-unique-id="idKey" data-toolbar-align="right" data-toggle="table"
+								data-sortable="true" data-url="" data-side-pagination="server" data-pagination="true"
+								data-page-size="5" data-page-list="[5, 10, 25, 50, ALL]">
+								<thead>
+									<tr>
+										<th data-field="idKey">Id</th>
+										<th data-field="groupId" data-sortable="true">Group Id</th>
+										<th data-field="groupName" data-sortable="true">Group Name</th>
+										<th data-field="action" data-halign="center" data-align="center">Action</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+
+
+						<div id="userCreateForm" hidden>
+							<div id="alertSuccess" class="alert alert-success" style="display: none;">
+								<strong>Success!</strong> <span id="alertSuccessMsg" th:text="${M_0005}"></span>
+							</div>
+							<div id="alertFailed" class="alert alert-danger" style="display: none;">
+								<strong>Failed!</strong> <span id="alertFailedMsg"></span>
+							</div>
+							<div class="row justify-content-end">
+								<div class="col-md-2">
+									<button class="btn btn-danger col-md-12" onclick="back()">
+										<i class="fa fa-chevron-left"></i> Back
+									</button>
+								</div>
+							</div>
+							</br>
+
+							<div class="row">
+								<div class="col-md-2" hidden>
+									<label>Id key</label> </br> <input type="text" name="idKey" id="idKey"
+										class="form-control col-md-12" required="true" disabled />
+								</div>
+								<div class="col-md-2">
+									<label>Group ID</label> </br> <input type="text" name="groupId" id="groupId"
+										class="form-control col-md-12" required="true" disabled />
+								</div>
+								<div class="col-md-4">
+									<label>Group Name</label> </br> <input type="text" name="groupName" id="groupName"
+										class="form-control col-md-12" required="true" disabled />
+								</div>
+
+								<div class="col-md-2">
+									<label>UI</label> </br> <select name="ui" id="ui" class="form-control col-md-12"
+										required="true">
+										<option value="ALL">ALL</option>
+									</select>
+								</div>
+
+							</div>
+							<br><br>
+							<div class="form-group" align="center">
+								<div class="col-md-12" align="center">
+									<button class="btn btn-success col-sm-1" id="btnAdd">Add</button>
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<button class="btn btn-dark col-sm-1" id="btnCancel">Cancel</button>
+								</div>
+							</div>
+							</br>
+							<div id="cart" class="card mb-3">
+								<div class="card-body">
+									<br>
+									<table id="tableUserChild" data-unique-id="idKey" data-toolbar-align="right"
+										data-toggle="table" data-sortable="true" data-url=""
+										data-side-pagination="server" data-pagination="true" data-page-size="5"
+										data-page-list="[5, 10, 25, 50, ALL]">
+										<thead>
+											<tr>
+												<th data-field="idKey">Id</th>
+												<th data-field="groupId" name="groupId" data-sortable="true">
+													Group Id</th>
+												<th data-field="groupName" name="groupName" data-sortable="true">
+													Group Name</th>
+												<th data-field="uiName" name="uiName">UI</th>
+												<th data-field="action" data-halign="center" data-align="center">Action
+												</th>
+											</tr>
+										</thead>
+									</table>
+								</div>
+								<br>
+								<br>
+							</div>
+
+							</br> </br>
+
+						</div>
+
+						<div id="userEditChildForm" hidden>
+							<div id="alertSuccess" class="alert alert-success" style="display: none;">
+								<strong>Success!</strong> <span id="alertSuccessMsg" th:text="${M_0005}"></span>
+							</div>
+							<div id="alertSuccessDelete" class="alert alert-success" style="display: none;">
+								<strong>Success!</strong> <span id="alertSuccessDeleteMsg">Delete
+									data success</span>
+							</div>
+							<div id="alertFailed" class="alert alert-danger" style="display: none;">
+								<strong>Failed!</strong> <span id="alertFailedMsg"></span>
+							</div>
+							<div class="row justify-content-end">
+								<div class="col-md-2">
+									<button class="btn btn-danger col-md-12" onclick="back()">
+										<i class="fa fa-chevron-left"></i> Back
+									</button>
+								</div>
+							</div>
+							</br>
+
+							<div class="row">
+								<div class="col-md-2">
+									<label>User ID</label> </br> <input type="text" name="userId" id="userId"
+										class="form-control col-md-12" required="true" />
+								</div>
+								<div class="col-md-2">
+									<label>User Name</label> </br> <input type="text" name="userName" id="userName"
+										class="form-control col-md-12" required="true" />
+								</div>
+								<div class="col-md-4">
+									<label>Group</label> </br> <input type="text" name="groupIds" id="groupIds"
+										class="form-control col-md-12" required="true" />
+								</div>
+							</div>
+							<br>
+							<br>
+							<div class="row">
+								<div class="col-md-2">
+									<label>Level</label> </br> <select name="level" id="level"
+										class="form-control col-md-12" required="true">
+										<option value="ALL">ALL</option>
+									</select>
+								</div>
+								<div class="col-md-2">
+									<label>Unit</label> </br> <select name="unit" id="unit"
+										class="form-control col-md-12" required="true">
+										<option value="ALL">ALL</option>
+									</select>
+								</div>
+								<div class="col-md-2">
+									<label>Status</label> </br> <select name="status" id="status"
+										class="form-control col-md-12" required="true">
+										<option value="ALL">ALL</option>
+									</select>
+								</div>
+								<div class="col-md-4">
+									<label>Created Date</label> </br> <input type="text" name="createdDate"
+										id="createdDate" class="form-control col-md-12" required="true" disabled />
+								</div>
+							</div>
+							<br>
+							<br>
+							<div class="row">
+								<div class="col-md-4">
+									<label>Email</label> </br> <input type="text" name="email" id="email"
+										class="form-control col-md-12" required="true" />
+								</div>
+								<div class="col-md-4">
+									<label>Expired Date</label> </br> <input type="text" name="expiredDate"
+										id="expiredDate" class="form-control col-md-12" required="true" disabled />
+								</div>
+								<div class="col-md-2">
+									<label>Founder</label> </br> <select name="founder" id="founder"
+										class="form-control col-md-12" required="true">
+										<option value="ALL">ALL</option>
+									</select>
+								</div>
+							</div>
+							<br><br>
+							<div class="form-group" align="center">
+								<div class="col-md-12" align="center">
+									<button class="btn btn-success col-sm-1" id="btnSaveCh">Save</button>
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<button class="btn btn-dark col-sm-1" id="btnCancelCh">Cancel</button>
+								</div>
+							</div>
+							</br> </br>
+
+						</div>
+					</div>
+
+				</div>
+
+				<div class="modal fade" id="roleUpModal" tabindex="-1" role="dialog" aria-labelledby="roleUpModal"
+					aria-hidden="true">
+					<div class="modal-dialog modal-lg" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="roleUpModalLabel">Role Up</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+
+								<div class="row card-body justify-content-end">
+									<div class="col-md-3">
+										<select id="roleUpSelector" name="roleUpSelector" class="custom-select">
+											<option value="paParentCode">Code</option>
+											<option value="paParentDesc">Name</option>
+										</select>
+									</div>
+
+								</div>
+								<br>
+								<table id="tableRoleUp" data-toggle="table" data-url="" data-height="400"
+									data-sortable="true" data-side-pagination="server" data-pagination="true"
+									data-page-size="5" data-page-list="[5, 10, 25, 50, ALL]">
+									<thead>
+										<tr>
+											<th data-field="paParentCode" data-sortable="true">Code</th>
+											<th data-field="paParentDesc" data-sortable="true">Name</th>
+										</tr>
+									</thead>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<!-- end of container -->
+
+
+		</div>
+		<!-- /.container-fluid -->
+		<th:block th:replace="fragments/general :: copyright-footer"></th:block>
+	</div>
+	<!-- /.content-wrapper -->
+
+	<!-- /#wrapper -->
+	<th:block th:replace="fragments/modal :: confirmation-delete" />
+	<th:block th:replace="fragments/modal :: confirmation-save" />
+	<th:block th:replace="fragments/general :: scroll-to-top" />
+	<th:block th:replace="fragments/general :: logout-modal" />
+	<th:block th:replace="fragments/import :: js-body" />
+
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var rowNow;
+	var removeId = null;
+	$('document').ready(function () {
+
+		$('#btnModalYes').click(function () {
+			save();
+		});
+		$('#btnModalYesDelete').click(function () {
+			removeData();
+		});
+		$('#btnModalNo').click(function () {
+			$('#btnAdd').removeAttr('disabled');
+		});
+		$('#btnCancel').click(function () {
+			$('#titlePage').text(/*[[${titlePage}]]*/);
+			$('#userManagementIndex').removeAttr('hidden');
+			$('#userCreateForm').attr('hidden', true);
+		});
+		$('#tableUser').bootstrapTable('hideColumn', 'idKey');
+		$('#tableUserChild').bootstrapTable('hideColumn', 'idKey');
+		$('#tableUser').bootstrapTable('refreshOptions', {
+			theadClasses: 'thead-dark',
+			url: /*[[@{/static-data/groupmanagement/inquiry}]]*/
+		});
+
+		$('#btnAdd').click(function () {
+			$('#btnAdd').attr('disabled', true);
+			$('#modalConfirmation').modal('show');
+		});
+		rest('GET', '/gui-re-broker/static-data/groupmanagement/dropdown')
+			.done(function (data) {
+				if (data.length == 0) {
+					data.push({ id:/*[[${ui}]]*/, text:/*[[${ui}]]*/});
+				}
+				$('#ui').select2({
+					width: '100%',
+					data: data
+				});
+			});
+	});
+
+	function remove(id) {
+		removeId = id;
+		$('#modalConfirmationDelete').modal('show');
+	}
+	function removeData() {
+
+		var saveData = {
+			idKey: removeId
+
+		}
+		var url = '/gui-re-broker/static-data/groupmanagement/delete';
+		restPOST('POST', url, saveData).done(function (data) {
+			$('#modalConfirmationDelete').modal('hide');
+			if (data.status == "200") {
+				showAlertSuccessDelete();
+			} else {
+				showAlertFailed(/*[[${M_0006}]]*/);
+			}
+		});
+	}
+
+
+	function save() {
+		var idKey = $('#idKey').val();
+		var groupId = $('#groupId').val();
+		var groupName = $('#groupName').val();
+		var uiId = $('#ui').val();
+		console.log(idKey);
+		var data = {
+			idKey: idKey,
+			groupId: groupId,
+			groupName: groupName,
+			uiId: uiId
+		}
+
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			contentType: "application/json",
+			data: JSON.stringify(data),
+			url: "/gui-re-broker/static-data/groupmanagement/save",
+			complete: function (jqXHR, textStatus) {
+
+				if (textStatus == "success") {
+					showAlertSuccess();
+
+				} else {
+					showAlertFailed(/*[[${M_0006}]]*/);
+				}
+			}
+		});
+		$('#titlePage').text(/*[[${titlePage}]]*/);
+		$('#userManagementIndex').removeAttr('hidden');
+		$('#userCreateForm').attr('hidden', true);
+	}
+
+	function back() {
+		$('#titlePage').text(/*[[${titlePage}]]*/);
+		$('#userManagementIndex').removeAttr('hidden');
+		$('#userCreateForm').attr('hidden', true);
+	}
+	function edit(id) {
+		row = $('#tableUser').bootstrapTable('getRowByUniqueId', id);
+		rowNow = row;
+
+		$('#groupId').attr('disabled', true);
+		$('#groupName').attr('disabled', true);
+		$('#titlePage').text(/*[[${titlePageEdit}]]*/);
+		$('#userCreateForm').removeAttr('hidden');
+		$('#userManagementIndex').attr('hidden', true);
+		$('#groupId').val(row.groupId);
+		$('#idKey').val(row.idKey);
+		$('#groupName').val(row.groupName);
+		inquiryChild(row.groupId);
+	}
+
+	function edit2(id) {
+		row = $('#tableUser').bootstrapTable('getRowByUniqueId', id);
+		rowNow = row;
+
+		$('#userEditChildForm').removeAttr('hidden');
+		$('#userCreateForm').attr('hidden', true);
+	}
+	function create() {
+		$('#titlePage').text(/*[[${titlePageCreate}]]*/);
+		$('#tableUserChild tbody > tr').empty();
+		$('#userCreateForm').removeAttr('hidden');
+		$('#userManagementIndex').attr('hidden', true);
+		$('#groupId').removeAttr('disabled');
+		$('#groupName').removeAttr('disabled');
+		$('#groupId').val("");
+		$('#idKey').val("");
+		$('#groupName').val("");
+		inquiryChild("");
+	}
+
+	function inquiryChild(groupId) {
+		var url = /*[[@{/static-data/groupmanagement/inquiryChild}]]*/;
+		url = url + '?groupId=' + groupId;
+
+		$('#tableUserChild').bootstrapTable('refreshOptions', {
+			theadClasses: 'thead-dark',
+			url: url
+		});
+	}
+
+	function showAlertSuccess() {
+		$('#btnModalyes').removeAttr('disabled');
+		$('#alertSuccess').fadeTo(2000, 500).slideUp(500, function () {
+			$('#alertSuccess').slideUp(500);
+			location.reload();
+		});
+	}
+
+	function showAlertSuccessDelete() {
+		$(location).attr('href', '#page-top');
+		$('#alertSuccessDelete').fadeTo(2000, 500).slideUp(500, function() {
+			$('#alertSuccess').slideUp(500);
+			location.reload();
+		});
+	}
+
+	function showAlertFailed(msgAlert) {
+		$('#alertFailedMsg').text(msgAlert);
+		$('#alertFailed').fadeTo(3000, 500).slideUp(500, function () {
+			$('#alertFailed').slideUp(500);
+			$('#btnSave').removeAttr('disabled')
+		});
+	}
+
+</script>
+
+</html>

@@ -1,0 +1,661 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Tre_CS_NoProp" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="20" bottomMargin="40" uuid="bf3723d1-1489-40c5-89af-d90b19f5cb5f">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="868"/>
+	<subDataset name="dataset_tc" uuid="cb724d25-62ac-4798-a436-d3fba342d419">
+		<parameter name="P_VOUCHER_ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="P_TC_CODE" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="TRE_GROUP" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[select TC.TRX_TC_CODE, REPLACE(
+ REPLACE(
+  REPLACE(
+   REPLACE(TC.TRX_TC_DATA,'font-size:','foff-size:'),'font-family','foff-family'),
+			'<font face=','<foff face='),'</font>','</foff>') TRX_TC_DATA
+	from TR0006D TC, MA0014 M14
+	where TC.TRX_VOUCHER_ID = $P{P_VOUCHER_ID}
+	and M14.PA_PARENT_CODE = 'TCGROUP'
+	and M14.PA_CHILD_VALUE = TC.TRX_TC_CODE
+	and TC.TRX_COB_GROUP = $P{TRE_GROUP}
+	order by M14.PA_CHILD_CODE ASC;]]>
+		</queryString>
+		<field name="TRX_TC_CODE" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="TRX_TC_DATA" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<subDataset name="dataset_reins" uuid="803ccf5e-58c9-4c48-9570-ef4f1c74d097">
+		<parameter name="P_VOUCHER_ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="P_TRX_ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="P_TRX_CLASS" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="P_TRX_INS_ID" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[SELECT M.CLI_NAME, M.CLI_ADDRESS, TK.TRX_INS_SHARE FROM TR0006K TK, MA0005 M
+	WHERE TK.TRX_INS_ID = M.CLI_CODE
+	AND TK.TRX_VOUCHER_ID = $P{P_VOUCHER_ID}
+	AND TK.TRX_CLASS = $P{P_TRX_CLASS}
+	AND TK.TRX_TRX_ID = $P{P_TRX_ID}
+	AND TK.TRX_INS_ID = $P{P_TRX_INS_ID};]]>
+		</queryString>
+		<field name="CLI_NAME" class="java.lang.String">
+			<fieldDescription><![CDATA[Nama Nasabah]]></fieldDescription>
+		</field>
+		<field name="CLI_ADDRESS" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="TRX_INS_SHARE" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<subDataset name="dataset_clause" uuid="62971d21-3200-48b0-958e-74cf388bf907">
+		<parameter name="P_VOUCHER_ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="P_TC_CODE" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="TRE_GROUP" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[select TC.TRX_TC_CODE, REPLACE(
+			REPLACE(
+			 REPLACE(
+			  REPLACE(TC.TRX_TC_DATA,'font-size:','foff-size:'),'font-family','foff-family'),
+			'<font face=','<foff face='),'</font>','</foff>') TRX_TC_DATA
+	from TR0006D TC, MA0014 M14
+	where TC.TRX_VOUCHER_ID = $P{P_VOUCHER_ID}
+	and M14.PA_PARENT_CODE = 'TCGROUP'
+	and M14.PA_CHILD_VALUE = TC.TRX_TC_CODE
+	and TC.TRX_COB_GROUP = $P{TRE_GROUP}
+	order by M14.PA_CHILD_CODE ASC;;]]>
+		</queryString>
+		<field name="TRX_TC_CODE" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="TRX_TC_DATA" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<parameter name="P_DATE" class="java.lang.String"/>
+	<parameter name="P_VOUCHER_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA["230120200020"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_TRX_CLIENT" class="java.lang.String">
+		<defaultValueExpression><![CDATA["10063"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_TRX_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA["RQ"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TRE_YEAR" class="java.lang.String"/>
+	<parameter name="TRE_REF" class="java.lang.String"/>
+	<parameter name="TRE_TOT" class="java.lang.String"/>
+	<parameter name="TRE_PERIOD" class="java.lang.String"/>
+	<parameter name="P_TRX_CLASS" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TRE_COB" class="java.lang.String"/>
+	<parameter name="TRE_GROUP" class="java.lang.String"/>
+	<parameter name="P_TRX_INS_ID" class="java.lang.String"/>
+	<parameter name="TRE_INS_BFEE" class="java.math.BigDecimal"/>
+	<parameter name="TRE_INS_SHARE" class="java.math.BigDecimal"/>
+	<queryString>
+		<![CDATA[SELECT TR.TRX_VOUCHER_ID,
+(SELECT MA12.SA_NAME FROM MA0012 MA12 WHERE MA12.SA_CODE = TR.TRX_OFFICER) OFFICER,
+TR.TRX_INSURED_NAME,
+MA5.CLI_NAME ,
+MA5.CLI_ADDRESS,
+MA5.CLI_PIC1,
+(SELECT REINS.CLI_NAME FROM MA0005 REINS WHERE REINS.CLI_CODE = $P{P_TRX_INS_ID}) REINS_NAME,
+(SELECT REINS.CLI_ADDRESS FROM MA0005 REINS WHERE REINS.CLI_CODE = $P{P_TRX_INS_ID}) REINS_ADDRESS,
+M10.CO_NAME,
+M10.CO_LOGO
+FROM TR0006 TR
+JOIN MA0005 MA5 ON MA5.CLI_CODE = TR.TRX_CLIENT
+JOIN MA0010 M10
+WHERE TR.TRX_VOUCHER_ID = $P{P_VOUCHER_ID}
+AND TR.TRX_CLIENT = $P{P_TRX_CLIENT}
+AND TR.TRX_TRX_ID = $P{P_TRX_ID}
+AND TR.TRX_CLASS = $P{P_TRX_CLASS}]]>
+	</queryString>
+	<field name="TRX_VOUCHER_ID" class="java.lang.String">
+		<fieldDescription><![CDATA[No. Voucher]]></fieldDescription>
+	</field>
+	<field name="OFFICER" class="java.lang.String"/>
+	<field name="TRX_INSURED_NAME" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CLI_NAME" class="java.lang.String">
+		<fieldDescription><![CDATA[Nama Nasabah]]></fieldDescription>
+	</field>
+	<field name="CLI_ADDRESS" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CLI_PIC1" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="REINS_NAME" class="java.lang.String"/>
+	<field name="REINS_ADDRESS" class="java.lang.String"/>
+	<field name="CO_NAME" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CO_LOGO" class="java.lang.Object">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<group name="NAMED">
+		<groupExpression><![CDATA[$F{TRX_VOUCHER_ID}]]></groupExpression>
+		<groupHeader>
+			<band height="89">
+				<frame>
+					<reportElement mode="Opaque" x="0" y="5" width="515" height="72" forecolor="#99CCFF" backcolor="#99CCFF" uuid="af6d36d3-64cb-4c89-a78a-4f8199d6d31b"/>
+					<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+						<reportElement stretchType="RelativeToTallestObject" x="0" y="5" width="515" height="20" uuid="d77b4dfe-e212-4b01-9661-85ab95986d6f"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+							<font fontName="SansSerif" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+							<paragraph rightIndent="10"/>
+						</textElement>
+						<textFieldExpression><![CDATA["CLOSING SLIP"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+						<reportElement stretchType="RelativeToTallestObject" x="0" y="30" width="515" height="20" uuid="5b98895b-bcde-4573-9f06-4d2b38f2a144"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+							<font fontName="SansSerif" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+							<paragraph rightIndent="10"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$P{TRE_COB}.toUpperCase()]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+						<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="50" width="515" height="20" uuid="22543ee4-4726-442a-9eb7-4bd7eb2c5a2b"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+							<font fontName="SansSerif" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+							<paragraph rightIndent="10"/>
+						</textElement>
+						<textFieldExpression><![CDATA["TREATY REINSURANCE AGREEMENT "+$P{TRE_YEAR}+ " No.:" + $P{TRE_REF}]]></textFieldExpression>
+					</textField>
+				</frame>
+			</band>
+			<band height="60">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="17" uuid="6b24b91b-1af1-4953-976a-c07e2b105283"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font fontName="SansSerif" size="10" isBold="false"/>
+						<paragraph rightIndent="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA["In the name of "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="17" width="515" height="17" uuid="b8836e1f-2059-470c-93a3-987d9d4bb4ad"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font fontName="SansSerif" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+						<paragraph rightIndent="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CLI_NAME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="34" width="515" height="17" isPrintWhenDetailOverflows="true" uuid="c574eb72-1fa0-472d-b722-6972ba75004f"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html"/>
+					<textFieldExpression><![CDATA[$F{CLI_ADDRESS}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="50">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="17" uuid="980795de-b040-4a62-8486-e48b39cba3c5"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font fontName="SansSerif" size="10" isBold="false"/>
+						<paragraph rightIndent="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA["(hereinafter referred to as the “REINSURED”)"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="33" width="515" height="17" uuid="75dcfd01-fa54-492f-92d1-273d67323787"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font fontName="SansSerif" size="10" isBold="false"/>
+						<paragraph rightIndent="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA["made between"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="80">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="16" width="515" height="17" uuid="c45bffeb-d078-462c-9637-0866ca05703b"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font fontName="SansSerif" size="10" isBold="false"/>
+						<paragraph rightIndent="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA["The Reinsured as specified above or in the Schedule as one part"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="49" width="515" height="17" uuid="1384f33a-f3f5-4c6e-b55d-27cefca943d0"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font fontName="SansSerif" size="10" isBold="false"/>
+						<paragraph rightIndent="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA["and"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="56">
+				<componentElement>
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="55" isPrintWhenDetailOverflows="true" uuid="5973267e-8a7a-4afe-944d-f3eb6f6d65b0"/>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+						<datasetRun subDataset="dataset_reins" uuid="838143fa-8a42-46a8-bc1e-f2e9f7eb8a29">
+							<datasetParameter name="P_VOUCHER_ID">
+								<datasetParameterExpression><![CDATA[$F{TRX_VOUCHER_ID}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="P_TRX_ID">
+								<datasetParameterExpression><![CDATA[$P{P_TRX_ID}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="P_TRX_CLASS">
+								<datasetParameterExpression><![CDATA[$P{P_TRX_CLASS}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="P_TRX_INS_ID">
+								<datasetParameterExpression><![CDATA[$P{P_TRX_INS_ID}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:listContents height="55" width="515">
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="17" uuid="03b7822a-3428-456d-b227-2aea1671397a"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+									<font fontName="SansSerif" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+									<paragraph rightIndent="10"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{CLI_NAME}]]></textFieldExpression>
+							</textField>
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="17" width="515" height="17" isPrintWhenDetailOverflows="true" uuid="1f28e8f0-9e36-461e-9d6b-9546a299eaf5"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" markup="html"/>
+								<textFieldExpression><![CDATA[$F{CLI_ADDRESS}]]></textFieldExpression>
+							</textField>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+			</band>
+			<band height="34">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="3" width="515" height="17" uuid="418c37c4-3290-4d16-b730-27bd7ef02caf"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font fontName="SansSerif" size="10" isBold="false"/>
+						<paragraph rightIndent="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA["(hereinafter referred to as the “REINSURER”)"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="3">
+				<break>
+					<reportElement x="0" y="1" width="100" height="1" uuid="9999f6ca-1938-4e22-b14b-6597c93ca748"/>
+				</break>
+			</band>
+			<band height="52">
+				<componentElement>
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="516" height="44" isPrintWhenDetailOverflows="true" uuid="be80ea41-babc-414e-9347-cd44a6cdf81f"/>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+						<datasetRun subDataset="dataset_clause" uuid="e163b025-7eba-41bc-9859-a1b351a58d6a">
+							<datasetParameter name="P_VOUCHER_ID">
+								<datasetParameterExpression><![CDATA[$F{TRX_VOUCHER_ID}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="TRE_GROUP">
+								<datasetParameterExpression><![CDATA[$P{TRE_GROUP}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:listContents height="44" width="516">
+							<textField isStretchWithOverflow="true">
+								<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="514" height="17" uuid="d55e6733-e051-4d6c-a77a-46effece2df3"/>
+								<textElement verticalAlignment="Top">
+									<font isBold="true" isUnderline="true" pdfFontName="Helvetica-Bold"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{TRX_TC_CODE}.toUpperCase()]]></textFieldExpression>
+							</textField>
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToTallestObject" x="0" y="22" width="514" height="17" isPrintWhenDetailOverflows="true" uuid="bfba57b9-93a8-470f-adb2-7f8e7ae4b4e7"/>
+								<textElement verticalAlignment="Top" markup="html"/>
+								<textFieldExpression><![CDATA[$F{TRX_TC_DATA}]]></textFieldExpression>
+							</textField>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="QUOTATION">
+		<groupHeader>
+			<band height="3">
+				<break>
+					<reportElement x="0" y="1" width="100" height="1" uuid="db2ee2e0-f083-459b-b464-c1b658098cae"/>
+				</break>
+			</band>
+			<band height="102">
+				<frame>
+					<reportElement mode="Opaque" x="0" y="14" width="515" height="72" forecolor="#99CCFF" backcolor="#99CCFF" uuid="1ce1c566-7389-4c85-9074-9f8ba78bfaaa"/>
+					<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+						<reportElement stretchType="RelativeToTallestObject" x="0" y="10" width="515" height="20" uuid="6a108b43-83ee-4b05-a118-72e57287e298"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+							<font fontName="SansSerif" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+							<paragraph rightIndent="10"/>
+						</textElement>
+						<textFieldExpression><![CDATA["SCHEDULE"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+						<reportElement stretchType="RelativeToTallestObject" x="0" y="30" width="515" height="20" uuid="5d0c0597-1896-4277-8331-ac45c4b75e31"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+							<font fontName="SansSerif" size="12" isBold="true" isItalic="true" pdfFontName="Helvetica-Bold"/>
+							<paragraph rightIndent="10"/>
+						</textElement>
+						<textFieldExpression><![CDATA["attaching to and forming part of the"]]></textFieldExpression>
+					</textField>
+					<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+						<reportElement stretchType="RelativeToTallestObject" x="0" y="50" width="515" height="20" uuid="a503b135-03b4-4c83-b059-5cdefa40f5b4"/>
+						<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+							<font fontName="SansSerif" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+							<paragraph rightIndent="10"/>
+						</textElement>
+						<textFieldExpression><![CDATA["TREATY REINSURANCE AGREEMENT "+$P{TRE_YEAR}+ " No.:" + $P{TRE_REF}]]></textFieldExpression>
+					</textField>
+				</frame>
+			</band>
+			<band height="54">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="17" uuid="d86e8d22-45c2-4268-bfc9-ea32e8c181bb"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font fontName="SansSerif" size="10" isBold="false"/>
+						<paragraph rightIndent="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA["In the name of "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="17" width="515" height="17" uuid="879989e2-cd99-4689-a8b9-65bb557dd8f6"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font fontName="SansSerif" size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+						<paragraph rightIndent="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CLI_NAME}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="20">
+				<componentElement>
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="516" height="17" isPrintWhenDetailOverflows="true" uuid="87c681d7-9fd1-43ac-b91d-c2646d16d727"/>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+						<datasetRun subDataset="dataset_tc" uuid="ebc2133d-4d46-4f78-9661-596e55b5e1bc">
+							<datasetParameter name="P_VOUCHER_ID">
+								<datasetParameterExpression><![CDATA[$F{TRX_VOUCHER_ID}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="TRE_GROUP">
+								<datasetParameterExpression><![CDATA[$P{TRE_GROUP}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:listContents height="17" width="516">
+							<textField isStretchWithOverflow="true">
+								<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="140" height="17" uuid="da4c7608-a94f-419e-beba-611ffb94f7ed"/>
+								<textElement verticalAlignment="Top">
+									<font isBold="true" pdfFontName="Helvetica-Bold"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{COLUMN_COUNT} + ". " + $F{TRX_TC_CODE}.toUpperCase()]]></textFieldExpression>
+							</textField>
+							<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+								<reportElement stretchType="RelativeToTallestObject" x="153" y="0" width="362" height="17" isPrintWhenDetailOverflows="true" uuid="cd2dd2b8-cfa8-4619-83dc-ac45db2e1c61"/>
+								<textElement verticalAlignment="Top" markup="html"/>
+								<textFieldExpression><![CDATA[$F{TRX_TC_DATA}]]></textFieldExpression>
+							</textField>
+							<textField isStretchWithOverflow="true">
+								<reportElement stretchType="RelativeToTallestObject" x="140" y="0" width="13" height="17" uuid="536840c2-5a1a-414d-bc0b-6a5860535db3"/>
+								<textElement verticalAlignment="Top"/>
+								<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+							</textField>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+			</band>
+			<band height="3">
+				<break>
+					<reportElement x="0" y="1" width="100" height="1" uuid="578b02e8-31bb-40cc-90ca-84c302da6ea7"/>
+				</break>
+			</band>
+			<band/>
+			<band height="100">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="30" width="515" height="20" uuid="c7f90e17-40b1-4bb7-8fad-bd2c6de70af3"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font fontName="SansSerif" size="12" isBold="true" isItalic="true" pdfFontName="Helvetica-Bold"/>
+						<paragraph rightIndent="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA["attaching to and forming part of"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="20" uuid="d9165841-a592-4682-ac5e-d0486b3b8c3a"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font fontName="SansSerif" size="12" isBold="true" isUnderline="true" pdfFontName="Helvetica-Bold"/>
+						<paragraph rightIndent="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA["SIGNING SCHEDULE"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="60" width="515" height="20" uuid="195c1a5b-9993-4e97-868b-0062f50acb71"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font fontName="SansSerif" size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+						<paragraph rightIndent="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA["NON PROPORTIONAL REINSURANCE TREATY AGREEMENT"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="110">
+				<textField isStretchWithOverflow="true">
+					<reportElement isPrintRepeatedValues="false" x="100" y="0" width="13" height="17" uuid="b7919d1f-65dc-4a5b-baeb-fc61be3ca897"/>
+					<textElement verticalAlignment="Top">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="100" height="17" uuid="18609aa4-31ab-417e-810e-577c9e6b8a0a"/>
+					<textElement verticalAlignment="Top">
+						<font isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["OUR REF. NO."]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="112" y="0" width="402" height="17" uuid="6b3d852c-ac43-49f1-a70e-6a525dcc4c38"/>
+					<textElement verticalAlignment="Top" markup="html">
+						<font isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{TRE_REF}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" isPrintRepeatedValues="false" x="100" y="17" width="13" height="17" uuid="4283b75d-0c4c-4fd5-97b5-b67650707b67"/>
+					<textElement verticalAlignment="Top">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="17" width="100" height="17" uuid="fa024a13-c149-493e-9750-36db3707e8e8"/>
+					<textElement verticalAlignment="Top">
+						<font isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["REINSURED"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="112" y="17" width="402" height="17" uuid="38de9256-eec3-4784-bb38-363f6439e5f6"/>
+					<textElement verticalAlignment="Top" markup="html">
+						<font isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CLI_NAME}.toUpperCase()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" isPrintRepeatedValues="false" x="100" y="34" width="13" height="17" uuid="cb9a94b8-ba6b-400d-9a00-2823a0e5ddca"/>
+					<textElement verticalAlignment="Top">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="34" width="100" height="17" uuid="0aeb3fce-64cb-4ff4-8150-3b3f4dc1f15a"/>
+					<textElement verticalAlignment="Top">
+						<font isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["TYPE"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="112" y="34" width="402" height="17" uuid="50469201-34ea-4756-9a48-bf96758d789c"/>
+					<textElement verticalAlignment="Top" markup="html">
+						<font isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{TRE_COB}.toUpperCase()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="51" width="100" height="17" uuid="b14667e6-6692-4441-9537-70b4377140c5"/>
+					<textElement verticalAlignment="Top">
+						<font isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["PERIOD"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" isPrintRepeatedValues="false" x="100" y="51" width="13" height="17" uuid="41cc5f8c-93f9-4373-8a86-c89773d0829d"/>
+					<textElement verticalAlignment="Top">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="112" y="51" width="402" height="17" uuid="3843bc8f-6e74-4ffa-9830-9d55f6730923"/>
+					<textElement verticalAlignment="Top" markup="html">
+						<font isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{TRE_PERIOD}.toUpperCase()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="-1" y="68" width="100" height="17" uuid="1203a3ab-ad01-4134-8b37-d5e0186f6b36"/>
+					<textElement verticalAlignment="Top">
+						<font isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["BROKERAGE"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" isPrintRepeatedValues="false" x="99" y="68" width="13" height="17" uuid="d20582b0-9268-4201-b50e-91e0acd41672"/>
+					<textElement verticalAlignment="Top">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="111" y="68" width="402" height="17" uuid="6a717dda-16fb-4d35-adc9-693cc4d49190"/>
+					<textElement verticalAlignment="Top" markup="html">
+						<font isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{TRE_INS_BFEE} + "%"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band/>
+			<band height="70">
+				<textField isStretchWithOverflow="true">
+					<reportElement isPrintRepeatedValues="false" x="0" y="20" width="220" height="17" uuid="e8cc909a-e868-426c-93e7-8425120f0c01"/>
+					<textElement markup="html">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Jakarta, this " + $P{P_DATE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement isPrintRepeatedValues="false" x="0" y="53" width="220" height="17" uuid="7c14cd08-fa44-44b4-a4ac-04cc5bfeb98b"/>
+					<textElement markup="html">
+						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Signed For and on behalf of:"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement isPrintRepeatedValues="false" x="297" y="53" width="220" height="17" uuid="421ad5bc-c0db-4be5-9deb-fdf7d11e10a7"/>
+					<textElement markup="html">
+						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Signed For and on behalf of:"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement isPrintRepeatedValues="false" x="0" y="0" width="513" height="20" uuid="c34ea16b-94dc-4c8b-ac25-c89ffc874672"/>
+					<textElement markup="html">
+						<font size="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA["In the witness whereof this Reinsurance has been signed in:"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="135">
+				<textField isStretchWithOverflow="true">
+					<reportElement isPrintRepeatedValues="false" x="0" y="0" width="220" height="17" uuid="59309119-61c4-4a36-84bd-a2a8b4c25632"/>
+					<textElement markup="html">
+						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{REINS_NAME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement isPrintRepeatedValues="false" x="0" y="94" width="220" height="20" uuid="f35e898f-4fe8-46ab-beb5-a63a91b3df16"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textElement>
+						<font isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Authorized Signature"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement isPrintRepeatedValues="false" x="297" y="0" width="220" height="17" uuid="9b8fb250-a4aa-4ed4-bb9f-eea42677a301"/>
+					<textElement markup="html">
+						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CO_NAME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement isPrintRepeatedValues="false" x="294" y="94" width="220" height="20" uuid="8ab3f594-7f91-4cbf-a396-fbeece42bf6d"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textElement>
+						<font isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Authorized Signature"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement x="1" y="114" width="219" height="17" uuid="e1f7fad0-66d0-42e5-a827-16b66ebdd648"/>
+					<textElement markup="html">
+						<font size="8" isItalic="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA["In respect of their participation share of " + $P{TRE_INS_SHARE} + "% of 100.0000% of the premium and liability under this Agreement."]]></textFieldExpression>
+				</textField>
+			</band>
+			<band/>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="60">
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="1" y="0" width="515" height="45" uuid="b0b1e6c8-806e-44c8-8427-5d6d1886c531"/>
+				<imageExpression><![CDATA[$F{CO_LOGO}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="60">
+			<printWhenExpression><![CDATA[$V{PAGE_NUMBER} > 1]]></printWhenExpression>
+			<image hAlign="Left" vAlign="Middle">
+				<reportElement x="0" y="0" width="515" height="45" uuid="ca7a1fe2-2085-49ea-b697-fffdd520757a">
+					<printWhenExpression><![CDATA[$V{PAGE_NUMBER} > 1]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$F{CO_LOGO}]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnFooter>
+		<band height="43"/>
+	</columnFooter>
+</jasperReport>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<th:block th:replace="fragments/import :: info-header" />
+<th:block th:replace="fragments/import :: css-header" />
+<th:block th:replace="fragments/import :: js-header" />
+
+<script th:src="@{/js/autoNumeric.min.js}"></script>
+</head>
+
+<body id="page-top">
+	<th:block th:replace="fragments/general :: navbar-header" />
+
+	<div id="wrapper">
+		<th:block th:replace="fragments/general :: menu" />
+
+		<div id="content-wrapper">
+			<div class="container-fluid">
+				<th:block th:replace="fragments/general :: panel-page" />
+
+				<!-- CONTENT PAGE -->
+				<div id="cart" class="card mb-3">
+					<div id="divContentHeader" class="card-header">
+						<b><span id="titlePage" th:text="${titlePage}"></span></b>
+					</div>
+					<div class="card-body">
+						<div class="row justify-content-center">
+							<div class="col-md-2">
+								<div class="row justify-content-center">
+									<label> Transaction Date </label>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<div class="input-group">
+									<input id="transactionDate" name="transactionDate" type="text"
+										class="form-control" disabled>
+									<div class="input-group-append">
+										<button id='transactionDateBtn' class="btn btn-primary"
+											type="button">
+											<i class="fas fa-calendar"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-1">
+								<div class="row justify-content-center">
+									<label>To </label>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<div class="input-group">
+									<input id="to" name="to" type="text" class="form-control"
+										disabled>
+									<div class="input-group-append">
+										<button id='toBtn' class="btn btn-primary" type="button">
+											<i class="fas fa-calendar"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<br>
+						<div class="row justify-content-center">
+							<div class="col-md-3">
+								<button id="searchBtn" class="btn btn-success col-md-12">Search</button>
+							</div>
+						</div>
+						<br>
+						<div class="row justify-content-end">
+							<div class="col-md-2">
+								<button id="printBtn" class="btn btn-primary col-md-12">Print</button>
+							</div>
+							<div class="col-md-2">
+								<button id="exportBtn" class="btn btn-success col-md-12">Export</button>
+							</div>
+						</div>
+						<br>
+						
+							<table id="vatReportTable"
+								data-toggle="table" data-sortable="true" data-url=""
+								data-side-pagination="server" data-pagination="true" data-unique-id="idKey"
+								data-pagination-v-align="top"
+								data-page-size="5" data-page-list="[5, 10, 25, 50, ALL]">
+								<thead>
+									<tr>
+										<th rowspan="2" data-valign="middle" data-field="idKey"
+											data-sortable="true">ID Key</th>
+										<th rowspan="2" data-valign="middle" data-field="month"
+											data-sortable="true">Month</th>
+										<th rowspan="2" data-valign="middle" data-field="trxDate"
+											data-sortable="true">Date</th>
+										<th rowspan="2" data-valign="middle" data-field="trxDateStr"
+											data-sortable="true">Date</th>
+										<th rowspan="2" data-valign="middle" data-field="invoice">invoice</th>
+										<th rowspan="2" data-valign="middle" data-field="account">Account</th>
+										<th rowspan="2" data-valign="middle" data-field="curr">Curr</th>
+										<th rowspan="2" data-valign="middle" data-align="right" data-field="kmkRate">KMK
+											Rate</th>
+										<th rowspan="2" data-valign="middle" data-align="right" data-field="kmkRateStr">KMK
+											Rate</th>
+										<th colspan="2">Original Amount</th>
+										<th colspan="2">IDR Amount</th>
+									</tr>
+									<tr>
+										<th data-field="originalAmountCgosStr" data-align="right">COGS</th>
+										<th data-field="originalAmountVatStr" data-align="right">VAT</th>
+										<th data-field="idrAmountCgosStr" data-align="right">COGS</th>
+										<th data-field="idrAmountVatStr" data-align="right">VAT</th>
+									</tr>
+								</thead>
+							</table>
+						
+					</div>
+				</div>
+
+			</div>
+			<!-- /.container-fluid -->
+			<th:block th:replace="fragments/general :: copyright-footer"></th:block>
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+
+	<!-- /#wrapper -->
+	<th:block th:replace="fragments/general :: scroll-to-top" />
+	<th:block th:replace="fragments/general :: logout-modal" />
+	<th:block th:replace="fragments/import :: js-body" />
+
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+
+	var transactionDate = "";
+	var to = "";
+
+	$(function() {
+		$('#transactionDate').val([[${appDate}]]);
+		$('#to').val([[${appDate}]]);
+		search();
+		
+		$('#transactionDate').datepicker({
+			dateFormat: 'dd/mm/yy',
+			changeMonth: true,
+			changeYear: true,
+		});
+		
+		$('#to').datepicker({
+			dateFormat: 'dd/mm/yy',
+			changeMonth: true,
+			changeYear: true
+		});
+		
+		$('#transactionDateBtn').click(function() {
+			$('#transactionDate').datepicker('show');
+		});
+		$('#toBtn').click(function() {
+			$('#to').datepicker('show');
+		});
+		
+		
+		$('#vatReportTable').bootstrapTable('hideColumn', 'idKey');
+		$('#vatReportTable').bootstrapTable('hideColumn', 'trxDate');
+		$('#vatReportTable').bootstrapTable('hideColumn', 'kmkRate');
+		
+		$('#searchBtn').click(function() {
+			search();
+		});
+		
+		$('#printBtn').click(function() {			
+			var param = "";
+			param = param+"transactionDate="+transactionDate;
+			param = param+"&to="+to;
+			
+			param = encodeURI(param);
+			var url = '/gui-re-broker/finance-report/vat-report/print?';
+			window.open(url+param, '_blank');
+		});
+		
+		$('#exportBtn').click(function() {			
+			var param = "";
+			param = param+"transactionDate="+transactionDate;
+			param = param+"&to="+to;
+			
+			param = encodeURI(param);
+			var url = '/gui-re-broker/finance-report/vat-report/export?';
+			window.open(url+param, '_blank');
+		});
+	});
+	
+	function search(){
+		transactionDate = $('#transactionDate').val();
+		to = $('#to').val();
+		var urlInq = /*[[@{/finance-report/vat-report/inquiry}]]*/;
+		urlInq = urlInq + '?transactionDate=' +transactionDate;
+		urlInq = urlInq + '&to=' +to;
+		$('#vatReportTable').bootstrapTable('refreshOptions', {
+	        theadClasses: 'thead-dark',
+	        url: urlInq,
+		    pageNumber: 1
+	    });
+	}
+
+	/*]]>*/
+</script>
+
+</html>

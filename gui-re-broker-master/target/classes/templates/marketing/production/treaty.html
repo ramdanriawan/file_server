@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<th:block th:replace="fragments/import :: info-header" />
+<th:block th:replace="fragments/import :: css-header" />
+<th:block th:replace="fragments/import :: js-header" />
+<script th:src="@{/js/bootstrap-table/bootstrap-table-group-by.min.js}"></script>
+
+<link href="css/jquery-ui.min.css" th:href="@{/css/richtext.min.css}"
+	rel="stylesheet">
+
+<style>
+.richText .richText-editor {
+	height: 125px;
+}
+</style>
+
+<script th:src="@{/js/autoNumeric.min.js}"></script>
+
+</head>
+
+<body id="page-top">
+	<th:block th:replace="fragments/general :: navbar-header" />
+
+	<div id="wrapper">
+		<th:block th:replace="fragments/general :: menu" />
+
+		<div id="content-wrapper">
+			<div class="container-fluid">
+				<th:block th:replace="fragments/general :: panel-page" />
+
+				<!-- CONTENT PAGE -->
+				<div id="cart" class="card mb-3">
+					<div id="divContentHeader" class="card-header">
+						<b><span id="titlePage" th:text="${titlePage}"></span></b>
+					</div>
+					<div class="card-body">
+						<div id="alertSuccess" class="alert alert-success"
+							style="display: none;">
+							<strong>Success!</strong> <span id="alertSuccessMsg"
+								th:text="${M_0005}"></span>
+						</div>
+						<div id="alertFailed" class="alert alert-danger"
+							style="display: none;">
+							<strong>Failed!</strong> <span id="alertFailedMsg"></span>
+						</div>
+						<div id="productionIndex">
+							<div class="row justify-content-end">
+								<div class="col-md-2">
+									<button id="productionCreate" class="btn btn-primary col-md-12"
+										onclick="create()">
+										<i class="fa fa-plus"></i> Create
+									</button>
+								</div>
+							</div>
+							<br>
+							<div class="row justify-content-end">
+								<div class="input-group col-md-2">
+									<input id="productionFilterValue" name="productionFilterValue"
+										type="text" class="form-control">
+									<div class="input-group-append">
+										<button class="btn btn-primary" type="button"
+											onclick="productionFilteredSearch()">
+											<i class="fas fa-search"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+							<br>
+							<table id="tableProduction" data-toolbar-align="right"
+								data-toggle="table" data-sortable="true" data-url=""
+								data-side-pagination="server" data-pagination="true"
+								data-page-size="5" data-page-list="[5, 10, 25, 50, ALL]">
+								<thead>
+									<tr>
+										<th data-field="requestId" data-sortable="true">Request ID</th>
+										<th data-field="aging">Aging</th>
+										<th data-field="client" data-sortable="true">Client</th>
+										<th data-field="trxNonProDesc" data-sortable="true">Type of Treaty</th>
+										<th data-field="curr">Curr</th>
+										<th data-field="amount" data-halign="right" data-align="right">Amount</th>
+										<th data-field="status">Status</th>
+										<th data-field="action" data-halign="center" data-align="center">Action</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+						<div id="productionCreateForm" th:fragment="productionTab" hidden="true">
+							<div class="row justify-content-end">
+								<div class="col-md-2">
+									<button id="btnBack" class="btn btn-danger col-md-12">
+										<i class="fa fa-chevron-left"></i> Back
+									</button>
+								</div>
+							</div>
+							<div class="card-body">
+								<input type="hidden" id="createBy"/>
+								<input type="hidden" id="createOn"/>
+								<div class="row">
+									<div class="col-md-2">Request Id</div>
+									RQ -
+									<div class="col-md-2">
+										<input type="text" name="requestId" id="requestId"
+											class="form-control" disabled />
+									</div>
+								</div>
+								<br>
+								<ul class="nav nav-tabs" id="myTab" role="tablist">
+									<li class="nav-item"><a class="nav-link active"
+										id="client-information-tab" data-toggle="tab"
+										href="#clientInformation" role="tab"
+										aria-controls="clientInformation" aria-selected="true">Client
+											Information</a></li>
+									<li class="nav-item"><a class="nav-link"
+										id="interest-insured-tab" data-toggle="tab"
+										href="#interestInsured" role="tab"
+										aria-controls="interestInsured" aria-selected="false">Interest
+											Insured</a></li>
+									<li class="nav-item"><a class="nav-link"
+										id="reinsurance-tab" data-toggle="tab" href="#reinsurance"
+										role="tab" aria-controls="reinsurance" aria-selected="false">Reinsurance</a></li>
+									<li class="nav-item"><a class="nav-link" id="value-tab"
+										data-toggle="tab" href="#value" role="tab"
+										aria-controls="value" aria-selected="false">Value</a></li>
+									<li class="nav-item"><a class="nav-link" id="tc-tab"
+										data-toggle="tab" href="#tc" role="tab" aria-controls="tc"
+										aria-selected="false">TC</a></li>
+									<li class="nav-item"><a class="nav-link"
+										id="check-list-tab" data-toggle="tab" href="#checkList"
+										role="tab" aria-controls="checkList" aria-selected="false">Checklist</a></li>
+									<li class="nav-item"><a class="nav-link" id="view-tab"
+										data-toggle="tab" href="#view" role="tab" aria-controls="view"
+										aria-selected="false">View</a></li>
+								</ul>
+								<div class="tab-content" id="myTabContent">
+									<div class="tab-pane fade show active" id="clientInformation"
+										role="tabpanel" aria-labelledby="client-information-tab">
+
+										<th:block
+											th:replace="fragments/productionTabs/treaty/clientInformation :: client-information-tab" />
+
+									</div>
+									<div class="tab-pane fade" id="interestInsured" role="tabpanel"
+										aria-labelledby="interest-insured-tab">
+										<th:block
+											th:replace="fragments/productionTabs/treaty/interestInsured :: interest-insured-tab" />
+									</div>
+									<div class="tab-pane fade" id="reinsurance" role="tabpanel"
+										aria-labelledby="reinsurance-tab">
+										<th:block
+											th:replace="fragments/productionTabs/treaty/reinsurance:: reinsurance-tab" />
+
+
+									</div>
+									<div class="tab-pane fade" id="value" role="tabpanel"
+										aria-labelledby="value-tab">
+										<th:block
+											th:replace="fragments/productionTabs/treaty/value:: value-tab" />
+
+
+									</div>
+									<div class="tab-pane fade" id="tc" role="tabpanel"
+										aria-labelledby="tc-tab">
+										<th:block th:replace="fragments/productionTabs/treaty/tc:: tc-tab" />
+
+									</div>
+									<div class="tab-pane fade" id="checkList" role="tabpanel"
+										aria-labelledby="check-list-tab">
+										<th:block
+											th:replace="fragments/productionTabs/treaty/checklist:: check-list-tab" />
+
+
+									</div>
+									<div class="tab-pane fade" id="view" role="tabpanel"
+										aria-labelledby="view-tab">
+										<th:block
+											th:replace="fragments/productionTabs/treaty/view:: view-tab" />
+
+
+									</div>
+								</div>
+							</div>
+							
+							<div id="previewReport" class="card-body" hidden="true">
+								<div class="row justify-content-center">
+									<button id="btnSendPreview" class="btn btn-success col-md-1">
+										Send Email</button>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+									<button id="btnBackPreview" class="btn btn-danger col-md-1">
+										Close</button>
+								</div>
+								
+								<br>
+								
+								<table id="tableSend" data-toolbar-align="right"
+									data-toggle="table" data-pagination="true" data-page-size="10">
+									<thead>
+										<tr>
+											<th data-field="action" data-halign="center" data-align="center">Action</th>
+											<th data-field="group">Group</th>
+											<th data-field="cob">COB</th>
+											<th data-field="layer">Layer/QS</th>
+											<th data-field="name">Name</th>
+											<th data-field="document">Document</th>
+										</tr>
+									</thead>
+								</table>
+								
+								<div id="previewReportHtml"></div>
+							</div>
+							<div id="buttonSave">
+								<th:block th:replace="fragments/button :: btn-save-validate" />
+							</div>
+							<div id="buttonSave2" hidden="true">
+								<th:block th:replace="fragments/button :: btn-save" />
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+			
+			<!-- Modal Validation -->
+			<div class="modal fade" id="validation-modal" tabindex="-1"
+				role="dialog" aria-labelledby="validation-modal" aria-hidden="true">
+				<div class="modal-dialog modal-lg" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="client-modal-label">Validation</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							
+						<div class="row">
+							<div class="col-md-10">
+								<label><b>Client Information</b></label>
+							</div>
+							<div class="col-md-10">
+								<label id="valCI"></label>
+							</div>
+							
+							<br>
+							<br>
+							
+							<div class="col-md-10">
+								<label><b>Interest Insured</b></label>
+							</div>
+							<div class="col-md-10">
+								<label id="valII"></label>
+							</div>
+							
+							<br>
+							<br>
+							
+							<div class="col-md-10">
+								<label><b>Reinsurance</b></label>
+							</div>
+							<div class="col-md-10">
+								<label id="valReins"></label>
+							</div>
+							
+							<br>
+							<br>
+							
+							<div class="col-md-10">
+								<label><b>Checklist - Payment Method</b></label>
+							</div>
+							<div class="col-md-10">
+								<label id="valCPM"></label>
+							</div>
+						</div>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Modal Validation -->
+			
+			<!-- /.container-fluid -->
+			<th:block th:replace="fragments/general :: copyright-footer"></th:block>
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<!-- /#wrapper -->
+
+	<th:block th:replace="fragments/general :: scroll-to-top" />
+	<th:block th:replace="fragments/general :: logout-modal" />
+	<th:block th:replace="fragments/import :: js-body" />
+
+	<script th:src="@{/js/jquery.richtext.js}"></script>
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var isInitEdit = false;
+	
+	const formatter_0 = new Intl.NumberFormat('en-US', {
+		style: 'currency',
+		currency: 'USD',
+		minimumFractionDigits: 0
+	});
+	
+	const formatter_2 = new Intl.NumberFormat('en-US', {
+			style: 'currency',
+			currency: 'USD',
+			minimumFractionDigits: 2
+	});
+	
+	const formatter_4 = new Intl.NumberFormat('en-US', {
+			style: 'currency',
+			currency: 'USD',
+			minimumFractionDigits: 4
+	});
+	
+	$('#t1-remarks').richText({id: 't1-remarks'});	
+	$('#t6-or').richText({id: 't6-or'});
+	
+	function create_UUID() {
+	    var dt = new Date().getTime();
+	    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+	        var r = (dt + Math.random()*16)%16 | 0;
+	        dt = Math.floor(dt/16);
+	        return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+	    });
+	    return uuid;
+	}
+	
+	//=============== CREATE ===============//
+	
+	function create() {
+		$('#titlePage').text(/*[[${titlePageCreate}]]*/);
+		$('#productionCreateForm').removeAttr('hidden');
+		$('#productionIndex').attr('hidden', true);
+		
+		$('#createBy').val('');
+		$('#createOn').val('');
+	}
+	
+	//=============== EDIT ===============//
+	
+	function edit(requestId) {
+		var param = {
+			trxVoucherId: requestId
+		}
+		
+		$.ajax({ 
+	        type: 'POST',
+	        dataType: 'json',
+	        contentType: 'application/json',
+	        data:JSON.stringify(param),
+	        url: /*[[@{/marketing/treaty-production/inquiryModify}]]*/,
+	    }).then(function(result) {    
+	    	isInitEdit = true;
+	    	
+	    	var t1Data = result.t1Data;
+	    	var dataAdd = result.DataAdd;
+	    	setT1Data(t1Data, dataAdd[0]);
+	    	
+	    	var type = dataAdd[0].trxNonPro;
+	    	setT2Data(dataAdd, type);
+	    	
+	    	var tableT2;
+	    	if(type == 'P') {
+		    	tableT2 = $('#t2-p-addTable').bootstrapTable('getData');
+	    	}else {
+	    		tableT2 = $('#t2-n-addTable').bootstrapTable('getData');
+	    	}
+			updateDropdownGroup(tableT2);
+			updateDropdownLayerQs(tableT2);
+			
+	    	setT4Data(result.t4Data, type);
+	    	setT6Data(result.t6Data);
+	    	setT7Data(result.t7Data1, result.t7Data2);
+	    	
+		    $('#titlePage').text(/*[[${titlePageEdit}]]*/);
+			$('#productionCreateForm').removeAttr('hidden');
+			$('#productionIndex').attr('hidden', true);
+	    });	
+	}
+	
+	function setT1Data(t1Data, t1DataAdd) {
+		var requestId;
+    	var createBy;
+    	var createOn;
+    	for(var i=0; i<t1Data.length; i++) {
+    		requestId = t1Data[i].trxVoucherId;
+    		createBy = t1Data[i].createBy;
+    		createOn = t1Data[i].createOnMillis;
+    		
+    		$('#t1-client').val(t1Data[i].trxClient);
+    		$('#t1-clientDesc').val(t1Data[i].clientDesc);
+    		AutoNumeric.getAutoNumericElement('#t1-share').set(t1Data[i].trxShare);
+    		$('#t1-officer').val(t1Data[i].trxOfficer).trigger('change');
+    		$('#t1-type').val(t1DataAdd.trxNonPro).trigger('change');
+    		
+    		$('#t1-insuredPeriod').val(t1DataAdd.trxInsStartStr);
+			$('#t1-insuredPeriodTo').val(t1DataAdd.trxInsEndStr);
+    		$('#t1-paymentMethod').val(t1Data[i].trxPayMthd).trigger('change');
+    		$('#t1-curr').val(t1Data[i].trxCurrId).trigger('change.select2');
+    		AutoNumeric.getAutoNumericElement('#t1-exchangeRate').set(t1Data[i].trxCurrRate);
+    		AutoNumeric.getAutoNumericElement('#t1-usdRate').set(t1DataAdd.trxUsdRate);
+    		$('#richText-t1-remarks').html(t1Data[i].trxRemarks);
+    	}
+    	$('#t1-clientDesc').trigger('change');
+    	
+    	$('#createBy').val(createBy);
+    	$('#createOn').val(createOn);    	
+    	$('#requestId').val(requestId);
+	}
+	
+	function setT2Data(t2Data, type) {
+		var remarks = '';
+		var t2DataTable = [];
+    	for(var i=0; i<t2Data.length; i++) {    		    		
+    		var data;
+    		
+    		if(type == 'P' && t2Data[i].trxCobGroup != '') {
+    			var id = create_UUID();
+    			var action = "<button class=\"btn btn-danger\" onclick=\"t2PRemoveAdd('"+id+"')\">" 
+						+ "<i class=\"fa fa-trash\"></i>" 
+						+ "</button>";
+    			
+				var compositeId = t2Data[i].trxCobGroup + t2Data[i].trxLayer;
+    			var data = {
+ 					id : id,
+ 					compositeId: compositeId,
+ 					groupId : t2Data[i].trxCobGroup,
+ 					group : t2Data[i].trxCobGroupDesc,
+ 					quotaShare : t2Data[i].trxLayer,
+ 					classOfBusinessId: t2Data[i].trxCoverCode,
+ 					classOfBusiness : t2Data[i].trxCoverCodeDesc,
+ 					basicCover: t2Data[i].trxBasicCover,
+ 					limit : formatter_2.format(t2Data[i].trxLimitAmt).replace('$', ''),
+ 					multiple : formatter_2.format(t2Data[i].trxReInst).replace('$', ''),
+ 					ownRisk : formatter_2.format(t2Data[i].trxOwnAmt).replace('$', ''),
+ 					remarks : t2Data[i].trxRemarks,
+ 					action : action
+    			};
+    			remarks = t2Data[i].trxRemarks;
+    			t2DataTable.push(data);
+    			
+    			// =============== VALUE PROPORTIONAL ===============
+    			var t5ValueII = {
+   					id: data.id,
+   					groupId: data.groupId,
+   					group: data.group,
+   					cobId: data.classOfBusinessId,
+   					cob: data.classOfBusiness,
+   					layer: data.quotaShare,
+   					multiple: data.multiple,
+   					ownRetention: data.ownRisk,
+   					limit: data.limit
+   				};
+   				
+   				calculateValueInterestProp(t5ValueII);
+    		}else if(type == 'N' && t2Data[i].trxCobGroup != '') {
+    			var id = create_UUID();
+    			var action = "<button class=\"btn btn-danger\" onclick=\"t2NRemoveAdd('"+id+"')\">" 
+						+ "<i class=\"fa fa-trash\"></i>" 
+						+ "</button>";
+    			
+				var compositeId = t2Data[i].trxCobGroup + t2Data[i].trxLayer;
+    			var data = {
+   					id : id,
+   					compositeId: compositeId,
+   					groupId : t2Data[i].trxCobGroup,
+   					group : t2Data[i].trxCobGroupDesc,
+   					layer : t2Data[i].trxLayer,
+   					cobId : t2Data[i].trxCoverCode,
+   					cob : t2Data[i].trxCoverCodeDesc,
+   					basicCover: t2Data[i].trxBasicCover,
+   					limit : formatter_2.format(t2Data[i].trxLimitAmt).replace('$', ''),
+   					deductible : formatter_2.format(t2Data[i].trxDeducAmt).replace('$', ''),
+   					reinstatement : formatter_2.format(t2Data[i].trxReInst).replace('$', '') + '@' + formatter_4.format(t2Data[i].trxReinsRate).replace('$', ''),
+   					reinstatement1 : formatter_2.format(t2Data[i].trxReInst).replace('$', ''),
+   					reinstatement2 : formatter_4.format(t2Data[i].trxReinsRate).replace('$', ''),
+   					xolRate : formatter_4.format(t2Data[i].trxXolRate).replace('$', ''),
+   					deposit : formatter_4.format(t2Data[i].trxDepositRate).replace('$', ''),
+   					estOgnrpi : formatter_2.format(t2Data[i].trxOgnrpi).replace('$', ''),
+   					maxAcceptance : t2Data[i].trxMaxAccpt,
+   					remarks: t2Data[i].trxRemarks,
+   					xolReas : formatter_4.format(t2Data[i].trxXolReas).replace('$', ''),
+   					depositReas : formatter_4.format(t2Data[i].trxDepositReas).replace('$', ''),
+   					action : action
+   				};
+    			remarks = t2Data[i].trxRemarks;
+    			t2DataTable.push(data);
+    			
+    			// =============== VALUE NON PROPORTIONAL ===============
+    			var dataT5 = {
+   					id: compositeId,
+   					groupId: data.groupId,
+   					group: data.group,
+   					layer: data.layer,
+   					limit: data.limit,
+   					deductible: data.deductible,
+   					xolRate: data.xolRate,
+   					reinstatement: data.reinstatement,
+   					reinstatement1: data.reinstatement1,
+   					reinstatement2: data.reinstatement2,
+   					estOgnrpi: data.estOgnrpi,
+   					depositPct: formatter_2.format(data.deposit).replace('$', '')
+   				};				
+   				
+   				calculateValueInterestNoProp(dataT5);
+    		}
+    	}
+    	
+    	if(type == 'P') {
+    		$('#t2-p-remarks').val(remarks);
+    		loadPropIITable(t2DataTable);
+    	}else {
+    		$('#t2-n-remarks').val(remarks);
+    		loadNonPropIITable(t2DataTable);	
+    	}
+	}
+	
+	function setT4Data(t4Data, type) {
+		var t4DataTable = [];
+    	for(var i=0; i<t4Data.length; i++) {    
+    		var id = create_UUID();
+    		var action = "<button class=\"btn btn-danger\" onclick=\"t4RemoveAdd('"+id+"')\">" 
+					+ "<i class=\"fa fa-trash\"></i>" 
+					+ "</button>";
+    		
+    		var data = {
+   				id: id,
+				groupId: t4Data[i].trxCobGroup,
+				group: t4Data[i].trxCobGroupDesc,
+				cobId: t4Data[i].trxCoverCode,
+				cob: t4Data[i].trxCoverCodeDesc,
+				layerId: t4Data[i].trxLayer,
+				layer: t4Data[i].trxLayer,
+				reinsuranceId: t4Data[i].trxInsId,
+				reinsurance: t4Data[i].trxInsIdDesc,
+				share: formatter_4.format(t4Data[i].trxInsShare).replace('$', ''),
+				premium: formatter_4.format(t4Data[i].trxPremium).replace('$', ''),
+				riComm: formatter_4.format(t4Data[i].trxRiComm).replace('$', ''),
+				action: action
+   			};
+    			
+    		t4DataTable.push(data);
+    		
+    		if(type == 'P') {
+    			var compositeId = t4Data[i].trxCoverCode + t4Data[i].trxLayer;
+		   		var t5ValueReins = {
+					id: data.id,
+					compositeId: compositeId,
+					cobId: data.cobId,
+					cob: data.cob,
+					layer: data.layer,
+					reinsuranceId: data.reinsuranceId,
+					reinsurance: data.reinsurance,
+					share: data.share
+				};
+		
+				calculateValueReinsProp(t5ValueReins);
+    		}else {
+    			var compositeId = t4Data[i].trxCobGroup + t4Data[i].trxLayer;
+    			var t5ValueReins = {
+   					id: data.id,
+   					compositeId: compositeId,
+   					groupId: data.groupId,
+   					group: data.group,
+   					layer: data.layer,
+   					reinsuranceId: data.reinsuranceId,
+   					reinsurance: data.reinsurance,
+   					share: data.share,
+   					riComm: data.riComm
+   				};	
+   				
+   				calculateValueReinsNoProp(t5ValueReins);	
+    		}
+    	}
+    	
+    	loadReinsTable(t4DataTable);
+    	
+    	setReinsuranceT7();
+	}
+	
+	function setT6Data(t6Data) {
+    	var t6DataTable = [];
+    	for(var i=0; i<t6Data.length; i++) {    		
+    		var idKey = create_UUID();
+    		var action = "<button class=\"btn btn-danger\" onclick=\"t6Remove('"+idKey+"')\">" 
+			+ "<i class=\"fa fa-trash\"></i>" 
+			+ "</button>";
+			
+			var addObject = {
+					idKey : idKey,
+					groupCob: t6Data[i].trxCobGroupDesc,
+					groupCobId: t6Data[i].trxCobGroup,
+					cob: t6Data[i].trxCoverCodeDesc,
+					cobId: t6Data[i].trxCoverCode,
+					tcGroup : t6Data[i].trxTcCode,
+					tcDetails : t6Data[i].trxTcData,
+					type: t6Data[i].trxNonPro,
+					action : action
+			};
+    		
+    		t6DataTable.push(addObject);
+    	}
+    	
+    	$('#t6-addTable').bootstrapTable('load', t6DataTable);
+	}
+	
+	function setT7Data(t7Data1, t7Data2) {
+    	var t7DataTable1 = [];
+    	for(var i=0; i<t7Data1.length; i++) {    		
+    		var id = create_UUID();
+    		var action = "<button class=\"btn btn-danger\" onclick=\"t7RemoveData1('"+id+"')\">" 
+			+ "<i class=\"fa fa-trash\"></i>" 
+			+ "</button>";
+			
+			var data = {
+				id: id,
+				type: t7Data1[i].trxPrClientDesc,
+				payDate: t7Data1[i].trxPrDateStr,
+				portion: formatter_4.format(t7Data1[i].trxPrShare).replace('$', ''),
+				action: action
+			}
+    		
+    		t7DataTable1.push(data);
+    	}
+    	
+    	$('#t7-addTable-1').bootstrapTable('load', t7DataTable1);
+    	
+    	var t7DataTable2 = [];
+    	for(var i=0; i<t7Data2.length; i++) {    		
+    		var id = create_UUID();
+    		var action = "<button class=\"btn btn-danger\" onclick=\"t7RemoveData2('"+id+"')\">" 
+			+ "<i class=\"fa fa-trash\"></i>" 
+			+ "</button>";
+			
+			var data = {
+				id: id,
+				documentId: t7Data2[i].trxDocId,
+				document: t7Data2[i].docDesc,
+				status: t7Data2[i].docStatus,
+				file: t7Data2[i].trxDocName,
+				path: t7Data2[i].trxDocFolder,
+				typeOfCover: t7Data2[i].trxPrClient,
+				action: action
+			};
+    		
+    		t7DataTable2.push(data);
+    	}
+    	
+    	$('#t7-addTable-2').bootstrapTable('load', t7DataTable2);
+	}
+	
+	//=============== BACK ===============//
+	
+	$('#btnBack').click(function() {
+		location.reload();
+	});
+	
+	//=============== INQUIRY ===============//
+	
+	$(function() {
+		productionFilteredSearch();
+	});
+	
+	function productionFilteredSearch() {
+		var urlInq = /*[[@{/marketing/treaty-production/inquiry}]]*/;
+		urlInq = urlInq + '?filterValue=' + $('#productionFilterValue').val();
+		
+		$('#tableProduction').bootstrapTable('refreshOptions', {
+	  		paginationSuccessivelySize: 3,
+	        theadClasses: 'thead-dark',
+	        url: urlInq
+	    });
+	}
+	
+	//=============== DELETE ===============//
+	
+	function remove(requestId) {
+		var isDelete = confirm("Are you sure?");
+		
+		if(isDelete == true) {
+			deleteData(requestId);
+			location.reload();
+		}
+	}
+	
+	function deleteData(requestId) {		
+		var data = {
+			trxVoucherId: requestId
+		}
+		
+		return $.ajax({type: 'POST', global: false, dataType: 'json',  
+			contentType:'application/json',
+			url: /*[[@{/marketing/treaty-production/delete}]]*/, 
+			data: JSON.stringify(data), 
+			success: function (data) {
+			}
+		});
+	}
+	
+	//=============== SAVE ===============//
+	
+	$('#btnSave').click(function() {
+		var client = $('#t1-client').val();
+		var type = $('#t1-type option:selected').val();
+		
+		if(client == "")
+			showAlertFailed("Client/Cedant can't empty.");
+		else
+			doSave(false);
+	});
+	
+	function doSave(isSend) {
+		$('#btnSave').attr('disabled', 'true');
+		
+		save().done(function(data) {
+			var status = data.status;
+			var message = data.message;
+			
+			$('#createBy').val(message.createBy);
+	    	$('#createOn').val(message.createOn);
+	    	$('#requestId').val(message.voucherId);
+			
+			if(status == "OK" && !isSend)
+				showAlertSuccess();
+			else if(isSend)
+				showPreviewReport();
+			else if(status != "OK")
+				showAlertFailed(/*[[${M_0006}]]*/);
+
+			$('#btnSave').removeAttr('disabled');
+		}).fail(function() {
+			showAlertFailed(/*[[${M_0006}]]*/);
+		    $('#btnSave').removeAttr('disabled');
+		});
+	}
+	
+	function save() {
+		var trxVoucherId = $('#requestId').val();
+		var createBy = $('#createBy').val();
+		var createOn = $('#createOn').val();
+		var t1Data = getT1Data();
+		var t2Data = getT2Data();
+		var t4Data = getT4Data();
+		var t5Data = getT5Data();
+		var t6Data = getT6Data();
+		var t7Data = getT7Data();
+		
+		var param = {
+			createBy: createBy,
+			createOn: createOn,
+			trxVoucherId: trxVoucherId,
+			t1Data: t1Data,
+			t2Data: t2Data,
+			t4Data: t4Data,
+			t5Data: t5Data,
+			t6Data: t6Data,
+			t7Data: t7Data
+		}
+		
+		return $.ajax({type: 'POST', global: false, dataType: 'json',  
+			contentType:'application/json',
+			url: /*[[@{/marketing/treaty-production/save}]]*/, 
+			data: JSON.stringify(param), 
+			success: function (data) {
+			}
+		});
+	}
+	
+	function getT1Data() {		
+		var client = $('#t1-client').val();
+		var share = AutoNumeric.getAutoNumericElement('#t1-share').get();
+		var officer = $('#t1-officer option:selected').val();
+		var type = $('#t1-type option:selected').val();
+		var insuredPeriod = $('#t1-insuredPeriod').val();
+		var insuredPeriodTo = $('#t1-insuredPeriodTo').val();
+		var paymentMethod = $('#t1-paymentMethod option:selected').val();
+		var curr = $('#t1-curr option:selected').val();
+		var exchangeRate = AutoNumeric.getAutoNumericElement('#t1-exchangeRate').get();
+		var usdRate = AutoNumeric.getAutoNumericElement('#t1-usdRate').get();
+		var remarks = $('#richText-t1-remarks').html();
+		
+		var t1Data = {
+			client: client,
+			share: share,
+			officer: officer,
+			type: type,
+			insuredPeriod: insuredPeriod,
+			insuredPeriodTo: insuredPeriodTo,
+			paymentMethod: paymentMethod,
+			curr: curr,
+			exchangeRate: exchangeRate,
+			usdRate: usdRate,
+			remarks: remarks
+		}
+		
+		return t1Data;
+	}
+	
+	function getT2Data() {		
+		var table = [];
+		var type = $('#t1-type option:selected').val();
+		
+		var remarks;
+		if(type == 'P') {
+			remarks = $('#t2-p-remarks').val();
+			table = $('#t2-p-addTable').bootstrapTable('getData');
+		}else {
+			remarks = $('#t2-n-remarks').val();
+			table = $('#t2-n-addTable').bootstrapTable('getData');
+		}
+		
+		var t2Data = {
+			remarks: remarks,
+			t2DataTable: table
+		}
+		
+		return t2Data;
+	}
+	
+	function getT4Data() {		
+		var table = $('#t4-addTable').bootstrapTable('getData');
+		
+		var t4Data = {
+			t4DataTable: table
+		}
+		
+		return t4Data;
+	}
+	
+	function getT5Data() {		
+		var t5NoPropTable1 = $('#t5-addTable').bootstrapTable('getData');
+		var t5NoPropTable2 = $('#t5-addTable2').bootstrapTable('getData');
+		var t5PropTable1 = $('#t5-2-addTable').bootstrapTable('getData');
+		var t5PropTable2 = $('#t5-2-addTable2').bootstrapTable('getData');
+		
+		var t5Data = {
+			t5NoPropTable1: t5NoPropTable1,
+			t5NoPropTable2: t5NoPropTable2,
+			t5PropTable1: t5PropTable1,
+			t5PropTable2: t5PropTable2
+		}
+		
+		return t5Data;
+	}
+	
+	function getT6Data() {		
+		var rows = $('#t6-addTable').bootstrapTable('getData');
+		
+		var t6DataTable = [];
+		for(var i=0; i<rows.length; i++) {
+			t6DataTable.push(rows[i]);
+		}
+		
+		var t6Data = {
+			t6DataTable: t6DataTable
+		}
+		
+		return t6Data;
+	}
+	
+	function getT7Data() {		
+		var rows1 = $('#t7-addTable-1').bootstrapTable('getData');
+		
+		var t7DataTable1 = [];
+		for(var i=0; i<rows1.length; i++) {
+			t7DataTable1.push(rows1[i]);
+		}
+		
+		var rows2 = $('#t7-addTable-2').bootstrapTable('getData');
+		
+		var t7DataTable2 = [];
+		for(var i=0; i<rows2.length; i++) {
+			t7DataTable2.push(rows2[i]);
+		}
+		
+		var t7Data = {
+			t7DataTable1: t7DataTable1,
+			t7DataTable2: t7DataTable2
+		}
+		
+		return t7Data;
+	}
+	
+	//=============== SEND ===============//
+	
+	$('#btnBackPreview').click(function() {
+		$('#t8-placingSlip').prop('disabled', false);
+		$('#t8-quotation').prop('disabled', false);
+		$('#t8-closing').prop('disabled', false);
+		
+		$('#previewReport').prop('hidden', true);
+	});
+	
+	$('#t8-send').click(function() {		
+		var valCI = validationCI();
+		$('#valCI').text(valCI);
+		
+		var valII = validationII();
+		$('#valII').text(valII);
+		
+		var valReins = validationReins();
+		$('#valReins').text(valReins);
+		
+		var valCPM = validationCPM();
+		$('#valCPM').text(valCPM);
+		
+		if(valCI.length>0 || valII.length>0 || valReins.length>0 || valCPM.length>0) {
+			$('#validation-modal').modal('show');
+			
+			return false;
+		}
+
+		doSave(true);
+	});
+	
+	$('#btnSendPreview').click(function() {
+		var valCI = validationCI();
+		$('#valCI').text(valCI);
+		
+		var valII = validationII();
+		$('#valII').text(valII);
+		
+		var valReins = validationReins();
+		$('#valReins').text(valReins);
+		
+		var valCPM = validationCPM();
+		$('#valCPM').text(valCPM);
+		
+		if(valCI.length>0 || valII.length>0 || valReins.length>0 || valCPM.length>0) {
+			$('#validation-modal').modal('show');
+			
+			return false;
+		}
+		
+		sendEmail();
+	});
+	
+	function showPreviewReport() {		
+		var trxVoucherId = $('#requestId').val();
+		if(trxVoucherId == '')
+			return null;
+		
+		var type = $('#t1-type option:selected').val();
+		var isPlacing = $('#t8-placingSlip').is(':checked');
+		var isQuotation = $('#t8-quotation').is(':checked');
+		var isClosing = $('#t8-closing').is(':checked');
+		
+		var process;
+		
+		var remarks;
+		if(isPlacing) {
+			process = 'placing';
+			
+			remarks = $('#t8-placingSlipRemarks').val();
+			if(remarks == '') {
+				alert("Remarks 'Palacing Slip' must be fill!");
+				return null;
+			}	
+		}else if(isQuotation) {
+			process = "quotation";
+			
+			remarks = $('#t8-quotationRemarks').val();
+			if(remarks == '') {
+				alert("Remarks 'Quotation' must be fill!");
+				return null;
+			}			
+		}else if(isClosing) {
+			remarks = $('#t8-closingRemarks').val();
+			var clientDate = $('#t8-clientConfirmationDate').val();
+			var clientInfo = $('#t8-clientConfirmationInfo').val();
+			if((clientDate=="" || clientInfo == "") && type != 'P') {
+				alert("Client Confirmation must be fill!");
+				return null;
+			}else if(remarks=="") {
+				alert("Remarks 'Closing' must be fill!");
+				return null;
+			}
+			
+			$('#t8-placingSlip').prop('disabled', true);
+			$('#t8-quotation').prop('disabled', true);
+			$('#t8-closing').prop('disabled', true);
+			
+			var clientValue = $('#t5-addTable').bootstrapTable('getData');
+			var reinsValue = $('#t5-addTable2').bootstrapTable('getData');
+			
+			var paramClosing = {
+				"type": type,
+				"trxVoucherId": trxVoucherId,
+				"remarks": remarks,
+				"clientConfirmationDate": clientDate,
+				"clientValue": clientValue,
+				"reinsValue": reinsValue
+			};
+			
+			$.ajax({
+				type: 'POST', global: false, dataType: 'json',  
+				contentType:'application/json',
+				url: /*[[@{/marketing/treaty-production/closing}]]*/, 
+				data: JSON.stringify(paramClosing), 
+				success: function (data) {
+				}
+			}).done(function(data) {
+				if(type != 'P') {
+					$('#trxDataStatus').val(11);
+					$('#tableSend').bootstrapTable('load', data);
+					$('#tableSend').bootstrapTable('showColumn', 'group');
+					$('#tableSend').bootstrapTable('showColumn', 'layer');
+					$('#tableSend').bootstrapTable('hideColumn', 'cob');
+					
+					$('#previewReport').removeAttr('hidden');
+				}else {
+					showAlertSuccess();
+				}
+			}).fail(function() {
+				showAlertFailed('Cannot Closing');
+			});
+			
+			return null;
+		}else {
+			return null;
+		}
+		
+		$('#t8-placingSlip').prop('disabled', true);
+		$('#t8-quotation').prop('disabled', true);
+		$('#t8-closing').prop('disabled', true);
+		
+		var param = {
+			trxVoucherId: trxVoucherId,
+			process: process,
+			remarks: remarks
+		};
+		
+		$.ajax({
+			type: 'POST', global: false, dataType: 'json',  
+			contentType:'application/json',
+			url: /*[[@{/marketing/treaty-production/inquirySend}]]*/, 
+			data: JSON.stringify(param), 
+			success: function (data) {
+			}
+		}).done(function(data) {
+			$('#tableSend').bootstrapTable('load', data);
+			
+			if(type == 'P') {
+				$('#tableSend').bootstrapTable('hideColumn', 'group');
+				$('#tableSend').bootstrapTable('showColumn', 'cob');
+				$('#tableSend').bootstrapTable('showColumn', 'layer');
+			}else if(type == 'N' && isPlacing) {
+				$('#tableSend').bootstrapTable('showColumn', 'group');
+				$('#tableSend').bootstrapTable('hideColumn', 'cob');
+				$('#tableSend').bootstrapTable('hideColumn', 'layer');
+			}else if(isQuotation) {
+				$('#tableSend').bootstrapTable('hideColumn', 'group');
+				$('#tableSend').bootstrapTable('hideColumn', 'cob');
+				$('#tableSend').bootstrapTable('hideColumn', 'layer');
+			}else {
+				$('#tableSend').bootstrapTable('showColumn', 'group');
+				$('#tableSend').bootstrapTable('showColumn', 'layer');
+				$('#tableSend').bootstrapTable('hideColumn', 'cob');
+			}
+			
+			$('#previewReport').removeAttr('hidden');
+		}).fail(function() {
+			showAlertFailed('Cannot get data');
+		});
+		
+	}
+	
+	function printPreview(trxVoucherId, group, cob, layer, code, process) {		
+		var url = /*[[@{/marketing/treaty-production/print}]]*/;
+		var param = '?trxVoucherId=' + trxVoucherId
+				+ '&group=' + group
+				+ '&cob=' + cob
+				+ '&layer=' + layer 
+				+ '&process=' + process 
+				+ '&code=' + code;
+		
+		param = encodeURI(param);
+		
+		window.open(url+param, '_blank');
+	}
+	
+	function printPreviewClosing(voucherId, group, layer, clientCode, clientName, type) {		
+		var trxVoucherId = $('#requestId').val();
+		var url = /*[[@{/marketing/treaty-production/closing-print}]]*/;
+		var param = '?voucherId=' + voucherId 
+				+ '&type=' + type 
+				+ '&trxVoucherId=' + trxVoucherId
+				+ '&code=' + clientCode
+				+ '&group=' + group
+				+ '&layer=' + layer;
+		
+		param = encodeURI(param);
+		
+		window.open(url+param, '_blank');
+	}
+	
+	function exportPreview(trxVoucherId, group, cob, layer, code, process, file) {		
+		var url = /*[[@{/marketing/treaty-production/document}]]*/;
+		var param = '?trxVoucherId=' + trxVoucherId
+				+ '&group=' + group
+				+ '&cob=' + cob
+				+ '&layer=' + layer 
+				+ '&process=' + process 
+				+ '&code=' + code 
+				+ '&file=' + file;
+		
+		param = encodeURI(param);
+		
+		window.open(url+param, '_blank');
+	}
+	
+	function exportPreviewClosing(voucherId, group, layer, clientCode, clientName, file, type) {	
+		var trxVoucherId = $('#requestId').val();
+		var url = /*[[@{/marketing/treaty-production/closing-document}]]*/;
+		var param = '?voucherId=' + voucherId  
+				+ '&type=' + type
+				+ '&trxVoucherId=' + trxVoucherId
+				+ '&code=' + clientCode
+				+ '&group=' + group
+				+ '&layer=' + layer 
+				+ '&fileName=' + file;
+		
+		param = encodeURI(param);
+		
+		window.open(url+param, '_blank');
+	}
+	
+	function sendEmail() {
+		alert('Send Email Under Construction');
+	}
+	
+	//=============== ALERT ===============//
+	
+	function showAlertFailed(msgAlert) {
+		$(location).attr('href','#page-top');
+		$('#alertFailedMsg').text(msgAlert);
+		$('#alertFailed').fadeTo(3000, 500).slideUp(500, function() {
+		    $('#alertFailed').slideUp(500);
+		});
+	}
+	
+	function showAlertSuccess(msgAlert) {
+		$(location).attr('href','#page-top');
+		$('#alertSuccessMsg').text(msgAlert);
+		$('#alertSuccess').fadeTo(2000, 500).slideUp(500, function() {
+		    $('#alertSuccess').slideUp(500);
+		});	
+	}
+	
+	//=============== VALIDATION ===============//
+	
+	$('#btnValidate').click(function() {
+		var valCI = validationCI();
+		$('#valCI').text(valCI);
+		
+		var valII = validationII();
+		$('#valII').text(valII);
+		
+		var valReins = validationReins();
+		$('#valReins').text(valReins);
+		
+		var valCPM = validationCPM();
+		$('#valCPM').text(valCPM);
+		
+		if(valCI.length>0 || valII.length>0 || valReins.length>0 || valCPM.length>0) {
+			$('#validation-modal').modal('show');
+			
+			return false;
+		}
+	});
+		
+	function validationCI() {
+		var val = [];
+		
+		var client = $('#t1-client').val();
+		if(client == "")
+			val.push(" Client/Cedant is required");
+		
+		var share = AutoNumeric.getAutoNumericElement('#t1-share').get();
+		if(share <= 0.00)
+			val.push(" Share (%) is required");
+		
+		var officer = $('#t1-officer option:selected').val();
+		if(officer == "")
+			val.push(" Officer is required");
+		
+		var type = $('#t1-type option:selected').val();
+		if(type == "")
+			val.push(" Type is required");
+		
+		var insuredPeriod = $('#t1-insuredPeriod').val();
+		var insuredPeriodTo = $('#t1-insuredPeriodTo').val();
+		if(insuredPeriod == "" || insuredPeriodTo == "")
+			val.push(" Insured Period is required");
+		
+		var paymentMethod = $('#t1-paymentMethod option:selected').val();
+		if(paymentMethod == "")
+			val.push(" Payment Method is required");
+		
+		var curr = $('#t1-curr option:selected').val();
+		if(curr == "")
+			val.push(" Currency is required");
+		
+		var exchangeRate = AutoNumeric.getAutoNumericElement('#t1-exchangeRate').get();
+		if(exchangeRate == "")
+			val.push(" Exchange Rate is required");
+		
+		var usdRate = AutoNumeric.getAutoNumericElement('#t1-usdRate').get();
+		if(usdRate == "")
+			val.push(" USD Rate is required");
+		
+		return val;
+	}
+	
+	function validationII() {
+		var val = [];
+		
+		var rows = [];
+		var type = $('#t1-type option:selected').val();
+		if(type == "P")
+			rows = $('#t2-p-addTable').bootstrapTable('getData');
+		else
+			rows = $('#t2-n-addTable').bootstrapTable('getData');
+		
+		if(rows.length == 0)
+			val.push(" Table interest insured can't empty");
+		
+		return val;
+	}
+	
+	function validationReins() {
+		var val = [];
+		
+		var rows = $('#t4-addTable').bootstrapTable('getData');
+		
+		if(rows.length == 0)
+			val.push(" Table Reinsurance can't empty");
+		
+		return val;
+	}
+	
+	function validationCPM() {
+		var val = [];
+		
+		var type = $('#t1-type option:selected').val();
+		if(type === 'P')
+			return val;
+		
+		var rows1 = $('#t7-addTable-1').bootstrapTable('getData');
+		
+		if(rows1.length == 0)
+			val.push(" Table payment method can't empty");
+		
+		var portionCli = 0.00;
+		var portionReins = 0.00;
+		for(var i=0; i<rows1.length; i++) {
+			if(rows1[i].type == 'Reinsurance')
+				portionReins += parseFloat(rows1[i].portion.replace(/,/g, ''));
+			else if(rows1[i].type == 'Client')
+				portionCli += parseFloat(rows1[i].portion.replace(/,/g, ''));
+		}
+		
+		if(portionCli != 100)
+			val.push(" Total portion client must equal 100%");
+		if(portionReins != 100)
+			val.push(" Total portion reinsurance must equal 100%");
+		
+		return val;
+	}
+	
+	//=============== LIST PUSH NOT EXISTS ===============//
+	
+	Array.prototype.inArray = function(comparer) { 
+	    for(var i=0; i<this.length; i++) { 
+	        if(comparer(this[i])) return true; 
+	    }
+	    return false; 
+	}; 
+
+	Array.prototype.pushIfNotExist = function(element, comparer) { 
+	    if(!this.inArray(comparer)) {
+	        this.push(element);
+	    }
+	}; 
+	
+	function compareValueDropdown(a, b) {
+	  const value1 = a.text.toUpperCase();
+	  const value2 = b.text.toUpperCase();
+
+	  let comparison = 0;
+	  if(value1 > value2)
+	    comparison = 1;
+	  else if (value1 < value2)
+	    comparison = -1;
+	  
+	  return comparison;
+	}
+		
+	/*]]>*/
+</script>
+
+</html>

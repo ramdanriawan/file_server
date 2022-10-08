@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+</head>
+
+<body>
+
+	<th:block th:fragment="claims-internal">
+		<div id="claimsInternalIndex">
+			<div class="card mb-3">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-2">
+							<label>Type of Cover</label>
+						</div>
+						<div class="col-md-3">
+							<select name="typeOfCover" id="typeOfCover" class="form-control" required>
+								<option value="ALL">ALL</option>
+							</select>
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<div class="col-md-2">
+							<label>Client</label>
+						</div>
+						<div class="col-md-3">
+							<div class="input-group">
+								<input id="client" name="client" type="text" class="form-control" disabled> <input
+									id="cliCode" name="cliCode" type="text" class="form-control" hidden>
+								<div class="input-group-append">
+									<button id='btnClient' class="btn btn-primary" type="button" data-toggle="modal"
+										data-target="#client-modal">
+										<i class="fas fa-search"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<div class="col-md-2">
+							<label>Create Date</label>
+						</div>
+						<div class="col-md-2">
+							<div class="input-group">
+								<input id="transactionDate" name="transactionDate" type="text" class="form-control"
+									disabled>
+								<div class="input-group-append">
+									<button id='btnTransactionDate' class="btn btn-primary" type="button">
+										<i class="fas fa-calendar"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-1" align="center">
+							<label>to</label>
+						</div>
+						<div class="col-md-2">
+							<div class="input-group">
+								<input id="to" name="to" type="text" class="form-control" disabled>
+								<div class="input-group-append">
+									<button id='btnTo' class="btn btn-primary" type="button">
+										<i class="fas fa-calendar"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<div class="col-md-2">
+							<label>Status</label>
+						</div>
+						<div class="col-md-3">
+							<select name="status" id="status" class="form-control" required>
+								<option value="ALL">ALL</option>
+							</select>
+						</div>
+					</div>
+					<br>
+					<th:block th:replace="fragments/button :: btn-search-reset" />
+					<br>
+					<th:block th:replace="fragments/button :: btn-export-create" />
+					<div id="divExporToExcelTr6" class="row justify-content-end" hidden="true">
+						<div class="col-md-2">
+							<button id="exporToExcelTr6" class="btn btn-success col-md-12" disabled>
+								Export to Excel</button>
+						</div>
+					</div>
+					<br>
+					<table id="trxTable" data-toolbar-align="right" data-toggle="table" data-sortable="true" data-url=""
+						data-side-pagination="server" data-pagination="true" data-page-size="5" data-unique-id="idKey"
+						data-pagination-v-align="top" data-page-list="[5, 10, 25, 50, ALL]">
+						<thead>
+							<tr>
+								<th data-field="idKey" data-sortable="true">idKey</th>
+								<th data-field="createOn">Date</th>
+								<th data-field="txType" data-sortable="true">Type</th>
+								<th data-field="txVoucherId" data-sortable="true">Voucher</th>
+								<th data-field="txClientId" data-sortable="true">Client/Cedant</th>
+								<th data-field="txCoverId" data-sortable="true">Product</th>
+								<th data-field="txInterest" data-sortable="true">Description</th>
+								<th data-field="txPolicyNo" data-sortable="true">Policy No</th>
+								<th data-field="txInsId" data-sortable="true">Insurer Name</th>
+								<th data-field="trxPartyName" data-sortable="true">Participant</th>
+								<th data-field="txCurrId" data-sortable="true">Curr</th>
+								<th data-field="txSumIns" data-halign="right" data-align="right">Sum Insured</th>
+								<th data-field="trxDataStatus" data-sortable="true">Status</th>
+								<th data-field="trxRemarks">Remarks</th>
+								<th data-field="trxInsStartStr">trxInsStart</th>
+								<th data-field="trxInsEndStr">trxInsEnd</th>
+								<th data-field="saName">saName</th>
+								<th data-field="action" data-halign="center" data-align="center">Action</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<!-- CLAIMS INTERNAL EDIT -->
+		<div id="claimsInternalEdit" hidden="true">
+			<div class="card mb-3">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-2">
+							<label>Type of Cover</label>
+						</div>
+						<div class="col-md-3">
+							<select name="typeOfCover2" id="typeOfCover2" class="form-control" required>
+								<option value="ALL">ALL</option>
+							</select>
+						</div>
+					</div>
+					<br>
+					<div class="row">
+						<div class="col-md-2">
+							<label>Client</label>
+						</div>
+						<div class="col-md-3">
+							<div class="input-group">
+								<input id="client2" name="client2" type="text" class="form-control" disabled> <input
+									id="cliCode2" name="cliCode" type="text" class="form-control" hidden>
+								<div class="input-group-append">
+									<button id='btnClient2' class="btn btn-primary" type="button" data-toggle="modal"
+										data-target="#client-modal2">
+										<i class="fas fa-search"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<br>
+					<th:block th:replace="fragments/button :: btn-search-reset-2" />
+					<br>
+					<table id="trxTable2" data-toolbar-align="right" data-toggle="table" data-sortable="true"
+						data-url="" data-side-pagination="server" data-pagination="true" data-page-size="5"
+						data-unique-id="idKey" data-pagination-v-align="top" data-page-list="[5, 10, 25, 50, ALL]">
+						<thead>
+							<tr>
+								<th data-field="idKey" data-sortable="true">idKey</th>
+								<th data-field="trxTrxId" data-sortable="true">Trx Id</th>
+								<th data-field="trxVoucherId" data-sortable="true">Trx Voucher Id</th>
+								<th data-field="trxCoverCode" data-sortable="true">Type Of Cover</th>
+								<th data-field="trxRemarks">Policy No</th>
+								<th data-field="trxInsStart">Period Start</th>
+								<th data-field="trxInsEnd">Period End</th>
+								<th data-field="cliName" data-sortable="true">Client/Cedant</th>
+								<th data-field="trxInsuredName">Description</th>
+								<th data-field="trxCurrId" data-sortable="true">Curr</th>
+								<th data-field="trxTsiAmount" data-sortable="true">Sum Insured</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<div id="claimsInternalDetail" hidden="true">
+			<div class="card mb-3">
+				<div class="card-body">
+					<div class="row justify-content-end">
+
+						<div class="input-group col-md-2">
+							<input id="clmFilterValue" name="clmFilterValue" type="text" class="form-control">
+							<div class="input-group-append">
+								<button class="btn btn-primary" type="button" onclick="clmFilteredSearch()">
+									<i class="fas fa-search"></i>
+								</button>
+							</div>
+						</div>
+
+					</div>
+					<br>
+					<table id="trxTable3" data-toolbar-align="right" data-toggle="table" data-sortable="true"
+						data-url="" data-side-pagination="server" data-pagination="true" data-page-size="5"
+						data-unique-id="idKey" data-pagination-v-align="top" data-page-list="[5, 10, 25, 50, ALL]">
+						<thead>
+							<tr>
+								<th data-field="trxBrdxId" data-sortable="true">The Insured/Borderoux</th>
+								<th data-field="trxPartyName">Name
+								</th>
+								<th data-field="trxNewStartF">Period Start</th>
+								<th data-field="trxNewEndF">Period End</th>
+								<th data-field="trxCurrId" data-sortable="true">Curr</th>
+								<th data-field="trxTsiAmount" data-sortable="true">Sum Insured
+								</th>
+								<th data-field="trxBenefit">Benefit</th>
+								<th data-field="trxDataStatus">Status</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+				<div class="card-body">
+					<input type="hidden" id="createBy" />
+					<input type="hidden" id="createOn" />
+					<input type="hidden" id="trxDataStatus" />
+
+					<ul class="nav nav-tabs" id="myTab" role="tablist">
+						<li class="nav-item"><a class="nav-link active" id="client-information-tab" data-toggle="tab"
+								href="#clientInformation" role="tab" aria-controls="clientInformation"
+								aria-selected="true">Client
+								Information</a></li>
+						<li class="nav-item"><a class="nav-link" id="claims-tab" data-toggle="tab" href="#claims"
+								role="tab" aria-controls="claims" aria-selected="false">Claims</a></li>
+						<li class="nav-item"><a class="nav-link" id="comm-out-tab" data-toggle="tab" href="#insurance"
+								role="tab" aria-controls="insurance" aria-selected="false">Insurance/Re</a></li>
+						<li class="nav-item"><a class="nav-link" id="value-tab" data-toggle="tab" href="#value"
+								role="tab" aria-controls="value" aria-selected="false">Value</a></li>
+						<li class="nav-item"><a class="nav-link" id="value-tab" data-toggle="tab" href="#memo"
+								role="tab" aria-controls="memo" aria-selected="false">Memo</a></li>
+						<li class="nav-item"><a class="nav-link" id="document-tab" data-toggle="tab" href="#document"
+								role="tab" aria-controls="document" aria-selected="false">Document </a></li>
+					</ul>
+					<div class="tab-content" id="myTabContent">
+						<div class="tab-pane fade show active" id="clientInformation" role="tabpanel"
+							aria-labelledby="client-information-tab">
+							<th:block th:replace="fragments/claims/clientInformation :: client-information-tab" />
+						</div>
+						<div class="tab-pane fade" id="claims" role="tabpanel" aria-labelledby="claims-tab">
+							<th:block th:replace="fragments/claims/claims :: claims-tab" />
+						</div>
+						<div class="tab-pane fade" id="insurance" role="tabpanel" aria-labelledby="insurance-tab">
+							<th:block th:replace="fragments/claims/insurance:: insurance-tab" />
+						</div>
+						<div class="tab-pane fade" id="value" role="tabpanel" aria-labelledby="value-tab">
+							<th:block th:replace="fragments/claims/value:: value-tab" />
+						</div>
+						<div class="tab-pane fade" id="memo" role="tabpanel" aria-labelledby="memo-tab">
+							<th:block th:replace="fragments/claims/memo:: memo-tab" />
+						</div>
+						<div class="tab-pane fade" id="document" role="tabpanel" aria-labelledby="document-tab">
+							<th:block th:replace="fragments/claims/document:: document-tab" />
+						</div>
+					</div>
+					<th:block th:replace="fragments/button :: btn-save-reset" />
+				</div>
+
+
+			</div>
+		</div>
+		</div>
+		<!-- Modal Client -->
+		<div class="modal fade" id="client-modal" tabindex="-1" role="dialog" aria-labelledby="client-modal"
+			aria-hidden="true">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="client-modal-label">Client</h5>
+						<button type="button" id="reset-client-modal" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="row card-body justify-content-end">
+							<div class="col-md-3">
+								<select id="clientSelector" name="clientSelector" class="custom-select">
+									<option value="cliName">Name</option>
+									<option value="cliCode">Client Id</option>
+								</select>
+							</div>
+							<div class="input-group col-md-3">
+								<input id="clientFilterValue" type="text" class="form-control">
+								<div class="input-group-append">
+									<button id="clientFilterSearchBtn" class="btn btn-primary" type="button"
+										onclick="clientFilteredSearch()">
+										<i class="fas fa-search"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+						<br>
+						<table id="tableClient" data-toggle="table" data-url="" data-sortable="true"
+							data-side-pagination="server" data-pagination="true" data-page-size="5"
+							data-pagination-v-align="top" data-page-list="[5, 10, 25, 50, ALL]">
+							<thead>
+								<tr>
+									<th data-field="cliCode" data-sortable="true">Client ID</th>
+									<th data-field="cliName" data-sortable="true">Client Name</th>
+									<th data-field="cliDataStatusStr">Status</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Modal Client2 -->
+		<div class="modal fade" id="client-modal2" tabindex="-1" role="dialog" aria-labelledby="client-modal2"
+			aria-hidden="true">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="client-modal-label2">Client</h5>
+						<button type="button" id="reset-client-modal2" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="row card-body justify-content-end">
+							<div class="col-md-3">
+								<select id="clientSelector2" name="clientSelector2" class="custom-select">
+									<option value="cliName">Name</option>
+									<option value="cliCode">Client Id</option>
+								</select>
+							</div>
+							<div class="input-group col-md-3">
+								<input id="clientFilterValue2" type="text" class="form-control">
+								<div class="input-group-append">
+									<button id="clientFilterSearchBtn2" class="btn btn-primary" type="button"
+										onclick="clientFilteredSearch2()">
+										<i class="fas fa-search"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+						<br>
+						<table id="tableClient2" data-toggle="table" data-url="" data-sortable="true"
+							data-side-pagination="server" data-pagination="true" data-page-size="5"
+							data-pagination-v-align="top" data-page-list="[5, 10, 25, 50, ALL]">
+							<thead>
+								<tr>
+									<th data-field="cliCode" data-sortable="true">Client ID</th>
+									<th data-field="cliName" data-sortable="true">Client Name</th>
+									<th data-field="cliDataStatusStr">Status</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+			$(function () {
+				var data;
+
+				
+				$('#trxTable').bootstrapTable('hideColumn', 'idKey');
+				$('#trxTable').bootstrapTable('hideColumn', 'trxRemarks');
+				$('#trxTable').bootstrapTable('hideColumn', 'trxInsStartStr');
+				$('#trxTable').bootstrapTable('hideColumn', 'trxInsEndStr');
+				$('#trxTable').bootstrapTable('hideColumn', 'saName');
+
+				$('#trxTable2').bootstrapTable('hideColumn', 'idKey');
+				$('#trxTable2').bootstrapTable('hideColumn', 'trxTrxId');
+				$('#trxTable2').bootstrapTable('hideColumn', 'trxVoucherId');
+
+				$('#clientSelector').select2({ width: '100%' });
+				rest('GET', [[${ urlTypeOfCover }]])
+					.done(function (data) {
+						$('#typeOfCover').select2({
+							width: '100%',
+							data: data
+						});
+					});
+
+				$('#clientSelector2').select2({ width: '100%' });
+				rest('GET', [[${ urlTypeOfCover }]])
+					.done(function (data) {
+						$('#typeOfCover2').select2({
+							width: '100%',
+							data: data
+						});
+					});
+				rest('GET', [[${ urlTypeOfCover }]])
+					.done(function (data) {
+						$('#typeOfCover2').select2({
+							width: '100%',
+							data: data
+						});
+					});
+				rest('GET', [[${ urlStatus }]])
+					.done(function (data) {
+						$('#status').select2({
+							width: '100%',
+							data: data
+						});
+					});
+
+
+				$('#btnClient').click(function () {
+					$('#clientFilterValue').val('');
+					$('#clientSelector').val('cliName').trigger('change');
+
+					var url = [[${ urlClient }]];
+					url = url + "?cliType=-0";
+					$('#tableClient').bootstrapTable('refreshOptions', {
+						theadClasses: 'thead-dark',
+						url: url,
+						pageNumber: 1
+					});
+				});
+
+				$('#btnClient2').click(function () {
+					$('#clientFilterValue2').val('');
+					$('#clientSelector2').val('cliName').trigger('change');
+
+					var url = [[${ urlClient2 }]];
+					url = url + "?cliType=-0";
+					$('#tableClient2').bootstrapTable('refreshOptions', {
+						theadClasses: 'thead-dark',
+						url: url,
+						pageNumber: 1
+					});
+				});
+
+				$('#btnExport').click(function () {
+
+				});
+
+				$('#btnCreate').click(function () {
+					$('#claimsInternalEdit').removeAttr('hidden');
+					$('#claimsInternalIndex').attr('hidden', true);
+					$('#titlePage').text(/*[[${titlePageCreate}]]*/);
+				});
+
+				$('#reset-client-modal').click(function () {
+					$('#client').val('');
+					$('#cliCode').val('');
+				});
+
+				$('#tableClient').on('click-row.bs.table', function (e, row, $tr) {
+					$('#client').val(row.cliName);
+					$('#cliCode').val(row.cliCode);
+					$('#client-modal').modal('hide');
+				});
+
+				$('#tableClient2').on('click-row.bs.table', function (e, row, $tr) {
+					$('#client2').val(row.cliName);
+					$('#cliCode2').val(row.cliCode);
+					$('#client-modal2').modal('hide');
+				});
+
+				$('#trxTable2').on('click-row.bs.table', function (e, row, $tr) {
+					$('#claimsInternalDetail').removeAttr('hidden');
+					$('#claimsInternalEdit').attr('hidden', true);
+					showPage(row.trxTrxId, row.trxVoucherId, row);
+				});
+
+				function showPage(trxTrxId, trxVoucherId, row) {
+					inquiryTableDetail(trxTrxId, trxVoucherId, row);
+					clientPage1(row);
+					// clientPage2(row);
+					// clientPage3(row);
+					// clientPage4(row);
+					// clientPage5(row);
+					// clientPage6(row);
+				}
+
+				function inquiryTableDetail(trxTrxId, trxVoucherId, row) {
+					var url = [[${ urlTableDetail }]];
+					var allUrl = url + "?trxTrxId=" + trxTrxId + "&trxVoucherId=" + trxVoucherId;
+					
+					$.ajax({
+						dataType: "json",
+						url: allUrl,
+						data: data
+					}).then(function (data) {
+						$('#trxTable3').bootstrapTable('refreshOptions', {
+							theadClasses: 'thead-dark',
+							url: allUrl,
+							pageNumber: 1
+						});
+						console.log(row);
+						$('#trxClient1').val(row.cliName);
+						$('#txPolicyNo1').val(row.trxRemarks);
+						$('#txCoverId1').val(row.trxCoverCode);
+						$('#trxInsStart1').val(row.trxInsStart);
+						$('#trxInsEnd1').val(row.trxInsEnd);
+						$('#trxPartyName1').val(data.rows[0].trxPartyName);
+						$('#trxBrdxId1').val(data.rows[0].trxBrdxId);
+						$('#trxBrdxIds1').val(data.rows[0].trxBrdxId);
+						$('#txDateFrom1').val(data.rows[0].trxNewStartF);
+						$('#txDateTo1').val(data.rows[0].trxNewEndF);
+						$('#trxInterest1').val(data.rows[0].trxInterest);
+						$('#txCurrId1').val(data.rows[0].trxCurrId);
+						$('#txTsiAmount1').val(data.rows[0].trxTsiAmount);
+						$('#txDataStatus1').val(16);
+						$('#txSumIns4').val(data.rows[0].trxTsiAmount);
+						txCurrId4
+					});
+				}
+
+				function clientPage1(row) {
+
+				}
+
+
+				$('#transactionDate').datepicker({
+					dateFormat: 'dd/mm/yy',
+					changeMonth: true,
+					changeYear: true,
+				}).datepicker('setDate', [[${ appDate }]]);
+
+				$('#to').datepicker({
+					dateFormat: 'dd/mm/yy',
+					changeMonth: true,
+					changeYear: true,
+					minDate: [[${ appDate }]]
+				}).datepicker('setDate', [[${ appDate }]]);
+
+				$('#txLostDate2').datepicker({
+					dateFormat: 'dd/mm/yy',
+					changeMonth: true,
+					changeYear: true
+				}).datepicker('setDate', [[${ appDate }]]);
+
+				$('#txAdviceDate2').datepicker({
+					dateFormat: 'dd/mm/yy',
+					changeMonth: true,
+					changeYear: true
+				}).datepicker('setDate', [[${ appDate }]]);
+
+				$('#to').datepicker({
+					dateFormat: 'dd/mm/yy',
+					changeMonth: true,
+					changeYear: true,
+				});
+				$('#btnTransactionDate').click(function () {
+					$('#transactionDate').datepicker('show');
+				});
+				$('#btnTo').click(function () {
+					$('#to').datepicker('show');
+				});
+
+				$('#btnCalLostDate2').click(function () {
+					$('#txLostDate2').datepicker('show');
+				});
+
+				$('#btnCalAdviceDate2').click(function () {
+					$('#txAdviceDate2').datepicker('show');
+				});
+
+				$('#transactionDate').change(function () {
+					$('#to').datepicker('option', 'minDate', $('#transactionDate').val());
+				});
+
+				$('#transactionDate').change(function () {
+					$('#to').datepicker('option', 'minDate', $('#transactionDate').val());
+				});
+
+				$('#btnTo').click(function () {
+					$('#to').datepicker('show');
+				});
+
+				$('#btnSearch').click(function () {
+					search([[${ urlSearch }]]);
+					$('#exporToExcelTr6').removeAttr('disabled');
+				});
+
+				$('#btnSearch2').click(function () {
+					search2([[${ urlSearch2 }]]);
+				});
+
+				$('#btnReset').click(function () {
+					$('#typeOfCover').val('ALL').trigger('change');
+					$('#client').val('');
+					$('#cliCode').val('');
+					$('#trxTable').bootstrapTable('refreshOptions', {
+						theadClasses: 'thead-dark',
+						url: ''
+					});
+
+					$('#transactionDate').datepicker({
+						dateFormat: 'dd/mm/yy',
+						changeMonth: true,
+						changeYear: true,
+					}).datepicker('setDate', [[${ appDate }]]);
+
+					$('#to').datepicker({
+						dateFormat: 'dd/mm/yy',
+						changeMonth: true,
+						changeYear: true,
+						minDate: [[${ appDate }]]
+					}).datepicker('setDate', [[${ appDate }]]);
+				});
+			});
+
+			function clientFilteredSearch() {
+				var url = [[${ urlClient }]];
+				var filterKey = $("#clientSelector").select2('val');
+				var filterValue = $("#clientFilterValue").val();
+				var allUrl = url
+
+				if (filterValue != "") {
+					var allUrl = url + "?filterKey=" + filterKey + "&filterValue=" + filterValue;
+				}
+
+				$('#tableClient').bootstrapTable('refreshOptions', {
+					theadClasses: 'thead-dark',
+					url: allUrl,
+					pageNumber: 1
+				});
+			}
+
+			function clientFilteredSearch2() {
+				var url = [[${ urlClient2 }]];
+				var filterKey = $("#clientSelector2").select2('val');
+				var filterValue = $("#clientFilterValue2").val();
+				var allUrl = url
+
+				if (filterValue != "") {
+					var allUrl = url + "?filterKey=" + filterKey + "&filterValue=" + filterValue;
+				}
+
+				$('#tableClient2').bootstrapTable('refreshOptions', {
+					theadClasses: 'thead-dark',
+					url: allUrl,
+					pageNumber: 1
+				});
+			}
+
+			function search(url) {
+				var typeOfCover = $('#typeOfCover').val();
+				var client = $('#client').val();
+				var transactionDate = $('#transactionDate').val();
+				var to = $('#to').val();
+				url = url + '?typeOfCover=' + typeOfCover
+					+ '&client=' + client
+					+ '&fromDate=' + transactionDate
+					+ '&to=' + to;
+				$('#trxTable').bootstrapTable('refreshOptions', {
+					theadClasses: 'thead-dark',
+					url: url,
+					pageNumber: 1
+				});
+
+			}
+			function search2(url) {
+				var typeOfCover = $('#typeOfCover2').val();
+				var client = $('#client2').val();
+				url = url + '?typeOfCover=' + typeOfCover
+					+ '&client=' + client
+				$('#trxTable2').bootstrapTable('refreshOptions', {
+					theadClasses: 'thead-dark',
+					url: url,
+					pageNumber: 1
+				});
+			}
+			/*]]>*/
+		</script>
+	</th:block>
+
+</body>
+
+</html>

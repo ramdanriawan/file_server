@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Tre_DCNotes_NoProp" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fb7c33a1-45d4-4350-bdcf-3e5a21829828">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="16"/>
+	<parameter name="P_COMPANY" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/app/report/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_VOUCHER_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_TYPE" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_REF" class="java.lang.String"/>
+	<parameter name="P_DATE" class="java.lang.String"/>
+	<parameter name="P_GROUP" class="java.lang.String"/>
+	<parameter name="P_LAYER" class="java.lang.String"/>
+	<parameter name="P_COVER" class="java.lang.String"/>
+	<parameter name="P_SHARE" class="java.math.BigDecimal"/>
+	<parameter name="P_BFEE" class="java.math.BigDecimal"/>
+	<parameter name="P_ADD_DESC" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select T3.TRX_VOUCHER_ID, T3.TRX_TYPE,
+	DATE_FORMAT(T3.TRX_DATE, '%D %M %Y') TRX_DATE,
+	DATE_FORMAT(T3.TRX_INS_START, '%D %M %Y') TRX_INS_START,
+	DATE_FORMAT(T3.TRX_INS_END, '%D %M %Y') TRX_INS_END,
+	REPLACE(
+	 REPLACE(
+	  REPLACE(
+	   REPLACE(T3.TRX_INS_INSURED,'font-size:','foff-size:'),'font-family','foff-family'),
+		'<font face=','<foff face='),'</font>','</foff>') TRX_INS_INSURED,
+	T3.TRX_AMT_DESC, T3.TRX_CURR_ID, T3.TRX_AMOUNT_DUE, T3.TRX_DESCRIPTION, M11.TC_DESC,
+	M5_ISSUED.CLI_NAME ISSUED_NAME,
+	M5_ISSUED.CLI_ADDRESS ISSUED_ADDRESS,
+	M5_ISSUED.CLI_POST_CODE ISSUED_POST_CODE,
+	M5_ASSURED.CLI_NAME ASSURED_NAME,
+	M5_ASSURED.CLI_ADDRESS ASSURED_ADDRESS,
+	M5_ASSURED.CLI_POST_CODE ASSURED_POST_CODE,
+	CLIENT_COMM.SA_NAME,
+	M14.PA_CHILD_DESC, CO.CO_LOGO, CO.CO_NAME, CO.CO_ADDRESS, CO.CO_BOD_PRESIDENT,
+	CASE
+	 WHEN (T3.TRX_OLD_VOUCHER_ID IS NOT NULL) THEN
+	  (CASE
+	    WHEN (M5_ISSUED.CLI_TYPE = '0') THEN
+		(SELECT T6B.TRX_INS_SHARE FROM TR0006B T6B
+			WHERE T6B.TRX_TRX_ID = 'RQ'
+			AND T6B.TRX_VOUCHER_ID = T3.TRX_OLD_VOUCHER_ID
+			AND T6B.TRX_INS_ID = T3.TRX_CLIENT)
+	    ELSE
+		(SELECT T6.TRX_SHARE FROM TR0006 T6
+			WHERE T6.TRX_TRX_ID = 'RQ'
+			AND T6.TRX_VOUCHER_ID = T3.TRX_OLD_VOUCHER_ID
+			AND T6.TRX_CLIENT = T3.TRX_CLIENT)
+	  END)
+	 ELSE
+	  (CASE
+	    WHEN (M5_ISSUED.CLI_TYPE = '0') THEN
+		(SELECT T6B.TRX_INS_SHARE FROM TR0006B T6B
+			WHERE T6B.TRX_TRX_ID = 'RQ'
+			AND T6B.TRX_VOUCHER_ID = SUBSTRING(T3.TRX_DESCRIPTION, 4, 12)
+			AND T6B.TRX_INS_ID = T3.TRX_CLIENT)
+	    ELSE
+		(SELECT T6.TRX_SHARE FROM TR0006 T6
+			WHERE T6.TRX_TRX_ID = 'RQ'
+			AND T6.TRX_VOUCHER_ID = SUBSTRING(T3.TRX_DESCRIPTION, 4, 12)
+			AND T6.TRX_CLIENT = T3.TRX_CLIENT)
+	  END)
+	END PCT
+from TR0003 T3
+left join MA0005 M5_ISSUED on (T3.TRX_CLIENT = M5_ISSUED.CLI_CODE)
+left join MA0005 M5_ASSURED on (T3.TRX_ASSURED = M5_ASSURED.CLI_CODE)
+left join MA0010 CO on (1 = 1)
+left join MA0012 CLIENT_COMM on (T3.TRX_CLIENT= CLIENT_COMM.SA_CODE)
+left join MA0014 M14 on (M5_ISSUED.CLI_COUNTRY_ID = M14.PA_CHILD_VALUE AND M14.PA_PARENT_CODE = 'COUCODE')
+left join MA0011 M11 on (T3.TRX_COVER_CODE = M11.TC_CODE)
+	where T3.TRX_VOUCHER_ID = $P{P_VOUCHER_ID}]]>
+	</queryString>
+	<field name="TRX_VOUCHER_ID" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TRX_TYPE" class="java.lang.String">
+		<fieldDescription><![CDATA[Tipe Transaksi]]></fieldDescription>
+	</field>
+	<field name="TRX_DATE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TRX_INS_START" class="java.lang.String">
+		<fieldDescription><![CDATA[Mulai Asuransi]]></fieldDescription>
+	</field>
+	<field name="TRX_INS_END" class="java.lang.String">
+		<fieldDescription><![CDATA[Akhir Asuransi]]></fieldDescription>
+	</field>
+	<field name="TRX_INS_INSURED" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TRX_AMT_DESC" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TRX_CURR_ID" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TRX_AMOUNT_DUE" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TRX_DESCRIPTION" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TC_DESC" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ISSUED_NAME" class="java.lang.String"/>
+	<field name="ISSUED_ADDRESS" class="java.lang.String"/>
+	<field name="ISSUED_POST_CODE" class="java.lang.String"/>
+	<field name="ASSURED_NAME" class="java.lang.String"/>
+	<field name="ASSURED_ADDRESS" class="java.lang.String"/>
+	<field name="ASSURED_POST_CODE" class="java.lang.String"/>
+	<field name="SA_NAME" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PA_CHILD_DESC" class="java.lang.String">
+		<fieldDescription><![CDATA[Deskripsi]]></fieldDescription>
+	</field>
+	<field name="CO_LOGO" class="java.lang.Object">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CO_NAME" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CO_ADDRESS" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CO_BOD_PRESIDENT" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PCT" class="java.math.BigDecimal"/>
+	<group name="dchead">
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement mode="Opaque" x="0" y="0" width="555" height="20" backcolor="#99CCFF" uuid="babea8b6-f69c-4297-8878-a42713ed48c7"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{P_TYPE}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="20">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="128" height="20" uuid="4629d9c4-bc7c-4b54-b742-3832286ed71e"/>
+					<box leftPadding="0" rightPadding="0">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+						<paragraph leftIndent="10" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{P_TYPE} + " NO."]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="128" y="0" width="265" height="20" uuid="b9c184c1-78cd-43e8-b8c3-38b7a6795405"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="10" isBold="false"/>
+						<paragraph leftIndent="10" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{P_REF}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
+					<reportElement stretchType="RelativeToTallestObject" x="393" y="0" width="162" height="20" uuid="3a0a5758-ef1b-4e5d-8d8c-90a724d43542"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="10" isBold="false"/>
+						<paragraph leftIndent="5" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Date : " + $F{TRX_DATE}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="20">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="128" y="0" width="427" height="20" uuid="771f0743-c2e8-43b7-9f8d-31e7b3fa3cd0"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="10" isBold="false"/>
+						<paragraph leftIndent="10" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ISSUED_NAME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="128" height="20" uuid="d6a3cfd5-02bb-44c7-ad3b-bf280efb3fe0"/>
+					<box leftPadding="0" rightPadding="0">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+						<paragraph leftIndent="10" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA["ISSUED TO:"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="20">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="128" y="0" width="427" height="20" uuid="c8877cdc-4ba0-4c48-bda9-f0e2a60bafb8"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="10" isBold="false"/>
+						<paragraph leftIndent="10" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA[(!("").equals($F{ISSUED_ADDRESS}) && $F{ISSUED_ADDRESS} != null ?
+    $F{ISSUED_ADDRESS} : "") +
+(!("").equals($F{ISSUED_POST_CODE}) && $F{ISSUED_POST_CODE} != null ?
+    ", " + $F{ISSUED_POST_CODE} : "")]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="128" height="20" uuid="4c0e5350-2eee-4c38-ab70-306349af9df6"/>
+					<box leftPadding="0" rightPadding="0">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+						<paragraph leftIndent="10" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA["ADDRESS:"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="47">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="128" height="20" uuid="aead0b26-a9b8-4adc-9b25-7c6e8c72338c"/>
+					<box leftPadding="0" rightPadding="0">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+						<paragraph leftIndent="10" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA["CEDING COMPANY:"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="128" y="0" width="427" height="20" uuid="b2b96409-0b3a-43b9-b06a-bb3d8f96d357"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="10" isBold="false"/>
+						<paragraph leftIndent="10" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ASSURED_NAME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="20" width="128" height="20" uuid="bca95bc3-c772-44a5-b6b7-fb294cb718fb"/>
+					<box leftPadding="0" rightPadding="0">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+						<paragraph leftIndent="10" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA["ADDRESS:"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="128" y="20" width="427" height="20" uuid="f8304fa4-d4f4-4fbc-81b8-48eb08df4434"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="10" isBold="false"/>
+						<paragraph leftIndent="10" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA[(!("").equals($F{ASSURED_ADDRESS}) && $F{ASSURED_ADDRESS} != null ?
+    $F{ASSURED_ADDRESS} : "") +
+(!("").equals($F{ASSURED_POST_CODE}) && $F{ASSURED_POST_CODE} != null ?
+    ", " + $F{ASSURED_POST_CODE} : "")]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="dcheader">
+		<groupExpression><![CDATA[$F{TRX_VOUCHER_ID}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField>
+					<reportElement mode="Opaque" x="0" y="0" width="555" height="20" forecolor="#000000" backcolor="#99CCFF" uuid="fd9e8cd5-b1ff-4b43-90f5-c4eb3a531c5b"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["PARTICULARS"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="20">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="128" y="0" width="427" height="20" uuid="68bdd869-03fd-4849-8fdf-2c4a9b52e7f1"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Top" markup="html">
+						<font size="10" isBold="false"/>
+						<paragraph leftIndent="10" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{P_ADD_DESC} + $P{P_GROUP} + " : " + $P{P_COVER}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="128" height="20" uuid="70bcde26-cdd2-47e4-8bac-49d9643804d7"/>
+					<box leftPadding="0" rightPadding="0">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+						<paragraph leftIndent="10" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA["CLASS OF BUSSINESS"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="20">
+				<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="128" y="0" width="427" height="20" uuid="f9359218-5e43-49e9-be4a-ac9f64c175f3"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="10" isBold="false"/>
+						<paragraph leftIndent="10" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Losses occurring during the period commencing " +  $F{TRX_INS_START} + " "+ "and ending "
++ $F{TRX_INS_END} + ", both days inclusive, local standard time, at the place where the loss occurs."]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="128" height="20" uuid="76c9c0c4-de73-4bb9-ac69-b13b7e1df470"/>
+					<box leftPadding="0" rightPadding="0">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+						<paragraph leftIndent="10" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA["PERIOD"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band/>
+			<band height="20">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="128" height="20" uuid="ff9e1a12-f0af-434b-b854-d6c491b82bf7"/>
+					<box leftPadding="0" rightPadding="0">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+						<paragraph leftIndent="10" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA["OUR SHARE"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="128" y="0" width="427" height="20" uuid="cd026919-715f-4b1c-90fa-7c75a700adbc"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Top" markup="html">
+						<font size="10" isBold="false"/>
+						<paragraph leftIndent="10" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.0000").format($P{P_SHARE}) + "% of " + $P{P_LAYER}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band/>
+			<band/>
+			<band/>
+			<band/>
+			<band/>
+			<band height="20">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="128" y="0" width="427" height="20" uuid="9df1a08d-10f7-49c0-8dd7-854c515e46ff"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Top" markup="html">
+						<font size="10" isBold="false"/>
+						<paragraph leftIndent="10" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.0000").format($P{P_BFEE}) + "%"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="128" height="20" uuid="ebd4ec36-5530-406d-8c28-dc8599447701"/>
+					<box leftPadding="0" rightPadding="0">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+						<paragraph leftIndent="10" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA["BROKARAGE FEE"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="20">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="128" y="0" width="427" height="20" uuid="baf57277-e69a-493e-babc-1d0b41bb5f96"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="10" isBold="false"/>
+						<paragraph leftIndent="10" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TRX_CURR_ID} + ", " +
+new java.text.DecimalFormat("#,##0.00").format($F{TRX_AMOUNT_DUE})]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="128" height="20" uuid="3c8121ef-bfc9-47b6-bc53-bbba74c39904"/>
+					<box leftPadding="0" rightPadding="0">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Top">
+						<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+						<paragraph leftIndent="10" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA["AMOUNT DUE"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="20"/>
+			<band height="50">
+				<subreport>
+					<reportElement x="0" y="0" width="555" height="50" uuid="535bccac-21ab-4685-a7ce-86e7b435e8c6"/>
+					<subreportParameter name="P_VOUCHER_ID">
+						<subreportParameterExpression><![CDATA[$F{TRX_VOUCHER_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="P_CURR_ID">
+						<subreportParameterExpression><![CDATA[$F{TRX_CURR_ID}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "DCNotesDetailProp.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+			<band height="40" splitType="Prevent"/>
+			<band height="80">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="555" height="20" uuid="81563cbf-5874-48eb-bef9-a2402ddc1265"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+						<paragraph leftIndent="10" rightIndent="4"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CO_NAME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="164" y="59" width="229" height="20" uuid="2a76d545-0d49-4fdc-b225-6549f5885842"/>
+					<box>
+						<topPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="10" isBold="false"/>
+						<paragraph leftIndent="10" rightIndent="4"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Authorized Signatory"]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="95" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="20" y="60" width="515" height="20" uuid="86b81c94-b931-457a-88d7-829d3ff0a6c0"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CO_ADDRESS}]]></textFieldExpression>
+			</textField>
+			<image hAlign="Center" vAlign="Middle">
+				<reportElement x="0" y="0" width="555" height="45" uuid="685a8e0b-13cb-4942-94f2-4bd61b8c6bc7"/>
+				<imageExpression><![CDATA[$F{CO_LOGO}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<lastPageFooter>
+		<band height="51" splitType="Prevent">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="1" width="555" height="17" uuid="14eeb563-28e1-4fa0-b541-d0313523a5f0"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+					<paragraph leftIndent="10" rightIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Please pay the amount shown in this Debit note immediately to finalize the transaction Payment should be made with transferred to our current account with one of the following bank :"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="19" width="555" height="17" uuid="4a62665d-7b5f-413d-88f6-9a6cb6682810"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+					<paragraph leftIndent="10" rightIndent="4"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Rupiah: A/C No. 800030866600 (PT. CBDANH PIALANG REASURANSI) - Bank CIMB Niaga"]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+</jasperReport>

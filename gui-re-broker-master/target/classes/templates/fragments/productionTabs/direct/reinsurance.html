@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+
+	<th:block th:fragment="reinsurance-tab">
+		<div class="card mb-3">
+			<div class="card-body">
+				<div class="card">
+					<div class="card-body">
+					
+						<div class="row">
+							<div class="col-md-4">
+								<label>Insurance</label><br> <select
+									name="t4-insurance" id="t4-insurance" class="form-control">
+									<option value=""></option>
+								</select>
+							</div>
+							<div class="col-md-2">
+								<label>Type</label><br> <select name="t4-type" id="t4-type"
+									class="form-control">
+									<option value="0">Lead</option>
+									<option value="1">Co Reins</option>
+								</select>
+							</div>
+							<div class="col-md-2">
+								<label>Share(%)</label><br> <input type="text"
+									name="t4-share" id="t4-share" class="form-control" style="text-align: right;"/>
+							</div>
+							<div class="col-md-2">
+								<label>Curr</label><br> <select name="t4-curr" id="t4-curr"
+									class="form-control">
+								</select>
+							</div>
+						</div>
+						
+						<br>
+						
+						<div class="row">
+							<div class="col-md-3">
+								<label>TSI</label><br> <input type="text"
+									name="t4-tsi" id="t4-tsi" class="form-control" style="text-align: right;"/>
+							</div>
+							<div class="col-md-2">
+								<label>Premium Rate (%)</label><br> <input type="text"
+									name="t4-premiumRate" id=t4-premiumRate class="form-control" style="text-align: right;"/>
+							</div>
+							<div class="col-md-2">
+								<label>Brokerage Fee (%)</label><br> <input type="text"
+									name="t4-brkrfee" id="t4-brkrfee" class="form-control" style="text-align: right;"/>
+							</div>
+							<div class="col-md-3">
+								<label>Payment</label><br> <select name="t4-payment"
+									id="t4-payment" class="form-control">
+								</select>
+							</div>
+						</div>
+						
+						<br>
+						
+						<div class="row">
+							<div class="col-md-11">
+								<label>Remarks</label><br> <input type="text"
+									name="t4-remarks" id="t4-remarks" class="form-control" />
+							</div>
+							<div class="col-md-1">
+								<label> &nbsp;</label> <br>
+								<button id="t4-add" class="btn btn-success col-md-12"
+									onclick="t4Add()">Add</button>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<br>
+
+				<div class="row">
+					<div class="col-md-12">
+						<table id="t4-addTable" data-toggle="table" data-unique-id="id">
+							<thead>
+								<tr>
+									<th data-field="id">id</th>
+									<th data-field="reinsuranceId">reinsuranceId</th>
+									<th data-field="reinsurance">Name</th>
+									<th data-field="type">Type</th>
+									<th data-field="typeDesc">Type</th>
+									<th data-field="share" data-halign="right" data-align="right">Share(%)</th>
+									<th data-field="amount" data-halign="right" data-align="right">TSI</th>
+									<th data-field="premiumRate" data-halign="right" data-align="right">Premium
+										Rate(%)</th>
+									<th data-field="bFee" data-halign="right" data-align="right">B
+										Fee(%)</th>
+									<th data-field="payment">Payment</th>
+									<th data-field="paymentId">PaymentId</th>
+									<th data-field="remarks">Remarks</th>
+									<th data-field="action" data-halign="center" data-align="center">Action</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<script type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+			$(function() {
+				$('#t4-curr').attr('disabled', true);
+				$('#t4-tsi').attr('disabled', true);
+				
+				$('#t4-type').select2({width : '100%'});
+				
+				var urlClient = /*[[@{/static-data/dropdown-client}]]*/;
+				rest('GET', urlClient + '?cliType=0').done(function(data) {
+					$('#t4-insurance').select2({
+						width : '100%',
+						data : data
+					});
+				});
+				
+				rest('GET', /*[[@{/static-data/dropdown-paymentMethod}]]*/).done(function(data) {
+					$('#t4-payment').select2({
+						width : '100%',
+						data : data
+					});
+					$('#t4-payment').val($('#t4-payment option:first-child').val()).trigger('change');
+				});
+				
+				new AutoNumeric('#t4-share', {
+					currencySymbol : '%',
+				    decimalCharacter : '.',
+				    digitGroupSeparator : ',',
+				    decimalPlaces : '4',
+				    maximumValue : '100',
+				    minimumValue : '0',
+				    currencySymbolPlacement: AutoNumeric.options.currencySymbolPlacement.suffix
+				});
+				AutoNumeric.getAutoNumericElement('#t4-share').set('0.00');
+				
+				new AutoNumeric('#t4-tsi', {
+				    decimalCharacter : '.',
+				    digitGroupSeparator : ',',
+				    maximumValue : '9999999999999999.00',
+					minimumValue : '0'
+				});
+				AutoNumeric.getAutoNumericElement('#t4-tsi').set('0.00');
+				
+				new AutoNumeric('#t4-brkrfee', {
+					currencySymbol : '%',
+				    decimalCharacter : '.',
+				    digitGroupSeparator : ',', 
+				    decimalPlaces : '4',
+				    maximumValue : '100',
+				    minimumValue : '0',
+				    currencySymbolPlacement: AutoNumeric.options.currencySymbolPlacement.suffix
+				});
+				AutoNumeric.getAutoNumericElement('#t4-brkrfee').set('0.00');
+				
+				new AutoNumeric('#t4-premiumRate', {
+					currencySymbol : '%',
+				    decimalCharacter : '.',
+				    digitGroupSeparator : ',',
+				    decimalPlaces : '4',
+				    maximumValue : '100',
+				    minimumValue : '0',
+				    currencySymbolPlacement: AutoNumeric.options.currencySymbolPlacement.suffix
+				});
+				AutoNumeric.getAutoNumericElement('#t4-premiumRate').set('0.00');
+				
+				$('#t4-insurance').change(function() {
+					$('#t7-reinsurance').val($('#t4-insurance').select2('data')[0].text);
+				});
+				
+				t4Reset();
+			});
+			
+			function t4Reset() {
+				$('#t4-addTable').bootstrapTable('hideColumn', 'id');
+				$('#t4-addTable').bootstrapTable('hideColumn', 'type');
+				$('#t4-addTable').bootstrapTable('hideColumn', 'reinsuranceId');
+				$('#t4-addTable').bootstrapTable('hideColumn', 'paymentId');
+				$('#t4-addTable').bootstrapTable('hideColumn', 'remarks');
+			}
+			
+			function t4Add() {
+				var valReq = validationRequiredAddT4();
+				
+				if(valReq.length>0) {
+					alert('Please fill : '+ valReq + '.');
+					
+					return null;
+				}
+
+				var shareVal = parseFloat(AutoNumeric.getAutoNumericElement('#t4-share').get());
+				var amountVal = parseFloat(AutoNumeric.getAutoNumericElement('#t4-tsi').get());
+				if(shareVal == 0 && amountVal == 0) {
+					alert('Share(%) or Amount must greater than 0');
+					
+					return null;
+				}
+
+				$('#t4-add').prop('disabled', true);
+				var response = getWhtClient();
+				response.done(function(data) {
+					t4AddData(data);
+					$('#t4-add').prop('disabled', false);
+				});
+				response.fail(function(jqXHR, textStatus) {
+					$('#t4-add').prop('disabled', false);
+				});
+			}
+			
+			function t4AddData(wht) {
+				var id = create_UUID();
+				var reinsuranceId = $('#t4-insurance').val();
+				var reinsurance = $('#t4-insurance option:selected').html();
+				var type = $('#t4-type').val();
+				var typeDesc = $('#t4-type option:selected').html();
+				var share = $('#t4-share').val().replace('%','');
+				var curr = $('#t4-curr').val();
+				var amount = $('#t4-tsi').val();
+				var premiumRate = $('#t4-premiumRate').val().replace('%','');
+				var bFee = $('#t4-brkrfee').val().replace('%','');
+				var paymentId = $('#t4-payment').val();
+				var payment = $('#t4-payment option:selected').html();
+				var remarks = $('#t4-remarks').val();
+				var action = "<button class=\"btn btn-danger\" onclick=\"t4RemoveAdd('"+id+"')\">" 
+				+ "<i class=\"fa fa-trash\"></i>" 
+				+ "</button>";
+				
+				var addObject = {
+					id:id,
+					reinsuranceId: reinsuranceId,
+					reinsurance:reinsurance,
+					type:type,
+					typeDesc:typeDesc,
+					share:share,
+					curr:curr,
+					amount:amount,
+					premiumRate:premiumRate,
+					bFee:bFee,
+					payment:payment,
+					paymentId:paymentId,
+					remarks:remarks,
+					wht:wht,
+					action:action
+				}
+				var appendData = [];
+				appendData.push(addObject);
+				
+				$('#t4-addTable').bootstrapTable('append', appendData);
+				
+				setReinsuranceT7();
+				
+				$('#t4-insurance').val('').trigger('change');
+				$('#t4-type').val($('#t4-type option:first-child').val()).trigger('change');
+				AutoNumeric.getAutoNumericElement('#t4-share').set('0.0000');
+				var share = $('#t4-share').val();
+				AutoNumeric.getAutoNumericElement('#t4-premiumRate').set(t2PremiumRate);
+				AutoNumeric.getAutoNumericElement('#t4-brkrfee').set(t2BFee);
+				$('#t4-remarks').val('');
+				
+				isEdit_t5dbrokerage = false;
+				isEdit_t5dtaxinBfee = false;
+				
+				calculatePremium();
+				t7UpdateDropdownFor();
+			}
+			
+			function getWhtClient() {
+				var url = /*[[@{/marketing/direct-production/get-whtClient}]]*/;
+				var client = $('#t4-insurance').val();
+				return $.ajax({
+						type: 'GET', global: false, dataType: 'json',
+						url: url + "?cliCode=" + client
+				});
+			}
+			
+			function validationRequiredAddT4() {		
+				var field = [];
+				
+				var reinsurance = $('#t4-insurance').val();
+				if(!reinsurance.trim())
+					field.push("Insurance");	
+				
+				var curr = $('#t4-curr').val();
+				if(!curr.trim())
+					field.push("Curr");	
+				
+				var shareVal = AutoNumeric.getAutoNumericElement('#t4-share').get();
+				if(!shareVal.trim())
+					AutoNumeric.getAutoNumericElement('#t4-share').set('0.0000');
+				
+				var amountVal = AutoNumeric.getAutoNumericElement('#t4-tsi').get();
+				if(!amountVal.trim())
+					AutoNumeric.getAutoNumericElement('#t4-tsi').set('0.00');
+				
+				return field;
+			}
+			
+			function t4RemoveAdd(id){
+				$('#t4-addTable').bootstrapTable('removeByUniqueId', id);
+				setReinsuranceT7();
+				
+				isEdit_t5dbrokerage = false;
+				isEdit_t5dtaxinBfee = false;
+				
+				calculatePremium();
+				t7UpdateDropdownFor();
+			}
+			
+			function setReinsuranceT7() {
+				var rows = $('#t4-addTable').bootstrapTable('getData');
+				
+				var reinsurance = [];
+				var reinsuranceDesc = [];
+				
+				for(var i=0; i<rows.length; i++) {
+					reinsurance.push(rows[i].reinsuranceId);
+					reinsuranceDesc.push(rows[i].reinsurance);
+				}
+				
+				$('#t7-reinsurance').val(reinsurance.toString());
+				$('#t7-reinsuranceDesc').val(reinsuranceDesc.toString());
+			}
+			
+			$('#t4-payment').change(function() {
+// 				t7AddData1();
+			});
+			
+			/*]]>*/
+		</script>
+	</th:block>
+
+</body>
+
+</html>
+
