@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+	<th:block th:fragment="interest-insured-tab">
+		<div class="card mb-3">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-8">
+						<label>*Type of Cover</label><br> <select
+							name="t2-typeOfCover" id="t2-typeOfCover" class="form-control"
+							required>
+							<option value=""></option>
+						</select>
+					</div>
+					<div class="col-md-4">
+						<label>*Classification</label><br> <select
+							name="t2-classification" id="t2-classification"
+							class="form-control" required>
+							<option value=""></option>
+						</select>
+					</div>
+				</div>
+				<br>
+				<div class="card">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-6">
+								<label>*Interest Insured</label><br>
+								<textarea class="form-control" id="t2-interestInsured"
+									name="t2-interestInsured" rows="4"></textarea>
+							</div>
+							<div class="col-md-6">
+								<label>*Location</label><br>
+								<textarea class="form-control" id="t2-location"
+									name="t2-location" rows="4"></textarea>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div id="t2-endorsementType-div" class="col-md-2" hidden="true">
+								<label>*Endorsement Type</label><br> <select name="t2-endorsementType"
+									id="t2-endorsementType" class="form-control" required>
+									<option value="A">Addition</option>
+									<option value="D">Deduction</option>
+								</select>
+							</div>
+							<div class="col-md-2" hidden="true">
+								<label>*Curr</label><br> <select name="t2-curr"
+									id="t2-curr" class="form-control" required disabled>
+									<option value=""></option>
+								</select>
+							</div>
+							<div class="col-md-2">
+								<label>*Exchange Rate</label><br> <input type="text"
+									name="t2-exchangeRate" id="t2-exchangeRate"
+									class="form-control" style="text-align: right;" required />
+							</div>
+						</div>
+						
+						<br>
+						
+						<div class="row">
+							<div class="col-md-3">
+								<label>*Sum Insured</label><br> <input type="text"
+									name="t2-sumInsured" id="t2-sumInsured" class="form-control" style="text-align: right;"
+									required />
+							</div>
+							<div class="col-md-2">
+								<label>Premium Amount</label><br> <input type="text"
+									name="t2-premiumAmount" id="t2-premiumAmount" class="form-control" style="text-align: right;"
+									required />
+							</div>
+							<div class="col-md-2">
+								<label>*Premium Rate (%)</label><br> <input type="text"
+									name="t2-premiumRate" id="t2-premiumRate" class="form-control"
+									style="text-align: right;" required />
+							</div>
+							<div class="col-md-2">
+								<label>Deduction (%)</label><br> <input type="text"
+									name="t2-deduction" id="t2-deduction" class="form-control"
+									style="text-align: right;" required />
+							</div>
+							<div class="col-md-1">
+								<label>*Weighted (%)</label><br> <input type="text"
+									name="t2-weighted" id="t2-weighted" class="form-control"
+									style="text-align: right;" required />
+							</div>
+							<div class="col-md-2">
+								<br>
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" class="custom-control-input"
+										name="t2-combined" id="t2-combined"> <label
+										class="custom-control-label" for="t2-combined">
+										Combined</label>
+								</div>
+							</div>
+						</div>
+						
+						<br>
+						
+						<div class="row">
+							<div class="col-md-5">
+								<div class="row">
+									<div class="col-md-12">
+										<label>Insured Period</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-5">
+										<div class="input-group">
+											<input id="t2-insuredPeriod" name="t2-insuredPeriod"
+												type="text" class="form-control" disabled>
+											<div class="input-group-append">
+												<button id='t2-btnInsuredPeriod' class="btn btn-primary"
+													type="button">
+													<i class="fas fa-calendar"></i>
+												</button>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="row justify-content-center">
+											<label> - </label>
+										</div>
+									</div>
+									<div class="col-md-5">
+										<div class="input-group">
+											<input id="t2-insuredPeriodTo" name="t2-insuredPeriodTo"
+												type="text" class="form-control" disabled>
+											<div class="input-group-append">
+												<button id='t2-btnInsuredPeriodTo' class="btn btn-primary"
+													type="button">
+													<i class="fas fa-calendar"></i>
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-5">
+								<div class="row">
+									<div class="col-md-12">
+										<label>Reinsured Period</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-5">
+										<div class="input-group">
+											<input id="t2-reinsuredPeriod" name="t2-reinsuredPeriod"
+												type="text" class="form-control" disabled>
+											<div class="input-group-append">
+												<button id='t2-btnReinsuredPeriod' class="btn btn-primary"
+													type="button">
+													<i class="fas fa-calendar"></i>
+												</button>
+											</div>
+										</div>
+									</div>
+									<div class="col-md-2">
+										<div class="row justify-content-center">
+											<label> - </label>
+										</div>
+									</div>
+									<div class="col-md-5">
+										<div class="input-group">
+											<input id="t2-reinsuredPeriodTo" name="t2-reinsuredPeriodTo"
+												type="text" class="form-control" disabled>
+											<div class="input-group-append">
+												<button id='t2-btnReinsuredPeriodTo' class="btn btn-primary"
+													type="button">
+													<i class="fas fa-calendar"></i>
+												</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<br>
+						<div class="row">
+							<div class="col-md-12">
+								<label>Remarks (Policy No / Vessel Name)</label><br> <input type="text"
+									name="t2-remarks" id="t2-remarks" class="form-control" />
+							</div>
+						</div>
+						<br>
+						<div class="row justify-content-end">
+							<div class="col-md-1">
+								<button id="t2-add" class="btn btn-success col-md-12"
+									onclick="t2Add()">Add</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-md-12">
+						<table id="t2-addTable" data-toggle="table" data-unique-id="id">
+							<thead>
+								<tr>
+									<th data-field="id">id</th>
+									<th data-field="insSub">Ins Sub</th>
+									<th data-field="interestInsured" data-sortable="true">Interest Insured</th>
+									<th data-field="curr">Curr</th>
+									<th data-field="endorsementType" data-halign="right">endorsementType</th>
+									<th data-field="endorsementTypeStr" data-halign="right">Endorsement Type</th>
+									<th data-field="sumInsured" data-halign="right" data-align="right">Sum
+										Insured</th>
+									<th data-field="premiumRate" data-halign="right" data-align="right">Premium
+										Rate</th>
+									<th data-field="deduction" data-halign="right" data-align="right">Deduction (%)</th>
+									<th data-field="bFee" data-halign="right" data-align="right">B
+										Fee</th>
+									<th data-field="action" data-halign="center" data-align="center">Action</th>
+									<th data-field="location">location</th>
+									<th data-field="exchangeRate">exchangeRate</th>
+									<th data-field="weighted">weighted</th>
+									<th data-field="insuredPeriod">insuredPeriod</th>
+									<th data-field="insuredPeriodTo">insuredPeriodTo</th>
+									<th data-field="reinsuredPeriod">reinsuredPeriodTo</th>
+									<th data-field="reinsuredPeriodTo">reinsuredPeriodTo</th>
+									<th data-field="combined">combined</th>
+									<th data-field="remarks">remarks</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+			var isEndorsement = false;
+			var listT2AddObject = [];
+			
+			var taxRate = 0;
+			
+			var t2BFee = 0;
+			var t2PremiumRate = 0;
+			var t2Vat = 0;
+			
+			var t2Com = 0;
+			var t2Discount = 0;
+			
+			$(function() {
+				$('#t2-endorsementType').select2({
+					width : '100%'
+				});
+				rest('GET', '/gui-re-broker/marketing-report/production/tax-rate').done(function(data) {
+					taxRate = parseFloat(data.taxRate);
+				});
+				
+				rest('GET', '/gui-re-broker/marketing-report/production/get-dropdownTypeOfCover').done(function(data) {
+					$('#t2-typeOfCover').select2({
+						width : '100%',
+						data : data
+					});
+				});
+				
+				
+				rest('GET', '/gui-re-broker/marketing-report/production/get-dropdownClasification').done(function(data) {
+					$('#t2-classification').select2({
+						width : '100%',
+						data : data
+					});
+				});
+				
+				new AutoNumeric('#t2-exchangeRate', {
+				    decimalCharacter : '.',
+				    digitGroupSeparator : ',',
+				    maximumValue : '99999.00'
+				});
+				
+				new AutoNumeric('#t2-sumInsured', {
+				    decimalCharacter : '.',
+				    digitGroupSeparator : ',',
+				    maximumValue : '9999999999999999.00'
+				});
+				
+				new AutoNumeric('#t2-premiumAmount', {
+				    decimalCharacter : '.',
+				    digitGroupSeparator : ',',
+				    maximumValue : '9999999999999.00'
+				}).set('0.00');
+				
+				new AutoNumeric('#t2-premiumRate', {
+					currencySymbol : '%',
+				    decimalCharacter : '.',
+				    digitGroupSeparator : ',',
+				    decimalPlaces : '6',
+				    maximumValue : '100',
+				    minimumValue : '0',
+				    currencySymbolPlacement: AutoNumeric.options.currencySymbolPlacement.suffix
+				});
+				
+				new AutoNumeric('#t2-deduction', {
+					currencySymbol : '%',
+				    decimalCharacter : '.',
+				    digitGroupSeparator : ',',
+				    decimalPlaces : '4',
+				    maximumValue : '100',
+				    minimumValue : '0',
+				    currencySymbolPlacement: AutoNumeric.options.currencySymbolPlacement.suffix
+				});
+				
+				new AutoNumeric('#t2-weighted', {
+				    decimalCharacter : '.',
+				    digitGroupSeparator : ',',
+				    minimumValue : '0',
+				    maximumValue : '999.00'
+				});
+				
+				$('#t2-insuredPeriod').datepicker({
+					dateFormat: 'dd/mm/yy',
+					changeMonth: true,
+					changeYear: true
+				});
+				$('#t2-insuredPeriodTo').datepicker({
+					dateFormat: 'dd/mm/yy',
+					changeMonth: true,
+					changeYear: true
+				});
+				$('#t2-reinsuredPeriod').datepicker({
+					dateFormat: 'dd/mm/yy',
+					changeMonth: true,
+					changeYear: true
+				});
+				$('#t2-reinsuredPeriodTo').datepicker({
+					dateFormat: 'dd/mm/yy',
+					changeMonth: true,
+					changeYear: true
+				});
+				
+				$('#t2-typeOfCover').change(function() {
+					$('#t7-documentType').html('').select2('data', [])
+					if($('#t2-typeOfCover').val() != ""){
+						var tcCode = $('#t2-typeOfCover').val();
+						var param = '?tcCode='+tcCode
+						rest('GET', '/gui-re-broker/marketing-report/production/ma-0011'+param).done(function(data) {
+							AutoNumeric.getAutoNumericElement('#t2-premiumRate').set(data.tcPremium);
+							AutoNumeric.getAutoNumericElement('#t4-premiumRate').set(data.tcPremium);
+							AutoNumeric.getAutoNumericElement('#t4-bFee').set(data.tcBrofeeAmt);
+							t2BFee = data.tcBrofeeAmt;
+							t2PremiumRate = data.tcPremium;
+							t2vat = taxRate * t2BFee;	
+						});
+						
+						var tcData = $('#t6-addTable').bootstrapTable('getData');
+						if(isInitEdit && tcData.length>0) {
+							isInitEdit = false;
+						}else {
+							$('#t6-addTable').bootstrapTable('refreshOptions', {
+							    url: '/gui-re-broker/marketing-report/production/term-and-condition'+param
+							});	
+						}
+						
+						rest('GET', '/gui-re-broker/marketing-report/production/dropdown-document-type'+param).done(function(data) {
+							$('#t7-documentType').select2({
+								width : '100%',
+								data : data
+							});
+						});
+						
+					}else{
+						AutoNumeric.getAutoNumericElement('#t2-premiumRate').set('0.00');
+						t2PremiumRate = 0;
+						t2BFee = 0;
+						t2vat = 0;
+					}
+					
+				});
+				
+				$('#t2-curr').change(function() {
+					if($('#t2-curr').val() != "") {
+						var url = /*[[@{/static-data/exchangeNonEom}]]*/;
+						var date = $('#t1-transactionDate').val();
+						var curr = $('#t2-curr').val();
+						
+						$.ajax({
+					        url: url + "?date=" + date + "&curr=" + curr,
+					    }).then(function(data) {
+					    	AutoNumeric.getAutoNumericElement('#t2-exchangeRate').set(data);
+					    });
+					}else{
+						AutoNumeric.getAutoNumericElement('#t2-exchangeRate').set('0.00');
+					}
+				});
+				
+				$('#t2-btnInsuredPeriod').click(function(){
+					$('#t2-insuredPeriod').datepicker('show');
+				});
+				$('#t2-btnInsuredPeriodTo').click(function(){
+					$('#t2-insuredPeriodTo').datepicker('show');
+				});
+				$('#t2-btnReinsuredPeriod').click(function(){
+					$('#t2-reinsuredPeriod').datepicker('show');
+				});
+				$('#t2-btnReinsuredPeriodTo').click(function(){
+					$('#t2-reinsuredPeriodTo').datepicker('show');
+				});
+				
+				t2Reset();
+			});
+			
+			$('#t2-insuredPeriod').change(function() {		
+				$('#t2-insuredPeriodTo').datepicker('option', 'minDate', $('#t2-insuredPeriod').val());
+			});
+			
+			$('#t2-reinsuredPeriod').change(function() {		
+				$('#t2-reinsuredPeriodTo').datepicker('option', 'minDate', $('#t2-reinsuredPeriod').val());
+			});
+			
+			function t2HideColumn() {
+				$('#t2-addTable').bootstrapTable('hideColumn', 'id');
+				$('#t2-addTable').bootstrapTable('hideColumn', 'insSub');
+				$('#t2-addTable').bootstrapTable('hideColumn', 'location');
+				$('#t2-addTable').bootstrapTable('hideColumn', 'exchangeRate');
+				$('#t2-addTable').bootstrapTable('hideColumn', 'weighted');
+				$('#t2-addTable').bootstrapTable('hideColumn', 'insuredPeriod');
+				$('#t2-addTable').bootstrapTable('hideColumn', 'insuredPeriodTo');
+				$('#t2-addTable').bootstrapTable('hideColumn', 'reinsuredPeriod');
+				$('#t2-addTable').bootstrapTable('hideColumn', 'reinsuredPeriodTo');
+				$('#t2-addTable').bootstrapTable('hideColumn', 'combined');
+				$('#t2-addTable').bootstrapTable('hideColumn', 'remarks');
+				$('#t2-addTable').bootstrapTable('hideColumn', 'bFee');
+				$('#t2-addTable').bootstrapTable('hideColumn', 'endorsementType');
+				$('#t2-addTable').bootstrapTable('hideColumn', 'endorsementTypeStr');
+			}
+			
+			function t2Add() {
+				var valReq = validationRequiredAddT2();
+				
+				if(valReq.length>0) {
+					alert('Please fill : '+ valReq + '.');
+					
+					return null;
+				}
+				
+				var id = create_UUID();
+				var interestInsured = $('#t2-interestInsured').val();
+				var location = $('#t2-location').val();
+				
+				var curr = getCurrProduction();
+				var exchangeRateStr = $('#t2-exchangeRate').val();
+				var sumInsured = $('#t2-sumInsured').val();
+				var premiumAmount = $('#t2-premiumAmount').val();
+				var premiumRate = $('#t2-premiumRate').val();
+				var deduction = $('#t2-deduction').val();
+				var weighted = $('#t2-weighted').val();
+				
+				var insuredPeriod = $('#t2-insuredPeriod').val();
+				var insuredPeriodTo = $('#t2-insuredPeriodTo').val();
+				var reinsuredPeriod = $('#t2-reinsuredPeriod').val();
+				var reinsuredPeriodTo = $('#t2-reinsuredPeriodTo').val();
+				
+				var endorsementType = $('#t2-endorsementType').val();
+				var endorsementTypeStr = $('#t2-endorsementType').select2("data")[0].text;
+				
+				var combined = '0';
+				if($('#t2-combined').prop("checked") == true)
+					combined = '1';
+				
+				var remarks = $('#t2-remarks').val();
+				var action = "<button class=\"btn btn-danger\" onclick=\"t2RemoveAdd('"+id+"')\">" 
+				+ "<i class=\"fa fa-trash\"></i>" 
+				+ "</button>";
+				
+				var t2AddObject = {
+					id : id,
+					interestInsured : interestInsured,
+					location : location,
+					curr : curr,
+					exchangeRate : exchangeRateStr,
+					sumInsured : sumInsured,
+					premiumAmount : premiumAmount,
+					premiumRate : premiumRate.replace('%',''),
+					deduction : deduction.replace('%',''),
+					weighted : weighted,
+					insuredPeriod : insuredPeriod,
+					insuredPeriodTo : insuredPeriodTo,
+					reinsuredPeriod : reinsuredPeriod,
+					reinsuredPeriodTo : reinsuredPeriodTo,
+					bFee : formatterT1_2.format(t2BFee).replace('$', ''), 
+					combined : combined,
+					remarks: remarks,
+					endorsementType:endorsementType,
+					endorsementTypeStr : endorsementTypeStr,
+					action : action
+				};
+				
+				var periodVal = 1.00;
+				var insuredFrom = $('#t2-insuredPeriod').val();
+				var insuredTo = $('#t2-insuredPeriodTo').val();
+				
+				if(insuredFrom !== '' && insuredFrom != null
+						&& insuredTo !== '' && insuredTo != null) {
+					var fromDate = new Date($('#t2-insuredPeriod').datepicker('getDate'));
+					var toDate = new Date($('#t2-insuredPeriodTo').datepicker('getDate'));
+					var millisBetween = toDate.getTime() - fromDate.getTime();
+					if(millisBetween > (1000 * 3600 * 24)){
+						var days = millisBetween / (1000 * 3600 * 24);
+					    periodVal = Math.ceil(Math.abs(days));
+					}
+					periodVal = periodVal/365;
+				}
+				
+				var premiumRe = 0.00;				
+				var sumShareRe = 0.00;
+				var sumPremiRe = 0.00;
+				var sumRiCommRe = 0.00;
+				var reinsTable = $('#t4-addTable').bootstrapTable('getData');
+				for(var i=0; i<reinsTable.length; i++) {
+					sumShareRe += parseFloat(reinsTable[i].share.replace(/,/g, ""));
+					sumPremiRe += parseFloat(reinsTable[i].premiumRate.replace(/,/g, ""));
+					sumRiCommRe += parseFloat(reinsTable[i].bFee.replace(/,/g, ""));
+				}
+				
+				console.log("reinsTable.length = "+reinsTable.length)
+				if(reinsTable.length >0) {
+					sumPremiRe = sumPremiRe / reinsTable.length;
+					sumRiCommRe = sumRiCommRe / reinsTable.length;
+				}
+				console.log("sumPremiRe = " + sumPremiRe);
+				console.log("sumRiCommRe = " + sumRiCommRe);
+						
+				var flagSummary = false;
+				
+				if(sumShareRe>100.00) {
+					sumShareRe = 100.00;
+					flagSummary = true;	
+				}
+				var tsi = AutoNumeric.getAutoNumericElement('#t2-sumInsured').get();
+				var shareCli = 0.00;
+				var ciTable = $('#addTable').bootstrapTable('getData');
+				if(ciTable.length>0) {
+					shareCli = parseFloat(ciTable[0].share.replace(/,/g, ""));
+				}
+				
+				// Premium (re) = sumInsured (ii) * premiumRate (%) (re) * weighted (%) (ii);
+				var weight = getNumberWithDef(weighted);
+				var bFeeBuy = 0.00;
+				for(var i=0; i<reinsTable.length; i++) {
+					var premiumReSub = 0.00;
+					
+					var share = getNumberWithDef(reinsTable[i].share);
+					var amountTsiPerReas = tsi * (share/100);
+
+					var amountReas = getNumberWithDef(reinsTable[i].amount);				//amount != 0
+					if(amountReas != 0)
+						amountTsiPerReas = amountReas;
+					
+					var premi = getNumberWithDef(reinsTable[i].premiumRate);
+					premiumReSub = amountTsiPerReas * (premi/100) * (weight/100) * periodVal;
+					
+					var premiumAmtReSub = getNumberWithDef(reinsTable[i].premiumAmount);	//premium amount != 0
+					if(premiumAmtReSub != 0)
+						premiumReSub = premiumAmtReSub;
+					
+					premiumRe += premiumReSub;
+					
+					//bFee = Premium (re) * RI Comm (%);
+					var riCommRe = getNumberWithDef(reinsTable[i].bFee);
+					var bFeeBuySub = premiumReSub * (riCommRe/100);
+					
+					var riCommReAmount = getNumberWithDef(reinsTable[i].bFeeAmount);		//ricomm amount != 0
+					if(riCommReAmount != 0)
+						bFeeBuySub = riCommReAmount;
+					
+					bFeeBuy += bFeeBuySub;
+					
+					reinsTable[i].premi = premiumReSub;
+					reinsTable[i].comm = bFeeBuySub;
+				}
+				
+				for(var i=0; i<reinsTable.length; i++) {
+					var premi = reinsTable[i].premi;
+					var premiPortion = premi/premiumRe * 100;
+					
+					var comm = reinsTable[i].comm;
+					var commPortion = comm/bFeeBuy * 100;
+					
+					reinsTable[i].premiPortion = premiPortion;
+					reinsTable[i].commPortion = commPortion;
+					$('#t4-addTable').bootstrapTable('updateByUniqueId', {
+						id: reinsTable[i].id, 
+						row: reinsTable[i]
+					});
+				}
+				
+				if(flagSummary) {
+					premiumRe = tsi * (sumPremiRe/100) * (weight/100) * (sumShareRe/100) * periodVal;
+					bFeeBuy = premiumRe * (sumRiCommRe/100);
+				}
+				
+				//Total (re) = Premium (re) - bFee;
+				var totalRe = premiumRe - bFeeBuy;
+			
+				//Premium (cli) = sumInsured (ii) * premiumRate (%) (ii) * weighted (%) (ii);
+				var premiumCli = 0.00;
+				var premi = parseFloat(premiumRate.replace(/,/g, ""));
+				premiumCli = tsi * (shareCli/100) * (premi/100) * (weight/100) * periodVal;
+				
+				var deductionII = parseFloat(deduction.replace(/,/g, ""));
+				//bFee = Premium (cli) * Deduction (%);
+				var bFeeSell = premiumCli * (deductionII/100);
+				
+				var discount = 0.00;
+				//Total (cli) = Premium - bFee - discount;
+				var totalCli = premiumCli - bFeeSell - discount;
+
+				//client
+				var premiumAmt = getNumberWithDef(premiumAmount);
+				if(premiumAmt != 0.00) {
+					premiumCli = premiumAmt;
+					totalCli = premiumCli - discount;
+					
+					//default
+					bFeeSell = 0.00;
+				}
+				
+				//Net Income = (Total (cli) - Total (re)) * 10/11;
+				var netIncome = (totalCli - totalRe) / taxRate009;
+	
+				//vat = netIncome * 1/10 (ppn);
+				var vatBuy = netIncome * (ppn/100);
+				//vat = 0;
+				var vatSell = 0.00;
+				
+				var t5AddObject = {
+					id : id,	
+					interestInsured : interestInsured,
+					curr : curr,
+					sumInsured : sumInsured,
+					premiumRe : formatter.format(premiumRe).replace('$', ''),
+					totalRe :formatter.format(totalRe).replace('$', '') ,
+					premium : formatter.format(premiumCli).replace('$', ''),
+					total : formatter.format(totalCli).replace('$', ''),
+					discount : formatter.format(discount).replace('$', ''),
+					netIncome : formatter.format(netIncome).replace('$', ''),
+					premiumRate : premiumRate,
+					bFeeRe : formatter.format(bFeeBuy).replace('$', ''),
+					bFee : formatter.format(bFeeSell).replace('$', ''),
+					vatRe : formatter.format(vatBuy).replace('$', ''),
+					vat : formatter.format(vatSell).replace('$', '')
+				};
+				
+				t2AddDataToTable(t2AddObject);
+				
+				console.log(JSON.stringify(t5AddObject))
+				var listT5AddObject = $('#t5-addTable').bootstrapTable('getData');
+				
+				listT5AddObject.push(t5AddObject);
+				
+				$('#t5-addTable').bootstrapTable('load', listT5AddObject);	
+				
+				if(!isEndorsement){
+					resetAdd();
+				}
+				
+			}
+			
+			function resetAdd(){
+				$('#richText-t2-interestInsured').empty();
+				$('#richText-t2-location').empty();
+				
+				AutoNumeric.getAutoNumericElement('#t2-exchangeRate').set('0.00');
+				AutoNumeric.getAutoNumericElement('#t2-sumInsured').set('0.00');
+				AutoNumeric.getAutoNumericElement('#t2-premiumAmount').set('0.00');
+				AutoNumeric.getAutoNumericElement('#t2-premiumRate').set('0.00');
+				AutoNumeric.getAutoNumericElement('#t2-deduction').set('0.0000');
+				AutoNumeric.getAutoNumericElement('#t2-weighted').set('100.00');
+				
+				$('#t2-insuredPeriod').datepicker('setDate', null);
+				$('#t2-insuredPeriodTo').datepicker('setDate', null);
+				$('#t2-reinsuredPeriod').datepicker('setDate', null);
+				$('#t2-reinsuredPeriodTo').datepicker('setDate', null);
+				$('#t2-combined').prop('checked', false);
+				$('#t2-remarks').val('');
+			}
+			
+			function validationRequiredAddT2() {
+				var field = [];
+				
+				var interestInsured = $('#t2-interestInsured').val().replace(/<(.|\n)*?>/g, '');
+				if(interestInsured == "")
+					field.push("Interest Insured");
+				
+				var location = $('#t2-location').val().replace(/<(.|\n)*?>/g, '');
+				if(location  == "")
+					field.push("Location");
+				
+				var curr = $('#t2-curr').val();
+				if(curr == "")
+					field.push("Curr");
+				
+				var exchangeRate = $('#t2-exchangeRate').val();
+				if(exchangeRate == "")
+					field.push("Exchange Rate");
+				
+				var sumInsured = $('#t2-sumInsured').val();
+				if(sumInsured == "")
+					field.push("Sum Insured");
+				
+				var premiumRate = $('#t2-premiumRate').val();
+				if(premiumRate == "")
+					field.push("Premium Rate (%)");
+				
+				var deduction = $('#t2-deduction').val();
+				if(deduction == "")
+					field.push("Deduction (%)");
+				
+				var weighted = $('#t2-weighted').val();
+				if(weighted == "")
+					field.push("Weighted (%)");
+				
+				return field;
+			}
+			
+			function t2createTotalDataAddTable(totalSumInsured, totalPremiumRate) {
+				var t2AddObject = {
+						id : create_UUID(),
+						interestInsured : "",
+						location : "",
+						curr : "",
+						exchangeRate : "",
+						sumInsured : totalSumInsured,
+						premiumRate : totalPremiumRate,
+						weighted : "",
+						insuredPeriod : "",
+						insuredPeriodTo : "",
+						reinsuredPeriod : "",
+						reinsuredPeriodTo : "",
+						bFee : "", 
+						action : "",
+						deduction : "",
+						endorsementTypeStr : "",
+						combined : false
+					}
+				listT2AddObject.push(t2AddObject);
+			}
+			
+			function t2AddDataToTable(data){
+				var dataTotal = listT2AddObject[listT2AddObject.length-1];
+				var totalSumInsured = parseFloat(listT2AddObject[listT2AddObject.length-1].sumInsured.replace(/,/g, ""))+parseFloat(data.sumInsured.replace(/,/g, ""));
+				var totalPremiumRate = parseFloat(listT2AddObject[listT2AddObject.length-1].premiumRate.replace(/,/g, ""))+parseFloat(data.premiumRate.replace(/,/g, ""));
+				
+				listT2AddObject.splice(listT2AddObject.length - 1); 
+				listT2AddObject.push(data);
+				t2createTotalDataAddTable(formatter.format(totalSumInsured).replace('$', ''), formatterT1_6.format(totalPremiumRate).replace('$', ''));
+				
+				$('#t2-addTable').bootstrapTable('load', listT2AddObject);
+			}
+			
+			function t2Reset() {				
+				AutoNumeric.getAutoNumericElement('#t2-premiumRate').set('0.00');
+				AutoNumeric.getAutoNumericElement('#t2-deduction').set('0.0000');
+				AutoNumeric.getAutoNumericElement('#t2-sumInsured').set('0.00');
+				AutoNumeric.getAutoNumericElement('#t2-exchangeRate').set('0.00');
+				AutoNumeric.getAutoNumericElement('#t2-weighted').set('100.00');
+				$('#t2-insuredPeriod').val();
+				$('#t2-insuredPeriodTo').val();
+				$('#t2-reinsuredPeriod').val();
+				$('#t2-reinsuredPeriodTo').val();
+				$('#t2-interestInsured').empty();
+				$('#t2-location').empty();
+				
+				listT2AddObject = [];
+				
+				t2createTotalDataAddTable("0.00", "0.00");
+				
+				$('#t2-addTable').bootstrapTable('load', listT2AddObject);
+				t2HideColumn();
+				
+			}
+			
+			function t2RemoveAdd(id){
+				
+				var dataToBeRemove = $('#t2-addTable').bootstrapTable('getRowByUniqueId', id)
+				var totalSumInsured = parseFloat(listT2AddObject[listT2AddObject.length-1].sumInsured.replace(/,/g, ""))-parseFloat(dataToBeRemove.sumInsured.replace(/,/g, ""));
+				var totalPremiumRate = parseFloat(listT2AddObject[listT2AddObject.length-1].premiumRate.replace(/,/g, ""))-parseFloat(dataToBeRemove.premiumRate.replace(/,/g, ""));
+				
+				$('#t2-addTable').bootstrapTable('removeByUniqueId', id)
+				var data = $('#t2-addTable').bootstrapTable('getData');
+				data.splice(data.length - 1);
+				
+				listT2AddObject = data;
+				
+				t2createTotalDataAddTable(formatter.format(totalSumInsured).replace('$', ''), formatterT1_6.format(totalPremiumRate).replace('$', ''));
+				$('#t2-addTable').bootstrapTable('load', listT2AddObject);
+				
+				$('#t5-addTable').bootstrapTable('removeByUniqueId', id);
+				
+			}
+			
+			/*]]>*/
+		</script>
+	</th:block>
+
+</body>
+
+
+</html>

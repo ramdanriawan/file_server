@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<th:block th:replace="fragments/import :: info-header" />
+	<th:block th:replace="fragments/import :: css-header" />
+	<th:block th:replace="fragments/import :: js-header" />
+	<script th:src="@{/js/autoNumeric.min.js}"></script>
+</head>
+
+<body id="page-top">
+	<th:block th:replace="fragments/general :: navbar-header" />
+
+	<div id="wrapper">
+		<th:block th:replace="fragments/general :: menu" />
+
+		<div id="content-wrapper">
+			<div class="container-fluid">
+				<th:block th:replace="fragments/general :: panel-page" />
+
+
+				<!-- CONTENT PAGE -->
+				<div id="cart" class="card mb-3">
+					<div id="divContentHeader" class="card-header">
+						<b><span id="titlePage" th:text="${titlePage}"></span></b>
+					</div>
+					<div class="card-body">
+						<div id="alertSuccess" class="alert alert-success" style="display: none;">
+							<strong>Success!</strong> <span id="alertSuccessMsg" th:text="${M_0005}"></span>
+						</div>
+						<div id="alertFailed" class="alert alert-danger" style="display: none;">
+							<strong>Failed!</strong> <span id="alertFailedMsg"></span>
+						</div>
+
+						<div id="productIndex">
+							<div class="row justify-content-end">
+								<div class="col-md-2">
+									<button id="create" class="btn btn-primary col-md-12" onclick="create()">
+										<i class="fa fa-plus"></i> Create
+									</button>
+								</div>
+							</div>
+							<br>
+							<div class="row justify-content-end">
+								<div class="input-group col-md-2">
+									<input id="filterValue" name="filterValue" type="text" class="form-control">
+									<div class="input-group-append">
+										<button class="btn btn-primary" type="button" onclick="filteredSearch()">
+											<i class="fas fa-search"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+
+							<table id="productTable" data-unique-id="idKey" data-toolbar-align="right"
+								data-toggle="table" data-sortable="true" data-url="" data-side-pagination="server"
+								data-pagination="true" data-page-size="5" data-pagination-v-align="top"
+								data-page-list="[5, 10, 25, 50, ALL]">
+								<thead>
+									<tr>
+										<th data-field="idKey">id</th>
+										<th data-field="tcCode" data-sortable="true">Code</th>
+										<th data-field="tcDesc" data-sortable="true">Description</th>
+										<th data-field="tcOjkGroup" data-sortable="true">Group</th>
+										<th data-field="tcDataStatusStr" data-sortable="true">Status</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+						<div id="productCreate" hidden="true">
+							<div class="row justify-content-end">
+								<div class="col-md-2">
+									<button class="btn btn-danger col-md-12" onclick="back()">
+										<i class="fa fa-chevron-left"></i> Back
+									</button>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-3">
+									<label>*Code</label> <br> <input id="code" name="code" type="text"
+										class="form-control">
+								</div>
+								<div class="col-md-5">
+									<label>*Name</label> <br> <input id="description" name="description" type="text"
+										class="form-control">
+								</div>
+								<div class="col-md-4">
+									<label>*Group</label> <br> <input id="group" name="group" type="text"
+										class="form-control">
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-md-12">
+									<label>Description</label> <br>
+									<textarea class="form-control" id="fullDesc" name="fullDesc" rows="3"></textarea>
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-md-3">
+									<label>*Premium(%)</label> <br> <input id="premium" name="premium" type="text"
+										class="form-control" style="text-align: right;" placeholder="999.9999">
+								</div>
+								<div class="col-md-3">
+									<label>*RI Comm(%)</label> <br> <input id="RIComm" name="RIComm" type="text"
+										class="form-control" style="text-align: right;" placeholder="999.9999">
+								</div>
+								<div class="col-md-2">
+									<label>*Extension (max)</label> <br> <input id="extensionMax" name="extensionMax"
+										type="number" value="0" min="0" required class="form-control"
+										style="text-align: right;">
+								</div>
+								<div class="col-md-2">
+									<label>*Renewable </label> <br> <select name="renewable" id="renewable"
+										class="select2" style="width: 100%" required>
+										<option value="0">Renewable</option>
+										<option value="1">Non renew</option>
+									</select>
+								</div>
+								<div class="col-md-2">
+									<label>*Channel </label> <br> <select name="channel" id="channel" class="select2"
+										style="width: 100%" required>
+										<option value="0">Mobile</option>
+										<option value="1">Web</option>
+										<option value="2">All</option>
+									</select>
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-md-2">
+									<label>PPW</label> <br> <input id="ppw" name="ppw" type="number" value="0" min="0"
+										class="form-control" style="text-align: right;">
+								</div>
+								<div class="col-md-2">
+									<label>Quote Validity</label> <br> <input id="quoteValidity" name="quoteValidity"
+										type="number" value="0" min="0" class="form-control" style="text-align: right;">
+								</div>
+								<div class="col-md-6">
+								</div>
+								<div class="col-md-2">
+									<label>*Status </label> <br> <select name="status" id="status" class="select2"
+										style="width: 100%" required>
+										<option value="11">Active</option>
+										<option value="12">Inactive</option>
+									</select>
+								</div>
+							</div>
+							<br>
+
+						</div>
+					</div>
+				</div>
+
+				<!-- insurance -->
+				<div id="cart2" class="card mb-3" hidden="true">
+					<div id="contentInsurance" class="card-header">
+						<b><span id="titleLowerBox" th:text="${titleLowerBox}"></span></b>
+					</div>
+					<div class="card-body">
+						<div id="productInsurance">
+							<div id="alertSuccessIns" class="alert alert-success" style="display: none;">
+								<strong>Success!</strong>
+								<span id="alertSuccessMsg" th:text="${M_0005}"></span>
+							</div>
+							<div id="alertFailedIns" class="alert alert-danger" style="display: none;">
+								<strong>Failed!</strong> <span id="alertFailedMsgIns"></span>
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<label>*Document </label> <select name="document" id="document"
+										class="form-control" style="width: 100%" required></select>
+								</div>
+								<div class="col-md-4">
+									<label>*Status </label> 
+									<select name="docStatus" id="docStatus"
+										class="form-control" style="width: 100%" required>
+										<option></option>
+					                    <option value="1">Mandatory</option>
+					                    <option value="0">Optional</option>
+									</select>
+								</div>
+								<div class="col-md-2">
+									<br>
+									<button class="btn btn-primary col-md-12"
+										style="margin-top: 2px; padding-top: 5px; padding-bottom: 5px;"
+										onclick="addDocument()">Add
+									</button>
+								</div>
+							</div>
+							<br>
+							<table id="documentTable" data-unique-id="idKey" data-toolbar-align="right"
+								data-toggle="table" data-sortable="true" data-url="" data-side-pagination="server"
+								data-pagination="true" data-page-size="5" data-page-list="[5, 10, 25, 50, ALL]">
+								<thead>
+									<tr>
+										<th data-field="idDoc">Id</th>
+										<th data-field="document" data-sortable="true">Document</th>
+										<th data-field="status" data-sortable="true">Status</th>
+										<th data-field="action" data-sortable="true">Action</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- insurance end -->
+				<div id="fragmentSave" hidden="true">
+					<th:block th:replace="fragments/button :: btn-save-reset" />
+				</div>
+
+			</div>
+			<!-- /.container-fluid -->
+			<th:block th:replace="fragments/general :: copyright-footer"></th:block>
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<div class="modal fade" id="modalConfirmationDelete" tabindex="-1" role="dialog"
+		aria-labelledby="modalLabelConfirmation" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="modalLabelConfirmation">Confirmation</h5>
+					<button class="close" type="button" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body" id="modalConfirmationMsg" th:text="${M_0002}"></div>
+				<div class="modal-footer">
+					<button id="btnModalYesDelete" class="btn btn-success" type="button">Yes</button>
+					<button id="btnModalNoDelete" class="btn btn-dark" type="button" data-dismiss="modal">No</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- /#wrapper -->
+	<th:block th:replace="fragments/modal :: confirmation-save" />
+	<th:block th:replace="fragments/general :: scroll-to-top" />
+	<th:block th:replace="fragments/general :: logout-modal" />
+	<th:block th:replace="fragments/import :: js-body" />
+
+</body>
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var editObject = null;
+	var deleteId = null;
+	$(function () {
+
+
+		var urlInq = /*[[@{/static-data/product/inquiry}]]*/;
+
+		$('#productTable').bootstrapTable('refreshOptions', {
+			theadClasses: 'thead-dark',
+			url: urlInq,
+			pageNumber: 1
+		});
+		$('#productTable').bootstrapTable('hideColumn', 'idKey');
+		$('#documentTable').bootstrapTable('hideColumn', 'idDoc');
+
+		new AutoNumeric('#premium', {
+			currencySymbol: '',
+			decimalCharacter: '.',
+			digitGroupSeparator: ',',
+			decimalPlaces: '4',
+			maximumValue: '100',
+			minimumValue: '0',
+			currencySymbolPlacement: AutoNumeric.options.currencySymbolPlacement.suffix
+		});
+		new AutoNumeric('#RIComm', {
+			currencySymbol: '',
+			decimalCharacter: '.',
+			digitGroupSeparator: ',',
+			decimalPlaces: '4',
+			maximumValue: '100',
+			minimumValue: '0',
+			currencySymbolPlacement: AutoNumeric.options.currencySymbolPlacement.suffix
+		});
+
+		$('#productTable').on('click-row.bs.table', function (e, row, $tr) {
+			editObject = row;
+			var tcCode = row.tcCode;
+			edit();
+			reset();
+			inquiryDoc(tcCode);
+		});
+
+		$('#renewable').select2({
+			width: '100%'
+		});
+		$('#channel').select2({
+			width: '100%'
+		});
+		$('#status').select2({
+			width: '100%'
+		});
+
+		$('#btnSave').click(function () {
+			save();
+		});
+
+		$('#btnReset').click(function () {
+			reset();
+		});
+
+		$('#btnModalYes').click(function () {
+			$('#btnModalYes').attr('disabled', true);
+			saveProcess();
+		});
+
+		$('#btnModalYesDelete').click(function () {
+			removeIns(deleteId);
+		});
+	});
+
+	const numInputs = document.querySelectorAll('input[type=number]')
+
+	numInputs.forEach(function (input) {
+		input.addEventListener('change', function (e) {
+			if (e.target.value == '') {
+				e.target.value = 0
+			}
+		})
+	})
+
+	function filteredSearch() {
+		var url = "/gui-re-broker/static-data/product/inquiry";
+		var filterValue = $("#filterValue").val();
+		var allUrl = url;
+
+		if (filterValue != "") {
+			var allUrl = url + "?filterValue=" + filterValue;
+		}
+
+		$('#productTable').bootstrapTable('refreshOptions', {
+			theadClasses: 'thead-dark',
+			url: allUrl
+		});
+	}
+
+	function removeIns(id) {
+
+		var url = /*[[@{/static-data/product/remove-insurance}]]*/ ;
+		var idKey = id;
+
+		var data = {
+			idKey: idKey
+		};
+
+		$.ajax({
+			type: "POST",
+			dataType: "json",
+			contentType: "application/json",
+			data: JSON.stringify(data),
+			url: /*[[@{/static-data/product/remove-insurance}]]*/ ,
+			success: function (data) {
+				if (data)
+					showAlertSuccess();
+				else
+					showAlertFailed( /*[[${M_0006}]]*/);
+			},
+			complete: function (jqXHR, textStatus) {
+				showAlertSuccess();
+			}
+		});
+		deleteId = null;
+		$('#modalConfirmationDelete').modal('hide');
+	}
+
+
+	function deleteIns(idKey) {
+		deleteId = idKey;
+		$('#modalConfirmationDelete').modal('show');
+	}
+	function create() {
+		$.ajax({
+			url: "/gui-re-broker/static-data/product/dropdown-pa-child"
+		}).then(function (data) {
+
+			$('#document').select2({
+				width: '100%',
+				data: (JSON.parse(data)).results
+			});
+		});
+		$('#titlePage').text(/*[[${titlePageCreate}]]*/);
+		$('#titleInsurance').text(/*[[${titleInsurance}]]*/);
+		$('#insurance').removeAttr('hidden');
+		$('#productCreate').removeAttr('hidden');
+		$('#productIndex').attr('hidden', true);
+		$('#cart2').removeAttr('hidden');
+		$('#fragmentSave').removeAttr('hidden');
+		$('#docStatus').select2({ width: '100%'});
+	}
+	function back() {
+		editObject = null;
+		$('#titlePage').text(/*[[${titlePage}]]*/);
+		$('#productCreate').attr('hidden', true);
+		$('#productIndex').removeAttr("hidden");
+
+		$('#cart2').attr('hidden', true);
+		$('#insurance').attr('hidden', true);
+		$('#fragmentSave').attr('hidden', true);
+		reset();
+	}
+
+	function inquiryDoc(tcCode) {
+		var url = /*[[@{/static-data/product/inquiry-insurance}]]*/;
+		url = url + '?tcCode=' + tcCode;
+		var statusDesc;
+		
+		$.ajax({
+			type: "GET",
+			dataType: "json",
+			url: url,
+		}).then(function (resultObject) {
+			var rows = [];
+			console.log(resultObject);
+			for (var i = 0; i < resultObject.rows.length; i++) {
+				if(resultObject.rows[i].clStatus == '0'){
+					statusDesc = "Optional";
+				}else{
+					statusDesc = "Mandatory"
+				}
+				var action = "<button class=\"btn btn-danger\" onclick=\"removeAdd('"+resultObject.rows[i].idKey+"')\">" 
+				+ "<i class=\"fa fa-trash\"></i>" 
+				+ "</button>";
+				console.log(resultObject.rows[i].action);
+				rows.push({
+					idKey: resultObject.rows[i].idKey,
+					document: resultObject.rows[i].clDesc,
+					status: statusDesc,
+					statusVal: resultObject.rows[i].clStatus,
+					action: action
+				});
+				$('#documentTable').bootstrapTable('load', rows);
+			}	
+		});
+	}
+
+	function edit() {
+		$.ajax({
+			url: "/gui-re-broker/static-data/product/dropdown-pa-child"
+		}).then(function (data) {
+
+			$('#document').select2({
+				width: '100%',
+				data: (JSON.parse(data)).results
+			});
+		});
+		$('#titlePage').text(/*[[${titlePageEdit}]]*/);
+		$('#productCreate').removeAttr('hidden');
+		$('#productIndex').attr('hidden', true);
+		$('#cart2').removeAttr('hidden');
+		$('#fragmentSave').removeAttr('hidden');
+		$('#titleInsurance').text(/*[[${titleInsurance}]]*/);
+		$('#insurance').removeAttr('hidden');
+	}
+
+	function reset() {
+		if (editObject == null) {
+			$('#code').val('');
+			$('#description').val('');
+			$('#group').val('');
+			AutoNumeric.getAutoNumericElement('#premium').set('');
+			AutoNumeric.getAutoNumericElement('#RIComm').set('');
+			$('#extensionMax').val('0');
+			$('#renewable').val('0').trigger('change');
+			$('#channel').val('0').trigger('change');
+			$('#ppw').val('0');
+			$('#quoteValidity').val('0');
+			$('#status').val('11');
+		} else {
+			$('#code').val(editObject.tcCode);
+			$('#description').val(editObject.tcDesc);
+			$('#group').val(editObject.tcOjkGroup);
+			AutoNumeric.getAutoNumericElement('#premium').set(editObject.tcPremium);
+			AutoNumeric.getAutoNumericElement('#RIComm').set(editObject.tcBrofeePct);
+			$('#extensionMax').val(editObject.tcExtMax);
+			$('#renewable').val(editObject.tcRenewable).trigger('change');
+			$('#channel').val(editObject.tcChannel).trigger('change');
+			$('#ppw').val(editObject.tcPpw);
+			$('#quoteValidity').val(editObject.tcQuoValid);
+			$('#status').val(editObject.tcDataStatus).trigger('change');;
+		}
+	}
+
+	function isSaveOk() {
+		var code = $('#code').val();
+		var description = $('#description').val();
+		var group = $('#group').val();
+		var premium = $('#premium').val();
+		var RIComm = $('#RIComm').val();
+		if (code == "" || description == "" || group == "" ||
+			code == null || description == null || group == null
+			|| premium == "" || RIComm == "") {
+			return false;
+		}
+		return true;
+	}
+	function isSaveInsuranceOk() {
+		var insurances = $('#insurances').val();
+		if (insurances == "" || insurances == null) {
+			return false;
+		}
+		return true;
+	}
+
+	function addInsurance() {
+		if (isSaveInsuranceOk()) {
+			var insId = $('#insurances').val();
+			var tcCode = $('#code').val();
+			var jsonData = {
+				idkey: null,
+				tcCode: tcCode,
+				insId: insId
+			}
+			var url = '/gui-re-broker/static-data/product/save-insurance';
+			restPOST('POST', url, jsonData).done(function (data) {
+				if (data.status == "200") {
+					showAlertSuccess();
+				} else {
+					showAlertFailed(data.message);
+				}
+			});
+		} else {
+			alert('Please fill all required field');
+		}
+	}
+	
+	function addDocument() {
+		var p_DocumentDesc = $('#document option:selected').text();
+		var p_DocumentStatus = $('#docStatus option:selected').text();
+		var p_DocumentStatusVal = $('#docStatus option:selected').val();
+		var rows = $('#documentTable').bootstrapTable('getData');
+		var id = create_UUID();
+		var action = "<button class=\"btn btn-danger\" onclick=\"removeAdd('"+id+"')\">" 
+		+ "<i class=\"fa fa-trash\"></i>" 
+		+ "</button>";
+		rows.push({
+			idKey:id,
+			document:p_DocumentDesc,
+			status:p_DocumentStatus,
+			statusVal:p_DocumentStatusVal,
+			action: action
+	    });
+		$('#documentTable').bootstrapTable('load', rows);
+		$('#document').val($('#document option:first-child').val()).trigger('change');
+		$('#docStatus').val($('#docStatus option:first-child').val()).trigger('change');
+	}
+
+	function save() {
+		if (isSaveOk()) {
+			$('#modalConfirmation').modal('show');
+		} else {
+			alert('Please fill all required field');
+		}
+	}
+
+	function saveProcess() {
+		$('#modalConfirmation').modal('hide');
+		var tcCode = $('#code').val();
+		var tcDesc = $('#description').val();
+		var tcOjkGroup = $('#group').val();
+		var tcFullDesc = $('#fullDesc').val();
+		var tcPremium = $('#premium').val().replace("", "");
+		var tcBrofeePct = $('#RIComm').val().replace("", "");
+		var tcExtMax = $('#extensionMax').val();
+		var tcRenewable = $('#renewable').val();
+		var tcChannel = $('#channel').val();
+		var tcPpw = $('#ppw').val();
+		var tcQuoValid = $('#quoteValidity').val();
+		var tcDataStatus = $('#status').val();
+		
+		var rows = $('#documentTable').bootstrapTable('getData');
+		
+		var rowsData = [];
+		for(var i = 0;i<rows.length;i++) {
+			rowsData.push(rows[i]);
+		}
+
+		if (editObject != null) {
+			editObject['tcCode'] = tcCode;
+			editObject['tcDesc'] = tcDesc;
+			editObject['tcFullDesc'] = tcFullDesc;
+			editObject['tcOjkGroup'] = tcOjkGroup;
+			editObject['tcPremium'] = tcPremium;
+			editObject['tcBrofeePct'] = tcBrofeePct;
+			editObject['tcExtMax'] = tcExtMax;
+			editObject['tcRenewable'] = tcRenewable;
+			editObject['tcChannel'] = tcChannel;
+			editObject['tcPpw'] = tcPpw;
+			editObject['tcQuoValid'] = tcQuoValid;
+			editObject['tcDataStatus'] = tcDataStatus;
+			editObject['rows'] = rowsData;
+		} else {
+			editObject = {
+				idkey: null,
+				tcCode: tcCode,
+				tcFullDesc: tcFullDesc,
+				tcDesc: tcDesc,
+				tcOjkGroup: tcOjkGroup,
+				tcPremium: tcPremium,
+				tcBrofeePct: tcBrofeePct,
+				tcExtMax: tcExtMax,
+				tcRenewable: tcRenewable,
+				tcChannel: tcChannel,
+				tcPpw: tcPpw,
+				tcQuoValid: tcQuoValid,
+				tcDataStatus: tcDataStatus,
+				rows: rowsData
+			}
+		}
+
+		/* var url = '/gui-re-broker/static-data/product/save';
+		restPOST('POST', url, editObject).done(function (data) {
+			$('#modalConfirmation').modal('hide');
+			if (data.status == "200") {
+				showAlertSuccess();
+			} else {
+				showAlertFailed(data.message);
+			}
+		}); */
+		$.ajax({
+		      type: "POST",
+		      dataType: "json",
+		      contentType: "application/json",
+		      data: JSON.stringify(editObject),
+		      url: /*[[@{/static-data/product/save}]]*/ ,
+		      success: function (editObject) {
+		        if (editObject)
+		          showAlertSuccess();
+		        else
+		          showAlertFailed( /*[[${M_0006}]]*/);
+		      },
+		      complete: function (jqXHR, textStatus) {
+		        if (textStatus != "success")
+		          showAlertFailed( /*[[${M_0006}]]*/);
+		      }
+
+		 });
+	}
+
+	function showAlertSuccess() {
+		$(location).attr('href', '#page-top');
+		$('#alertSuccess').fadeTo(2000, 500).slideUp(500, function () {
+			$('#alertSuccess').slideUp(500);
+			location.reload();
+		});
+	}
+
+	function showAlertFailed(msgAlert) {
+		$('#alertFailedMsg').text(msgAlert);
+		$('#alertFailed').fadeTo(3000, 500).slideUp(500, function () {
+			$('#alertFailed').slideUp(500);
+			$('#btnModalYes').removeAttr('disabled')
+		});
+	}
+	
+	function create_UUID() {
+	    var dt = new Date().getTime();
+	    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+	        var r = (dt + Math.random()*16)%16 | 0;
+	        dt = Math.floor(dt/16);
+	        return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+	    });
+	    
+	    return uuid;
+	}
+	
+	function removeAdd(idKey) {
+		$('#documentTable').bootstrapTable('removeByUniqueId', idKey);
+		 
+		var rows = $('#documentTable').bootstrapTable('getData');	
+		$('#documentTable').bootstrapTable('load', rows); 
+	}
+
+	/*]]>*/
+</script>
+
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<th:block th:replace="fragments/import :: info-header" />
+<th:block th:replace="fragments/import :: css-header" />
+<th:block th:replace="fragments/import :: js-header" />
+</head>
+
+<body id="page-top">
+
+	<div id="wrapper">
+
+		<div id="content-wrapper">
+			<div class="container-fluid" id="coBgpic">
+				<div class="row">
+
+					<div id="idx" class="col-md-8">
+						<div class="card-body">
+							<img id="loginLogo" src="" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label
+								id="coName"></label> <br>
+						</div>
+						<div class="row justify-content-center">
+							<img id="loginBody" src="" />
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="card card-login mx-auto mt-5">
+							<div class="card-body">
+								<form id="fromLogin" th:action="@{/login/form}" method="post">
+									<div class="row">
+										<div class="col-md-3">
+											<label>User ID</label>
+										</div>
+
+										<div class="col-md-9">
+											<input type="text" name="username" id="userId"
+												class="form-control" required="required"
+												autofocus="autofocus" />
+										</div>
+									</div>
+									<br>
+									<div class="row">
+										<div class="col-md-3">
+											<label>Password</label>
+										</div>
+
+										<div class="col-md-9">
+											<input type="password" id="password" name="password"
+												class="form-control" required="required"
+												autofocus="autofocus" />
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-3">
+											<label></label>
+										</div>
+										<div class="col-md-9">
+											<div class="row">
+												<div class="card-body">
+													<img id="captchaImage" src="/gui-re-broker/login/captcha">
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="row">
+										<div class="col-md-3">
+											<label>Captcha</label>
+										</div>
+
+										<div class="col-md-9">
+											<div class="input-group">
+												<input id="captcha" name="captcha" type="text"
+													class="form-control">
+												<div class="input-group-append">
+													<button id='btn-reset-captcha' class="btn btn-primary"
+														type="button" title="refresh captcha">
+														<i class="fa fa-refresh"></i>
+													</button>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-3">
+											<label></label>
+										</div>
+										<br>
+										<div class="col-md-9">
+											<div id="alertCaptcha" class="alert alert-danger fade show"
+												role="alert">Wrong Captcha!</div>
+										</div>
+									</div>
+									<br>
+									<button id='btnLogin' class="btn btn-primary col-md-12"
+										type="button">Login</button>
+
+								</form>
+								<div class="text-center">
+									<a class="d-block small" href="#" onclick="forgotPassword()">Forgot
+										Password?</a>
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<p id="coMessage"></p>
+						</div>
+						<div class="card-body">
+							<div class="row justify-content-end">
+								<p id="lisence"></p>
+							</div>
+						</div>
+
+					</div>
+
+
+
+				</div>
+				<!-- CONTENT PAGE -->
+
+				<div id="userLockModal" class="modal" tabindex="-1" role="dialog">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title">ERROR</h5>
+								<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<p id="userLockMessage"></p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary"
+									data-dismiss="modal">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div id="confirmationForgotPassword" class="modal" tabindex="-1"
+					role="dialog">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title">Confirmation</h5>
+								<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<p>New password will be send to registered email address</p>
+							</div>
+							<div class="modal-footer">
+								<button id="btnSave" onClick="forgotPasswordOk()" type="button"
+									class="btn btn-primary">Save changes</button>
+								<button type="button" class="btn btn-secondary"
+									data-dismiss="modal">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<!-- /#wrapper -->
+
+	<th:block th:replace="fragments/general :: scroll-to-top" />
+	<th:block th:replace="fragments/import :: js-body" />
+
+</body>
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	$(function() {
+		$('#alertCaptcha').hide();
+		
+		if([[${error}]] == 'true'){
+			$('#alertCaptcha').text('Wrong Username or Password!');
+			$('#alertCaptcha').show('adsagaherha');
+		}
+		
+		rest('GET', /*[[@{/login/login-page-item}]]*/).done(function(result) {    
+			console.log(JSON.stringify(result));
+	    	$("#loginLogo").attr("src", "data:image/png;base64,"+result[0].coLogo);
+	    	$("#coName").html('<h3>'+result[0].coName+'</h3>');
+	    	$("#loginBody").attr("src", "data:image/png;base64,"+result[0].coBgpic);
+	    	//$("#idx").css("background-image", "url('data:image/png;base64, " + result[0].coBgpic + "')");
+	    	$("#coMessage").text(result[0].coMessage);
+	    	$("#lisence").text(result[0].coLicense);
+	    });	
+		
+		$('#btn-reset-captcha').click(function(){
+			$("#captchaImage").attr("src", "/gui-re-broker/login/captcha");
+			$('#captcha').val("");
+		});
+		
+		$('#btnLogin').click(function(){
+			if(!isLockedUser()){
+				validateCaptcha();
+			}else{
+				$('#userLockModal').modal('show');
+			}
+			
+		});
+	});
+	
+	function isLockedUser(){
+		var data = {
+				username : $('#userId').val()
+			};
+			restPOST('POST', /*[[@{/login/is-user-locked}]]*/, data).done(function(result) {    
+		    	
+				if(result.isLocked == true){
+					$('#userLockMessage').text(result.message);
+					$('#userLockModal').show();
+					$('#userId').val('');
+					$('#password').val('');
+					$('#captcha').val('');
+					$("#captchaImage").attr("src", "/gui-re-broker/login/captcha");
+					
+					return true;
+				}else if(result.exp == true){
+					$('#userLockModal').show();
+					$('#userId').val('');
+					$('#password').val('');
+					$('#captcha').val('');
+					$("#captchaImage").attr("src", "/gui-re-broker/login/captcha");
+					return true;
+				}
+				
+		    });	
+			
+			return false;
+	}
+	
+	function validateCaptcha(){
+		var data = {
+			captcha : $('#captcha').val()
+		}
+		restPOST('POST', "/gui-re-broker/login/validate-captcha", data).done(function(result) {    
+	    	console.log(JSON.stringify(result));
+			if(result.status == 'success'){
+				$("#fromLogin").submit();  
+			}else{
+				$('#userId').val('');
+				$('#password').val('');
+				$('#captcha').val('');
+				$('#alertCaptcha').text('Wrong Captcha!');
+				$('#alertCaptcha').show();
+				$("#captchaImage").attr("src", "/gui-re-broker/login/captcha");
+			}
+	    });	
+		
+	}
+
+	function forgotPassword(){
+		if($('#userId').val() == ''){
+			alert('User ID is required')
+		}else{
+			$('#confirmationForgotPassword').modal('show');
+		}
+			
+	}
+	
+	
+	function forgotPasswordOk(){
+			$('#confirmationForgotPassword').modal('hide');
+			var data = {
+				username : $('#userId').val()
+			}
+			
+				restPOST('POST', "/gui-re-broker/login/reset-password", data).done(function(result) {    
+					
+						location.reload();
+					
+				} );
+		
+		
+			
+			
+	}
+	/*]]>*/
+</script>
+
+</html>

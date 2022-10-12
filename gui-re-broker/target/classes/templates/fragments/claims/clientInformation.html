@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+</head>
+
+<body>
+	<th:block th:fragment="client-information-tab">
+		<div id="cart" class="card mb-3">
+			<div class="card-body">
+
+				<div class="card mb-3">
+					<div class="card-body">
+						<div class="row">
+							<div class="col-md-3">
+								<label>Client Name</label> <br>
+								<input type="text" class="form-control col-md-12" id="trxClient1" disabled>
+							</div>
+							<div class="col-md-3">
+								<label>Policy No</label> <br>
+								<input type="text" class="form-control col-md-12" id="txPolicyNo1" disabled>
+							</div>
+							<div class="col-md-3">
+								<label>Type of Cover</label> <br>
+								<input type="text" class="form-control col-md-12" id="txCoverId1" disabled>
+							</div>
+							<div class="col-md-3">
+								<label>Period</label>
+								<br>
+								<div class="row col-md-12">
+									<input type="text" class="form-control col-md-5" id="trxInsStart1" disabled> &nbsp;
+									to &nbsp;
+									<input type="text" class="form-control col-md-5" id="trxInsEnd1" disabled>
+								</div>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-4">
+								<label>Participant Name</label> <br>
+								<input type="text" class="form-control col-md-12" id="trxPartyName1" disabled>
+							</div>
+							<div class="col-md-4">
+								<label>Participant Id</label> <br>
+								<input type="text" class="form-control col-md-12" id="trxBrdxId1" disabled>
+							</div>
+							<div class="col-md-4">
+								<label>Bordeaux</label> <br>
+								<input type="text" class="form-control col-md-12" id="trxBrdxId1" disabled>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-3">
+								<label>Period</label> <br>
+								<div class="row col-md-12">
+									<input type="text" class="form-control col-md-5" id="txDateFrom1" disabled> &nbsp;
+									to &nbsp;
+									<input type="text" class="form-control col-md-5" id="txDateTo1" disabled>
+								</div>
+							</div>
+							<div class="col-md-9">
+								<label>Interest Insured</label> <br>
+								<input type="text" class="form-control col-md-12" id="trxInterest1" disabled>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-2">
+								<label>Currency</label> <br>
+								<input type="text" class="form-control col-md-12" id="txCurrId1" disabled>
+							</div>
+							<div class="col-md-4">
+								<label>Sum Insured</label> <br>
+								<input type="text" class="form-control col-md-12" id="txTsiAmount1"
+									style="text-align: right;" placeholder="0.00" disabled>
+							</div>
+							<div class="col-md-3">
+								<label>Status</label> <br>
+								<input type="text" class="form-control col-md-12" id="txDataStatus1">
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-12">
+								<label>Attention’s Client</label> <br>
+								<input type="text" class="form-control col-md-12" id="txAttClient1">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</th:block>
+</body>
+
+</html>

@@ -1,0 +1,687 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Outstanding" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ce4dcd2c-7645-4ac5-a32f-efdd63e444bd">
+	<property name="ireport.zoom" value="1.3310000000000013"/>
+	<property name="ireport.x" value="92"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<parameter name="P_MAX_DATE" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_MIN_DATE" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_TYPE" class="java.util.List">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_CLIENT" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_COVER" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select TR0012.ID_KEY, DATEDIFF(STR_TO_DATE((SELECT PA_CHILD_VALUE FROM MA0014 WHERE PA_PARENT_CODE = 'SYSDATE' and PA_CHILD_CODE = 'SYSDATE001'), "%m-%d-%Y"), TR0012.TRX_DUE_DATE) as AGE,
+idr.sumOriginIDR, idr.sumSettlementIDR, usd.sumOriginUSD, usd.sumSettlementUSD,
+(idr.sumOriginIDR - idr.sumSettlementIDR) as outstandingIDR,
+(usd.sumOriginUSD - usd.sumSettlementUSD) as outstandingUSD,
+TR0012.TRX_COVER_CODE, TR0012.TRX_VOUCHER_ID, MA0010.CO_NAME, MA0005.CLI_NAME,
+DATE_FORMAT(TR0012.TRX_DATE,"%d/%m/%Y") as TRX_DATE,
+DATE_FORMAT(TR0012.TRX_DUE_DATE,"%d/%m/%Y") as TRX_DUE_DATE, TR0012.TRX_TYPE,
+TR0012.TRX_VOUCHER_ID, TR0012.TRX_CLIENT, TR0012.TRX_CURR_ID, TR0012.TRX_DESCRIPTION,
+TR0012.TRX_CURR_RATE, TR0012.TRX_INVC_AMOUNT, TR0012.TRX_SET_AMOUNT, MA0012.SA_NAME,
+(TR0012.TRX_INVC_AMOUNT-TR0012.TRX_SET_AMOUNT) as OUTSTANDING
+from TR0012 join MA0010
+left join MA0005 on TR0012.TRX_CLIENT = MA0005.CLI_CODE
+left join TR0006 on TR0006.TRX_VOUCHER_ID = TR0012.TRX_OLD_VOUCHER_ID
+left join MA0012 on MA0012.SA_CODE = TR0006.TRX_OFFICER,
+(select sum(TR0012.TRX_INVC_AMOUNT) as sumOriginIDR,  sum(TR0012.TRX_SET_AMOUNT) as sumSettlementIDR from TR0012
+WHERE TR0012.TRX_DUE_DATE <= str_to_date($P{P_MIN_DATE},"%d/%m/%Y")
+and TR0012.TRX_DATA_STATUS = '11' and TR0012.TRX_SET_AMOUNT < TR0012.TRX_INVC_AMOUNT
+and TR0012.TRX_CLIENT like '%$P!{P_CLIENT}%' and $X{IN, TR0012.TRX_TYPE, P_TYPE} and TR0012.TRX_COVER_CODE like '%$P!{P_COVER}%'
+and TR0012.TRX_CURR_ID = 'IDR') as idr,
+(select sum(TR0012.TRX_INVC_AMOUNT) as sumOriginUSD,  sum(TR0012.TRX_SET_AMOUNT) as sumSettlementUSD from TR0012
+WHERE TR0012.TRX_DUE_DATE <= str_to_date(($P{P_MIN_DATE}),"%d/%m/%Y")
+and TR0012.TRX_DATA_STATUS = '11' and TR0012.TRX_SET_AMOUNT < TR0012.TRX_INVC_AMOUNT
+and TR0012.TRX_CLIENT like '%$P!{P_CLIENT}%' and $X{IN, TR0012.TRX_TYPE, P_TYPE} and TR0012.TRX_COVER_CODE like '%$P!{P_COVER}%'
+and TR0012.TRX_CURR_ID = 'USD') as usd
+WHERE TR0012.TRX_DUE_DATE <= str_to_date(($P{P_MIN_DATE}),"%d/%m/%Y")
+and TR0012.TRX_DATA_STATUS = '11' and TR0012.TRX_SET_AMOUNT < TR0012.TRX_INVC_AMOUNT
+and TR0012.TRX_CLIENT like '%$P!{P_CLIENT}%' and $X{IN, TR0012.TRX_TYPE, P_TYPE} and TR0012.TRX_COVER_CODE like '%$P!{P_COVER}%'
+order by TR0012.TRX_DATE, TR0012.TRX_VOUCHER_ID, TR0012.TRX_COUNT_INV;]]>
+	</queryString>
+	<field name="ID_KEY" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="AGE" class="java.lang.Integer"/>
+	<field name="sumOriginIDR" class="java.math.BigDecimal"/>
+	<field name="sumSettlementIDR" class="java.math.BigDecimal"/>
+	<field name="sumOriginUSD" class="java.math.BigDecimal"/>
+	<field name="sumSettlementUSD" class="java.math.BigDecimal"/>
+	<field name="outstandingIDR" class="java.math.BigDecimal"/>
+	<field name="outstandingUSD" class="java.math.BigDecimal"/>
+	<field name="TRX_COVER_CODE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TRX_VOUCHER_ID" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CO_NAME" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CLI_NAME" class="java.lang.String">
+		<fieldDescription><![CDATA[Nama Nasabah]]></fieldDescription>
+	</field>
+	<field name="TRX_DATE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TRX_DUE_DATE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TRX_TYPE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TRX_CLIENT" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TRX_CURR_ID" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TRX_DESCRIPTION" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TRX_CURR_RATE" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TRX_INVC_AMOUNT" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TRX_SET_AMOUNT" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="SA_NAME" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="OUTSTANDING" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="142" splitType="Stretch">
+			<textField>
+				<reportElement x="35" y="0" width="767" height="20" uuid="c4ab089b-dd40-4f82-9688-d2fb9e5ddc9a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CO_NAME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="347" y="20" width="130" height="20" uuid="aaae866b-5e5b-46be-bdf5-0b0c7a8cdd11"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[OUTSTANDING LIST]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="303" y="40" width="91" height="20" uuid="75c188a8-8c92-4fec-b47f-2c2fbceb15ad"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Type of Cover]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="303" y="60" width="91" height="20" uuid="d2652480-9dcf-4971-9026-2b9237defe84"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Client]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="303" y="80" width="91" height="20" uuid="b2271f98-83c3-4e6a-9509-7df0e972eeb8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Type of Transaction]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="303" y="100" width="91" height="20" uuid="c9c8b7ae-9201-4982-9f36-ef5bd28921fd"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[As At]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="394" y="40" width="16" height="20" uuid="7c636899-026d-4f3a-ad1e-423dfdd45449"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="394" y="60" width="16" height="20" uuid="e2eb2336-1e4f-4d6c-8221-5f0418e83dc0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="394" y="80" width="16" height="20" uuid="2ee0983a-c721-40d3-824c-e5786a63c040"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="394" y="100" width="16" height="20" uuid="f58b1600-9492-4afc-a414-7fccb89d97c1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement x="410" y="40" width="331" height="20" uuid="22059db3-8498-4c07-9885-910303ef0ee8"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_COVER} =="" ? "ALL" : $F{TRX_COVER_CODE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="410" y="60" width="331" height="20" uuid="05b16cb2-b42f-4b63-a287-905bee039fc1"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_CLIENT} =="" ? "ALL" : $F{CLI_NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="410" y="80" width="345" height="20" uuid="285ec7f8-f89f-44ab-94f4-6ef96232e95f"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_TYPE}.toString().indexOf('P') == 1 ? "PAYABLE" : "RECEIVABLE"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="410" y="100" width="331" height="20" uuid="66530e75-22e4-4e7a-b92f-12cdf4f1d9b4"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_MIN_DATE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="21">
+			<staticText>
+				<reportElement x="481" y="0" width="56" height="20" uuid="3c0dc279-54d5-490a-a2e4-f9474b9ee258"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Exchange]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="63" y="0" width="54" height="20" uuid="5c584625-7f58-4bf6-ba65-493af1b72bb1"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="117" y="0" width="54" height="20" uuid="9c57e59c-3d6f-49bb-8a3c-aa719819ed70"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Due]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="301" y="0" width="74" height="20" uuid="f737e1f6-d1ce-4ec1-aac5-2e0d9eeb7804"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Client]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="171" y="0" width="23" height="20" uuid="74898d1a-96d5-41a8-9da7-f3e46ec112ae"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Age]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="537" y="0" width="78" height="20" uuid="e7449cb3-ffa1-458c-9f17-c62f656df520"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Origin Amount]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="375" y="0" width="78" height="20" uuid="a217c289-be8a-405d-930c-725f1bd290b1"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Description]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="615" y="0" width="62" height="20" uuid="b41568de-c5b6-4feb-a80c-edcdc9c34b18"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Settlement Amount]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="35" y="0" width="28" height="20" uuid="ebffb053-d216-428a-a53f-711c4c0c4869"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="677" y="0" width="78" height="20" uuid="e636d003-66c3-4688-967a-178176374588"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Outstanding]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="453" y="0" width="28" height="20" uuid="61dd31bf-6695-4a77-b726-a8217bbee877"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Curr]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="755" y="0" width="47" height="20" uuid="3ed1cda8-3115-4c01-b2c7-fbdbeca53350"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Sales]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="222" y="0" width="79" height="20" uuid="e03a6373-66b3-4f76-aa97-a8dcb72d267b"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Voucher]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="194" y="0" width="28" height="20" uuid="444425f6-acbb-4769-ab73-028fe4a011ab"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Type]]></text>
+			</staticText>
+			<line>
+				<reportElement x="35" y="20" width="767" height="1" uuid="955715a6-f3bb-4b12-8b55-c4d3557ddd56"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<textField pattern="#,##0;(#,##0)">
+				<reportElement x="171" y="0" width="23" height="25" uuid="130d327c-a459-4839-8cc0-11d39d5a8b50"/>
+				<box rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{AGE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="194" y="0" width="28" height="25" uuid="ebc38d69-64c0-4c60-b706-f7ac50268fc4"/>
+				<box leftPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TRX_TYPE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="222" y="0" width="79" height="25" uuid="0dcc49ce-6695-4b7f-9184-df673a276180"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TRX_VOUCHER_ID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="301" y="0" width="74" height="25" uuid="56902d16-6128-4974-8c8d-f4ed9d783537"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CLI_NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="453" y="0" width="28" height="25" uuid="1e2cb3a7-5da6-4e72-89e8-571e60277b1f"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TRX_CURR_ID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="481" y="0" width="56" height="25" uuid="a9f75ae5-2756-44bd-9d30-b66e6dc104b7"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TRX_CURR_RATE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="537" y="0" width="78" height="25" uuid="330bc51a-4aaf-4d2d-80cc-b6377d5f6c99"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TRX_INVC_AMOUNT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="615" y="0" width="62" height="25" uuid="0c3d67ce-9be3-4ce0-8aef-bb499977fef9"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TRX_SET_AMOUNT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="677" y="0" width="78" height="25" uuid="c8ae31b7-f9fe-406a-90a2-812103a71a67"/>
+				<box rightPadding="2">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right" verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{OUTSTANDING}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="35" y="0" width="28" height="25" uuid="d8a24d66-ce20-4b40-abc2-1c39653b8d25"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="375" y="0" width="78" height="25" uuid="222fb890-76aa-4cc2-ac83-b8e115b3493e"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TRX_DESCRIPTION} == null ?
+"" : (
+        $F{TRX_DESCRIPTION}.length() <= 22 ?
+        $F{TRX_DESCRIPTION} : $F{TRX_DESCRIPTION}.substring(0,22)
+     )]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="755" y="0" width="47" height="25" uuid="b2434800-a3e6-4d53-88e6-6d28bc01998d"/>
+				<box leftPadding="0">
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SA_NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="117" y="0" width="54" height="25" uuid="3e6da700-7d5b-49ef-b353-34bb4852ee18"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TRX_DUE_DATE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="63" y="0" width="54" height="25" uuid="f204ac77-6645-4b50-a8bf-f5da9635017b"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TRX_DATE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="77" splitType="Stretch">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="660" y="20" width="95" height="20" uuid="080c309b-3e81-4ced-b48f-51c57e0dd0b0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{outstandingIDR}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="590" y="20" width="70" height="20" uuid="ecbe3f7d-b8c9-4780-9abb-125dc194b1fe"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sumSettlementIDR}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="443" y="21" width="52" height="20" uuid="3c981132-148a-4a87-8ca3-620627b60b7c"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[IDR]]></text>
+			</staticText>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="660" y="40" width="95" height="20" uuid="5371df89-0c8f-47c6-86df-81f2a6e5aecf"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{outstandingUSD}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="443" y="41" width="52" height="20" uuid="2ba0f823-4ffc-41c5-b6a7-fd1ba9fa00a8"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[USD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="443" y="0" width="52" height="20" uuid="76784803-5ee7-4aff-8976-681175b7e91e"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="495" y="20" width="95" height="20" uuid="40db7426-f8c2-4872-8de7-fdf210878eba"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sumOriginIDR}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="35" y="0" width="767" height="1" uuid="0846a849-4ba6-4391-95a9-41d7d190f071"/>
+			</line>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="590" y="40" width="70" height="20" uuid="532dd33a-3f41-4ef0-af7d-56d982679a6e"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sumSettlementUSD}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="495" y="40" width="95" height="20" uuid="50513d30-e129-4a8a-8389-f95854f405e2"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sumOriginUSD}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

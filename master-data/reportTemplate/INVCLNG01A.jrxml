@@ -1,0 +1,1027 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="InvoiceDirect" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="20" bottomMargin="25" uuid="bf3723d1-1489-40c5-89af-d90b19f5cb5f">
+	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.x" value="23"/>
+	<property name="ireport.y" value="375"/>
+	<subDataset name="INSURER" uuid="142515b4-9b4a-42d4-8b01-ac8113e3b69b">
+		<parameter name="P_VOUCHER_ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="P_TRX_ID" class="java.lang.String"/>
+		<queryString>
+			<![CDATA[SELECT T6B.TRX_INS_ID, T6B.TRX_INS_SHARE,	M5.CLI_NAME,
+case when T6B.TRX_INS_TYPE = '0' then 'Leader' else 'Member' end status
+	FROM TR0006B T6B, MA0005 M5
+	WHERE T6B.TRX_VOUCHER_ID = $P{P_VOUCHER_ID}
+    AND T6B.TRX_TRX_ID = $P{P_TRX_ID}
+    AND T6B.TRX_INS_ID = M5.CLI_CODE;]]>
+		</queryString>
+		<field name="TRX_INS_ID" class="java.lang.String">
+			<fieldDescription><![CDATA[Kode Asuransi/Re]]></fieldDescription>
+		</field>
+		<field name="TRX_INS_SHARE" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[Share (%)]]></fieldDescription>
+		</field>
+		<field name="CLI_NAME" class="java.lang.String">
+			<fieldDescription><![CDATA[Nama Nasabah]]></fieldDescription>
+		</field>
+		<field name="status" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<subDataset name="BANK" uuid="1e23ee98-501c-41c1-b37c-80ef3ca7cdbd">
+		<queryString>
+			<![CDATA[select CONCAT(M22.BANK_CURR_ID, ' - ' , M22.BANK_NAME, ' - A/C No: ', M22.BANK_ACCT_NO ) BANK
+from MA0022 M22
+where M22.BANK_STATUS = '0']]>
+		</queryString>
+		<field name="BANK" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="tc_group" uuid="8cb7e2e0-5488-4db5-8734-9aa64e02ec6e">
+		<parameter name="P_VOUCHER_ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="P_TC_CODE" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select TC.TRX_TC_CODE, REPLACE(
+			REPLACE(
+			 REPLACE(
+			  REPLACE(TC.TRX_TC_DATA,'font-size:','foff-size:'),'font-family','foff-family'),
+			'<font face=','<foff face='),'</font>','</foff>') TRX_TC_DATA
+	from TR0006D TC
+	join MA0014 M14 on M14.PA_CHILD_VALUE = TC.TRX_TC_CODE
+	where TC.TRX_VOUCHER_ID = $P{P_VOUCHER_ID}
+		order by M14.PA_CHILD_CODE ASC;]]>
+		</queryString>
+		<field name="TRX_TC_CODE" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="TRX_TC_DATA" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<subDataset name="checklist" uuid="461062df-0ebc-4371-b2d0-0e6d25226bb7">
+		<parameter name="P_VOUCHER_ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="P_TC_CODE" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[select TE.TRX_PR_SHARE, TE.TRX_PR_DATE from TR0006E TE
+	where TE.TRX_VOUCHER_ID = $P{P_VOUCHER_ID}
+	and TE.TRX_PR_CLIENT = '0'
+	order by TE.TRX_PR_DATE asc;]]>
+		</queryString>
+		<field name="TRX_PR_SHARE" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="TRX_PR_DATE" class="java.sql.Date">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<parameter name="P_DATE" class="java.lang.String"/>
+	<parameter name="P_VOUCHER_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA["230120200020"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_TRX_CLIENT" class="java.lang.String">
+		<defaultValueExpression><![CDATA["10063"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_USER" class="java.lang.String"/>
+	<parameter name="P_TRX_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA["RQ"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT TR.TRX_VOUCHER_ID,
+TRA.TRX_COVER_CODE,
+(SELECT MA12.SA_NAME FROM MA0012 MA12 WHERE MA12.SA_CODE = TR.TRX_OFFICER) OFFICER,
+MA.TC_DESC TYPE_OF_COVER,
+TRA.TRX_REMARKS POLICY_NO,
+TR.TRX_INSURED_NAME,
+case when (TRA.TRX_INS_START = TRA.TRX_INS_END and TRA.TRX_INS_DUR = 0)	then 'TBA'
+when (TRA.TRX_INS_START is not null and TRX_INS_END is not null)
+then concat(date_format(TRA.TRX_INS_START,'%d %M %Y'), ' - ' , date_format(TRA.TRX_INS_END,'%d %M %Y'))
+when TRA.TRX_INS_DUR > 0
+then concat(TRA.TRX_INS_DUR, ' day(s) from ' , date_format(TRA.TRX_INS_START,'%d %M %Y'))end PERIOD,
+TRA.TRX_INCEP_DATE,
+TRA.TRX_INS_INSURED INTEREST_INSURED,
+TRA.TRX_CURR_ID CURR,
+TRA.TRX_SUM_INSURED,
+TRA.TRX_INS_LOCATION RISK_LOCATION,
+TR.TRX_PAY_MTHD PREMIUM_PAYMENT,
+TR.TRX_PERIOD_VLD VALIDATY,
+TRC.TRX_PREMIUM_SELL PREMIUM,
+(TRC.TRX_POL_AMOUNT + TRC.TRX_OTHERS2_AMOUNT) POLICY_COST,
+(TRC.TRX_SDUTY_AMOUNT + TRC.TRX_OTHERS3_AMOUNT) STAMP_DUTY,
+TRC.TRX_OTHERS1_AMOUNT OTHER_AMT,
+TRC.TRX_BANK_AMOUNT BANK_FEE,
+TRC.TRX_DISC_SELL DISCOUNT,
+(TRC.TRX_ADMIN_AMOUNT + TRC.TRX_COM_AMOUNT + TRC.TRX_OTHERS4_AMOUNT + TRC.TRX_BANK_AMOUNT) ADMIN_FEE,
+TRC.TRX_BRKR_FEE BROKER_FEE,
+TRA.TRX_TRX_ID,
+MA5.CLI_NAME ,
+MA5.CLI_ADDRESS,
+M10.CO_NAME,
+M10.CO_ADDRESS,
+M10.CO_PIC_TELP,
+M10.CO_PIC_EMAIL,
+M10.CO_LOGO,
+MA.TC_SALES_TAX IS_PPN,
+(SELECT PA_CHILD_VALUE FROM MA0014 WHERE PA_CHILD_CODE = 'TAXRATEH003') PPN
+FROM TR0006 TR
+JOIN TR0006A TRA ON TRA.TRX_VOUCHER_ID = TR.TRX_VOUCHER_ID
+JOIN TR0006C TRC ON TRC.TRX_VOUCHER_ID = TR.TRX_VOUCHER_ID
+JOIN MA0011 MA ON MA.TC_CODE = TRA.TRX_COVER_CODE
+JOIN MA0005 MA5 ON MA5.CLI_CODE = TR.TRX_CLIENT
+join MA0010 M10
+WHERE TR.TRX_VOUCHER_ID = $P{P_VOUCHER_ID}
+AND TR.TRX_CLIENT = $P{P_TRX_CLIENT}
+AND TR.TRX_TRX_ID = $P{P_TRX_ID}]]>
+	</queryString>
+	<field name="TRX_VOUCHER_ID" class="java.lang.String">
+		<fieldDescription><![CDATA[No. Voucher]]></fieldDescription>
+	</field>
+	<field name="TRX_COVER_CODE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="OFFICER" class="java.lang.String"/>
+	<field name="TYPE_OF_COVER" class="java.lang.String"/>
+	<field name="POLICY_NO" class="java.lang.String"/>
+	<field name="TRX_INSURED_NAME" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="PERIOD" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TRX_INCEP_DATE" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="INTEREST_INSURED" class="java.lang.String"/>
+	<field name="CURR" class="java.lang.String"/>
+	<field name="TRX_SUM_INSURED" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[Tanggal]]></fieldDescription>
+	</field>
+	<field name="RISK_LOCATION" class="java.lang.String"/>
+	<field name="PREMIUM_PAYMENT" class="java.lang.String"/>
+	<field name="VALIDATY" class="java.lang.Integer"/>
+	<field name="PREMIUM" class="java.math.BigDecimal"/>
+	<field name="POLICY_COST" class="java.math.BigDecimal"/>
+	<field name="STAMP_DUTY" class="java.math.BigDecimal"/>
+	<field name="OTHER_AMT" class="java.math.BigDecimal"/>
+	<field name="BANK_FEE" class="java.math.BigDecimal"/>
+	<field name="DISCOUNT" class="java.math.BigDecimal"/>
+	<field name="ADMIN_FEE" class="java.math.BigDecimal"/>
+	<field name="BROKER_FEE" class="java.math.BigDecimal"/>
+	<field name="TRX_TRX_ID" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CLI_NAME" class="java.lang.String">
+		<fieldDescription><![CDATA[Nama Nasabah]]></fieldDescription>
+	</field>
+	<field name="CLI_ADDRESS" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CO_NAME" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CO_ADDRESS" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CO_PIC_TELP" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CO_PIC_EMAIL" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CO_LOGO" class="java.lang.Object">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="IS_PPN" class="java.lang.String"/>
+	<field name="PPN" class="java.math.BigDecimal"/>
+	<group name="INVOICE">
+		<groupHeader>
+			<band height="17">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="388" y="0" width="127" height="17" uuid="87c7a348-81eb-4733-a24f-fe23c19dcc88"/>
+					<textElement verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="9" isBold="false"/>
+						<paragraph rightIndent="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[": " + $P{P_DATE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="330" y="0" width="58" height="17" uuid="d44fac10-fefd-4bec-a618-9fe93db913f9"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="9" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Date"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="306" height="17" uuid="eea843b1-c3fd-4d26-8d5f-7ae077acdac5"/>
+					<textElement verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="11" isBold="false" pdfFontName="Helvetica-Bold"/>
+						<paragraph rightIndent="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CLI_NAME}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="34">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="388" y="0" width="127" height="17" uuid="ad9121a2-62c6-4b45-a5ca-4128a35843f3"/>
+					<textElement verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="9" isBold="false"/>
+						<paragraph rightIndent="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[": " + $P{P_USER}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="330" y="0" width="58" height="17" uuid="21840b50-4e53-4565-ad31-5677cedbd074"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="9" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Created By"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="306" height="17" uuid="6b24b91b-1af1-4953-976a-c07e2b105283"/>
+					<textElement verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="11" isBold="false" pdfFontName="Helvetica-Bold"/>
+						<paragraph rightIndent="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CLI_ADDRESS}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="388" y="17" width="127" height="17" uuid="15e400fc-dc7d-4b06-bcd9-10df460eb7d7"/>
+					<textElement verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="9" isBold="false"/>
+						<paragraph rightIndent="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA[": " + $F{OFFICER}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" x="330" y="17" width="58" height="17" uuid="6087cb00-bde0-43e2-a789-6b4417c7a21e"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="9" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Officer"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="26">
+				<textField>
+					<reportElement x="0" y="0" width="515" height="20" uuid="5142f2ff-f3cf-4dae-84aa-407261ca5b58"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+						<paragraph rightIndent="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA["INVOICE " +  $F{TRX_COVER_CODE} + " NO. " + $F{TRX_VOUCHER_ID}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="60">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="60" uuid="8a75270c-843f-438c-afd5-ba4e72651c88"/>
+					<textElement verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="11" isBold="false"/>
+						<paragraph rightIndent="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA["We are pleased to advise that the cover has been arranged according to your instructions. Please forward your premium we are pleased to advise that the cover has been arranged according to your instructions. Please forward your premium payment as mentioned below immediately to ensure the continuity of cover. Failure to comply with this may invalidate your insurance policy."]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="17">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="153" y="0" width="362" height="17" uuid="5ee38cd3-beab-4b20-96f1-93b887ff738f"/>
+					<textElement verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TYPE_OF_COVER}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="140" height="17" uuid="d7ece4ef-8f98-4288-98b3-e2107804c562"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Type of Cover"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="140" y="0" width="13" height="17" uuid="c5a95b83-c6e9-4246-a045-985105066829"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="17">
+				<textField isStretchWithOverflow="true">
+					<reportElement isPrintRepeatedValues="false" x="0" y="0" width="140" height="17" uuid="820b35f7-2541-4a77-9e8e-8534514d2c3c"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Insurer"]]></textFieldExpression>
+				</textField>
+				<componentElement>
+					<reportElement x="140" y="0" width="375" height="17" uuid="b249e2c3-d802-4994-bd00-f21dd4a41e0a"/>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+						<datasetRun subDataset="INSURER" uuid="6cee1ad1-1a85-402a-80fe-2c58b3af6d44">
+							<datasetParameter name="P_VOUCHER_ID">
+								<datasetParameterExpression><![CDATA[$F{TRX_VOUCHER_ID}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="P_TRX_ID">
+								<datasetParameterExpression><![CDATA[$P{P_TRX_ID}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:listContents height="17" width="375">
+							<textField>
+								<reportElement x="13" y="0" width="362" height="17" uuid="911900b6-8a8e-4c35-8f14-0c3620949100"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Cambria" size="11"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{CLI_NAME} + " " + $F{status} + " " + $F{TRX_INS_SHARE} + " %"]]></textFieldExpression>
+							</textField>
+							<textField isStretchWithOverflow="true">
+								<reportElement isPrintRepeatedValues="false" x="0" y="0" width="13" height="17" uuid="e9eaadc6-14f8-4513-9954-86c43e9dfba2"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Cambria" size="11"/>
+								</textElement>
+								<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+							</textField>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+			</band>
+			<band height="17">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="140" y="0" width="13" height="17" uuid="ef5727d8-4f93-4253-ac5f-a46ee6a3a68c"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="140" height="17" uuid="23d2c2a1-4a18-41e1-a51c-0c0a60aae8c7"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Insured Name"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="153" y="0" width="362" height="17" uuid="06e1e52d-b512-4d21-b9b8-4fb0268b42f6"/>
+					<textElement verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TRX_INSURED_NAME}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="17">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="140" y="0" width="13" height="17" uuid="6bded2a3-c1ab-4692-b52b-5b3481c5b2c7"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="140" height="17" uuid="fa34808f-b21a-48ac-9e34-c3df191767c1"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Policy No"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="153" y="0" width="362" height="17" uuid="f9f5a359-78a3-4e88-bc3c-427eb2abb956"/>
+					<textElement verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{POLICY_NO}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="17">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="140" y="0" width="13" height="17" uuid="cde98006-0f49-407e-969a-c98d93f209af"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="140" height="17" uuid="d601a6a0-36d8-4fc7-b397-a9ebeac66515"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Interest Insured"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="153" y="0" width="362" height="17" uuid="3972d849-8c82-41ff-8d1b-b9a0edb56c17"/>
+					<textElement verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{INTEREST_INSURED}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="17">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="140" y="0" width="13" height="17" uuid="bc67222a-5792-464e-8699-e0037b8e57d5"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="140" height="17" uuid="b9479e40-fe02-47d6-8cea-049d053c2036"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Period of Insurance"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="153" y="0" width="362" height="17" uuid="4a1b7015-5163-4f86-9433-8997f43368a9"/>
+					<textElement verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PERIOD}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band/>
+			<band height="17">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="153" y="0" width="362" height="17" uuid="7c5fb4a9-6181-44f9-9594-93fd2a09637d"/>
+					<textElement verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CURR} + " " + new java.text.DecimalFormat("#,##0.00").format($F{TRX_SUM_INSURED})]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="140" y="0" width="13" height="17" uuid="cf6e460c-ad22-4b46-8f76-77d37f4c448c"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="140" height="17" uuid="88d431a6-da47-4f0a-81f3-837b26c4b7cb"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Sum Insured"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="34">
+				<textField isStretchWithOverflow="true">
+					<reportElement isPrintRepeatedValues="false" x="0" y="0" width="140" height="17" uuid="666d6a04-0773-418c-8d8a-da4ed0ff9594"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Risk Location"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement isPrintRepeatedValues="false" x="140" y="0" width="13" height="17" uuid="e9a029cf-fe1d-4261-8d18-e57c9b904506"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement isPrintRepeatedValues="false" x="153" y="0" width="362" height="17" uuid="7ca9fd1d-a0ae-4528-8f37-c875610e17a5"/>
+					<textElement verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{RISK_LOCATION}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement isPrintRepeatedValues="false" x="0" y="17" width="140" height="17" uuid="73d847be-2abe-4028-8b98-368bde3eacaa"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Premium Payment"]]></textFieldExpression>
+				</textField>
+				<componentElement>
+					<reportElement x="140" y="17" width="375" height="17" uuid="b243b96f-fe4b-4278-9838-8c7b00a85222"/>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+						<datasetRun subDataset="checklist" uuid="970de450-35a7-4b14-8138-a6a619ea0ffc">
+							<datasetParameter name="P_VOUCHER_ID">
+								<datasetParameterExpression><![CDATA[$F{TRX_VOUCHER_ID}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:listContents height="17" width="375">
+							<textField isStretchWithOverflow="true">
+								<reportElement x="13" y="0" width="362" height="17" uuid="a25d96fe-3de0-40f3-8e8c-908036b521fa"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Cambria" size="11"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{TRX_PR_SHARE} + " %  at  " + new SimpleDateFormat("dd MMM YYYY").format($F{TRX_PR_DATE})]]></textFieldExpression>
+							</textField>
+							<textField isStretchWithOverflow="true">
+								<reportElement isPrintRepeatedValues="false" x="0" y="0" width="13" height="17" uuid="1d03ef95-8676-4fb1-8a6b-181fc34cf231"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Cambria" size="11"/>
+								</textElement>
+								<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+							</textField>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+			</band>
+			<band height="17">
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" isPrintRepeatedValues="false" x="153" y="0" width="362" height="17" uuid="1dd717cf-d04d-4fd9-a06a-0832aea9e4fb"/>
+					<textElement verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["is attached below"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="140" height="17" uuid="9921283c-27cd-41d7-a4d8-c248c931c2c7"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Particulars"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="140" y="0" width="13" height="17" uuid="111319f1-5d07-4d0d-9bed-f859921b2c45"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+				</textField>
+			</band>
+			<band/>
+			<band/>
+			<band height="2" splitType="Stretch"/>
+			<band height="17" splitType="Prevent">
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(-#,##0.00)" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="153" y="0" width="362" height="17" uuid="39ca1561-dc6e-4e9b-b6e8-a1c5f6b4e523"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="11"/>
+						<paragraph rightIndent="200"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PREMIUM}.add($F{OTHER_AMT})]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="140" height="17" uuid="4d4510d8-6b1e-44fa-b0bd-59edb21dca75"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Premium"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="140" y="0" width="13" height="17" uuid="409d386b-ac9c-473f-8700-575b602343df"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="17">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="140" height="17" uuid="cef86ec2-5c72-43b8-bb9f-09030263366b"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Policy / Endorsement Cost"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="140" y="0" width="13" height="17" uuid="a91e437e-8d34-49df-8dfa-6bfa31ddffa1"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(-#,##0.00)" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="153" y="0" width="362" height="17" uuid="db17d44d-2d5b-4d5b-96ea-4d7b297b55b3"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="11"/>
+						<paragraph rightIndent="200"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{POLICY_COST}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="17">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="140" height="17" uuid="1c525f23-da6d-4d95-ab23-07c568219810"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Stamp Duty"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="140" y="0" width="13" height="17" uuid="b6a42ea4-59ca-4226-8c4f-233d254d81f3"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(-#,##0.00)" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="153" y="0" width="362" height="17" uuid="04856f2f-bdc3-462a-8a7d-056a68147a69"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="11"/>
+						<paragraph rightIndent="200"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{STAMP_DUTY}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band/>
+			<band/>
+			<band height="17">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="140" height="17" uuid="416aeab1-e360-4ae1-9b03-2f92004be4cb"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Gross Premium"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="140" y="0" width="13" height="17" uuid="591647b6-429a-4c72-8fd4-be76195268fc"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(-#,##0.00)" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="153" y="0" width="362" height="17" uuid="1d38a50d-e45c-4951-a96e-b28ca03e855e"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="11"/>
+						<paragraph rightIndent="200"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PREMIUM}.add($F{POLICY_COST}).add($F{STAMP_DUTY}).add($F{OTHER_AMT})]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="34">
+				<textField isStretchWithOverflow="true">
+					<reportElement isPrintRepeatedValues="false" x="0" y="0" width="140" height="17" uuid="d6f01e7e-a84b-434b-bfe0-f68a3f5f08ae"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Admin Fee, Admin Cost, Bank, Others"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement isPrintRepeatedValues="false" x="140" y="0" width="13" height="17" uuid="77064c88-b91b-4e55-a02f-1659e66df964"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(-#,##0.00)" isBlankWhenNull="true">
+					<reportElement isPrintRepeatedValues="false" x="153" y="0" width="362" height="17" uuid="f6ddc7a2-6f9e-43af-88b5-88c5e157b248"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="11"/>
+						<paragraph rightIndent="200"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{ADMIN_FEE}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="140" y="17" width="13" height="17" uuid="73f5db24-dfb2-4a26-9af7-d973e34cbacf"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)" isBlankWhenNull="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="153" y="17" width="362" height="17" uuid="152045ef-3cbf-4da4-a9ee-71c1911ddec4"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="11"/>
+						<paragraph rightIndent="200"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DISCOUNT}.negate()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="17" width="140" height="17" uuid="781a44e0-0b71-4cb8-b37a-fa70da3de20f"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Discount"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="17">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="140" height="17" uuid="45d02a07-a924-4340-9b0d-7d6da8cf9cf0"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Total"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="140" y="0" width="13" height="17" uuid="5d974f9b-4253-4a23-9014-0975e8639480"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(-#,##0.00)" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="153" y="0" width="362" height="17" uuid="7058a080-c220-461c-b06a-262d1be84f07"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="11"/>
+						<paragraph rightIndent="200"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PREMIUM}.add($F{POLICY_COST}).add($F{STAMP_DUTY}).add($F{OTHER_AMT}).add($F{ADMIN_FEE}).subtract($F{DISCOUNT})]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="17">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="140" y="0" width="13" height="17" uuid="7939aea0-2041-44d5-9292-36c9585ed880"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(-#,##0.00)" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="153" y="0" width="362" height="17" uuid="ffdd8d18-622b-484d-aa8c-5b229410b2cc"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="11"/>
+						<paragraph rightIndent="200"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{IS_PPN}.equals("Y") || $F{IS_PPN}.equals("y")) ?
+($F{PREMIUM}.add($F{POLICY_COST}).add($F{STAMP_DUTY}).add($F{OTHER_AMT}).add($F{ADMIN_FEE}).subtract($F{DISCOUNT})).multiply($F{PPN}.divide(new BigDecimal("100")))
+: new BigDecimal("0")]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="140" height="17" uuid="3ab91571-2b56-4e88-ad6e-f8a89413d81e"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Tax (PPn)"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="18">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="140" y="0" width="13" height="17" uuid="21d65ed8-095a-49c3-b692-02ce7945dffa"/>
+					<box>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(-#,##0.00)" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="153" y="0" width="362" height="17" uuid="87c4f704-88ef-4f22-bbca-232442481c71"/>
+					<box>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="11"/>
+						<paragraph rightIndent="200"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{PREMIUM}.add($F{POLICY_COST}).add($F{STAMP_DUTY}).add($F{OTHER_AMT}).add($F{ADMIN_FEE}).subtract($F{DISCOUNT})
+.add(($F{IS_PPN}.equals("Y") || $F{IS_PPN}.equals("y")) ?
+($F{PREMIUM}.add($F{POLICY_COST}).add($F{STAMP_DUTY}).add($F{OTHER_AMT}).add($F{ADMIN_FEE}).subtract($F{DISCOUNT})).multiply($F{PPN}.divide(new BigDecimal("100")))
+: new BigDecimal("0"))]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="140" height="17" uuid="2800a395-e998-4666-b3cc-2fd268bb6084"/>
+					<box>
+						<bottomPen lineWidth="0.5"/>
+					</box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Net Total"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="25">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="8" width="140" height="17" uuid="dec48d06-77dd-44a4-a0ea-786b01d6ad5f"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Account Name"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="140" y="8" width="13" height="17" uuid="98b96505-3169-4a10-a171-3e239e7fb760"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00;(-#,##0.00)" isBlankWhenNull="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="153" y="8" width="362" height="17" uuid="22b9904a-c062-4537-9e7c-b448df68e319"/>
+					<textElement verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CO_NAME}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="17">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="140" height="17" uuid="939ae8a8-82ea-432d-968a-a8a1e782b982"/>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Bank"]]></textFieldExpression>
+				</textField>
+				<componentElement>
+					<reportElement x="140" y="0" width="375" height="17" uuid="270e7329-33bc-4775-af22-b519a528bb36"/>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+						<datasetRun subDataset="BANK" uuid="ced77ef5-280f-4201-996e-cef614d3b06e">
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:listContents height="17" width="375">
+							<textField>
+								<reportElement x="13" y="0" width="362" height="17" uuid="6a9e2628-5caf-46f9-a010-e12518d1f347"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Cambria" size="11"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{BANK}]]></textFieldExpression>
+							</textField>
+							<textField isStretchWithOverflow="true">
+								<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="13" height="17" uuid="6281695c-43ed-4aa8-be8d-0de6855c303f"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Cambria" size="11"/>
+								</textElement>
+								<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+							</textField>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+			</band>
+			<band height="9"/>
+			<band height="93">
+				<textField isStretchWithOverflow="true">
+					<reportElement isPrintRepeatedValues="false" x="0" y="0" width="220" height="17" uuid="69045522-5e07-4cb0-87c2-850bf774515c"/>
+					<textElement markup="html">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Signed for and behalf of :"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement isPrintRepeatedValues="false" x="0" y="17" width="220" height="17" uuid="fb6f443e-d6d7-4bd5-a634-013460d4f6e7"/>
+					<textElement markup="html">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CO_NAME}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement isPrintRepeatedValues="false" x="295" y="17" width="220" height="17" uuid="b4c2ae34-458a-4c5c-a90e-bbb4406f014c"/>
+					<textElement markup="html">
+						<font fontName="Cambria" size="11"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Confirm by,"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement isPrintRepeatedValues="false" x="0" y="91" width="220" height="1" uuid="4f5c008b-78ac-47bd-a219-e59091f61615"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement isPrintRepeatedValues="false" x="295" y="91" width="220" height="1" uuid="7fffd3c7-2a5c-40b3-bf43-c35b2ada4546"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+					</box>
+					<textFieldExpression><![CDATA[""]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="10">
+				<break>
+					<reportElement x="0" y="0" width="100" height="1" uuid="a162b74a-86e4-410f-afdf-3ed2d6ac6b1d"/>
+				</break>
+			</band>
+			<band height="25">
+				<textField>
+					<reportElement x="0" y="0" width="515" height="20" uuid="990d35f9-f234-4fad-8d86-5ef0d9d3205f"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Middle" markup="html">
+						<font fontName="Cambria" size="11" isBold="false"/>
+						<paragraph rightIndent="10"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Particular"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="25">
+				<componentElement>
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="17" isPrintWhenDetailOverflows="true" uuid="8ace55f1-bcfb-482a-8655-e3dca799b83e"/>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+						<datasetRun subDataset="tc_group" uuid="626a10c8-698f-4fa6-8369-ec7f23441ae7">
+							<datasetParameter name="P_VOUCHER_ID">
+								<datasetParameterExpression><![CDATA[$F{TRX_VOUCHER_ID}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:listContents height="17" width="515">
+							<textField isStretchWithOverflow="true">
+								<reportElement isPrintRepeatedValues="false" x="0" y="0" width="140" height="17" uuid="023488fd-0f0b-4ce6-9745-d4c6ae0b0152"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Cambria" size="11"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{TRX_TC_CODE}]]></textFieldExpression>
+							</textField>
+							<textField isStretchWithOverflow="true">
+								<reportElement x="153" y="0" width="362" height="17" uuid="8f05ef85-48b0-498e-8c06-88cec5a7fd7d"/>
+								<textElement verticalAlignment="Middle" markup="html">
+									<font fontName="Cambria" size="11"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{TRX_TC_DATA}]]></textFieldExpression>
+							</textField>
+							<textField>
+								<reportElement x="140" y="0" width="13" height="17" uuid="6dda5ce6-0f92-4867-b126-87d0d75bdc77"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Cambria" size="11"/>
+								</textElement>
+								<textFieldExpression><![CDATA[" : "]]></textFieldExpression>
+							</textField>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50">
+			<image>
+				<reportElement x="0" y="0" width="120" height="40" uuid="d67960af-f9dc-419c-ab0d-56866de3a6f0"/>
+				<imageExpression><![CDATA[$F{CO_LOGO}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="60">
+			<printWhenExpression><![CDATA[$V{PAGE_NUMBER} > 1]]></printWhenExpression>
+			<textField>
+				<reportElement x="0" y="35" width="515" height="20" uuid="f244fa4d-c4dc-48e2-92d8-4afcb4996b96"/>
+				<box>
+					<leftPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Cambria" size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["INVOICE " +  $F{TRX_COVER_CODE} + " NO. " + $F{TRX_VOUCHER_ID}]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="90" height="30" uuid="f4061d30-0948-44a2-8d4e-40b569689eb7"/>
+				<imageExpression><![CDATA[$F{CO_LOGO}]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnFooter>
+		<band height="43">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="4" width="359" height="13" uuid="50832a78-5666-42fa-ab57-5b15ea08e5aa"/>
+				<textElement verticalAlignment="Bottom" markup="html">
+					<font fontName="Cambria" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CO_NAME}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="17" width="359" height="13" uuid="8c1610d7-e98d-4aa3-8f03-ee86f2bf2d9b"/>
+				<textElement verticalAlignment="Bottom" markup="html">
+					<font fontName="Cambria" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CO_ADDRESS}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="30" width="359" height="13" uuid="61f7c8d3-2f30-44ab-8708-625d78e42e2b"/>
+				<textElement verticalAlignment="Bottom" markup="html">
+					<font fontName="Cambria" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CO_PIC_TELP} + " " + $F{CO_PIC_EMAIL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="377" y="4" width="80" height="13" uuid="bc2ecb1a-d334-4ee1-bb7f-37f480f80805"/>
+				<textElement textAlignment="Right">
+					<font fontName="Cambria" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="457" y="4" width="53" height="13" uuid="766c90d9-5ac7-4601-b219-e29a3af910c8"/>
+				<textElement>
+					<font fontName="Cambria" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+</jasperReport>

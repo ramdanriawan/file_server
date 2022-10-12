@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<th:block th:replace="fragments/import :: info-header" />
+<th:block th:replace="fragments/import :: css-header" />
+<th:block th:replace="fragments/import :: js-header" />
+</head>
+
+<body id="page-top">
+	<th:block th:replace="fragments/general :: navbar-header" />
+
+	<div id="wrapper">
+		<th:block th:replace="fragments/general :: menu" />
+
+		<div id="content-wrapper">
+			<div class="container-fluid">
+				<th:block th:replace="fragments/general :: panel-page" />
+
+
+				<!-- CONTENT PAGE -->
+				<div id="cart" class="card mb-3">
+					<div id="divContentHeader" class="card-header">
+						<b><span id="titlePage" th:text="${titlePage}"></span></b>
+					</div>
+					<div class="card-body">
+						<div id="journalIndex">
+							<div class="row">
+								<label class="col-md-2">Activity</label>
+								<div class="col-md-2">
+									<select name="activity" id="activity" class="form-control">
+										<option value="all">All</option>
+										<option value="OP">Operating</option>
+										<option value="IN">Investing</option>
+										<option value="FI">Financing</option>
+									</select>
+								</div>
+
+							</div>
+							<br>
+							<div class="row">
+								<label class="col-md-2">Type</label>
+								<div class="col-md-2">
+									<select name="type" id="type" class="form-control" required>
+										<option value="all">All</option>
+										<option value="PY">Payment</option>
+										<option value="RC">Received</option>
+										<option value="PU">Buy</option>
+										<option value="SE">Sell</option>
+										<option value="OT">Other</option>
+									</select>
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<label class="col-md-2">Project</label>
+								<div class="col-md-2">
+									<select name="project" id="project" class="form-control">
+									</select>
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<label class="col-md-2">Office</label>
+								<div class="col-md-2">
+									<select name="office" id="office" class="form-control">
+									</select>
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<label class="col-md-2">Transaction Date</label>
+								<div class="input-group col-md-2">
+									<input id="transactionDate" name="transactionDate" type="text"
+										class="form-control" placeholder="dd/MM/yyyy" disabled>
+									<div class="input-group-append">
+										<button id='btnTransactionDate' class="btn btn-primary"
+											type="button">
+											<i class="fas fa-calendar"></i>
+										</button>
+									</div>
+								</div>
+								<div class="justify-content-center">
+									<label class="">to</label>
+								</div>
+
+								<div class="input-group col-md-2">
+									<input id="toTransactionDate" name="toTransactionDate"
+										type="text" class="form-control" placeholder="dd/MM/yyyy"
+										disabled>
+									<div class="input-group-append">
+										<button id='btnToTransactionDate' class="btn btn-primary"
+											type="button">
+											<i class="fas fa-calendar"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+							<br>
+								<th:block th:replace="fragments/button :: btn-search-reset" />
+							
+						</div>
+						<br><br>
+						<div id="journalResult" hidden="true">
+							<table id="tableJournal" data-toolbar-align="right"
+								data-toggle="table" data-sortable="true" data-url=""
+								data-side-pagination="server" data-pagination="true"
+								data-page-size="5" data-page-list="[5, 10, 25, 50, ALL]">
+								<thead>
+									<tr>
+										<th data-field="glTrxClass" data-sortable="true">Activity</th>
+										<th data-field="glType" data-sortable="true">Type</th>
+										<th data-field="glVoucherId" data-sortable="true">Voucher
+											ID</th>
+										<th data-field="glTrxDateStr" data-sortable="true">Date</th>
+										<th data-field="glTrxClientDesc" >Client</th>
+										<th data-field="glTrxDesc">Description</th>
+										<th data-field="glTrxValueIdrStr" data-halign="right"
+											data-align="right">Amount</th>
+									</tr>
+								</thead>
+							</table>
+							
+							
+						</div>
+						<br>
+						<div id="previewJournal" class="card-body" hidden="true">
+							<div class="row justify-content-end">
+								<button id="btnExportXls" class="btn btn-success col-md-2">
+									Export to Excel</button>
+								&nbsp;&nbsp;&nbsp;&nbsp;
+								<button id="btnPrint" class="btn btn-secondary col-md-1">
+									Print</button>
+							</div>
+							
+							<div id="previewJournalHtml" class="viewHtml">
+								
+							</div>
+							<br>
+							<div class="row justify-content-center">
+								<button id="btnClosePreviewJournal" type="button" class="btn btn-danger col-md-2">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<!-- /.container-fluid -->
+			<th:block th:replace="fragments/general :: copyright-footer"></th:block>
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<!-- /#wrapper -->
+
+	<th:block th:replace="fragments/general :: scroll-to-top" />
+	<th:block th:replace="fragments/general :: logout-modal" />
+	<th:block th:replace="fragments/import :: js-body" />
+
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	$('document').ready(function(){
+		$('#activity').select2({ width: '100%' });
+		$('#type').select2({ width: '100%' });
+		$('#project').select2({ width: '100%' });
+		$('#office').select2({ width: '100%' });
+		
+		$.ajax({
+	        url: "/gui-re-broker/accounting-report/inquiry-journal/dropdown-project",
+	        
+	    }).then(function(data) {
+	    	
+	    	$('#project').select2({
+	  		  width: '100%',
+	  		  data:(JSON.parse(data)).results
+	  		});
+	    });
+		
+		$.ajax({
+	        url: "/gui-re-broker/accounting-report/inquiry-journal/dropdown-office",
+	        
+	    }).then(function(data) {
+	    	
+	    	$('#office').select2({
+	  		  width: '100%',
+	  		  data:(JSON.parse(data)).results
+	  		});
+	    });
+		
+		$('#transactionDate').datepicker({
+			dateFormat: 'dd/mm/yy',
+			changeMonth: true,
+			changeYear: true
+		}).datepicker('setDate', /*[[${appDate}]]*/);
+		$('#transactionDate').trigger('change');
+		$('#toTransactionDate').datepicker({
+			dateFormat: 'dd/mm/yy',
+			changeMonth: true,
+			changeYear: true,
+	  		minDate: /*[[${appDate}]]*/
+		}).datepicker('setDate', /*[[${appDate}]]*/);
+		
+		$('#transactionDate').change(function() {		
+			$('#toTransactionDate').datepicker('option', 'minDate', $('#transactionDate').val());
+		});
+		
+		$('#btnTransactionDate').click(function(){
+			$('#transactionDate').datepicker('show');
+		});
+		$('#btnToTransactionDate').click(function(){
+			$('#toTransactionDate').datepicker('show');
+		});
+		
+		$('#btnSearch').click(function(){
+			var url = "/gui-re-broker/accounting-report/inquiry-journal/inquiry?";
+			var	activity = $('#activity').val();
+			var	type = $('#type').val();
+			var	project = $('#project').val();
+			var	office = $('#office').val();
+			var	transactionDate = $('#transactionDate').val();
+			var	to = $('#toTransactionDate').val();
+			url = url+"activity="+activity;
+			url = url+"&type="+type;
+			url = url+"&project="+project;
+			url = url+"&office="+office;
+			url = url+"&transactionDate="+transactionDate;
+			url = url+"&to="+to;
+			
+			$('#tableJournal').bootstrapTable('refreshOptions', {
+			    theadClasses: 'thead-dark',
+			    url: url
+			});
+			$('#journalResult').removeAttr('hidden');
+		});
+		
+		$('#btnReset').click(function(){
+			$('#journalResult').attr('hidden', true);
+			$('#previewJournal').attr('hidden', true);
+			$('#activity').val('all').trigger('change');
+			$('#type').val('all').trigger('change');
+			$('#project').val('all').trigger('change');
+			$('#office').val('all').trigger('change');
+			$('#transactionDate').datepicker('setDate', /*[[${appDate}]]*/).trigger('change');
+			$('#toTransactionDate').datepicker('setDate', /*[[${appDate}]]*/).trigger('change');
+		});
+		$('#tableJournal').on('click-row.bs.table',function(e, row, $tr) {
+			showPreviewJournal(row.glVoucherId);
+		});
+		
+		$('#btnExportXls').click(function() {
+			exportXsl();
+		});
+		$('#btnPrint').click(function() {
+			print();
+		});
+		$('#btnClosePreviewJournal').click(function() {
+			location.reload();
+		});
+	});
+	var printObject = null;
+	
+	function showPreviewJournal(voucherIdEdit){
+		$('#btnExportXls').attr('disabled', true);
+		$('#btnPrint').attr('disabled', true);
+		$('#previewJournalHtml').html("Loading...");
+		var data = {
+				voucherId:voucherIdEdit
+			}
+		$.ajax({ 
+	        type: "POST",
+	        dataType: "json",
+	        contentType: "application/json",
+	        data:JSON.stringify(data),
+	        url: "/gui-re-broker/accounting/entry-journal/edit",
+	    }).then(function(resultObject){
+	    	printObject = resultObject;
+	    	var activity = resultObject.tR0001Entity.glTrxClass;
+	    	var type = resultObject.tR0001Entity.glType;
+	    	var voucher = resultObject.tR0001Entity.glVoucherId
+	    	var transaction = resultObject.tR0001Entity.glTrxDateStr;
+	    	var dueDate = resultObject.tR0001Entity.glTrxDueStr;
+	    	var client = resultObject.tR0001Entity.glTrxClientDesc;
+	    	var voucherId = activity+"-"+type+"-"+voucher;
+	    	var url = '/gui-re-broker/accounting/entry-journal/print-journal';
+			var param = "";
+			param = param+"voucher="+voucher+"&";
+			param = param+"transactionDate="+transaction+"&";
+			param = param+"dueDate="+dueDate+"&";
+			param = param+"voucherId="+voucherId+"&";
+			param = param+"client="+client;
+			
+			param = encodeURI(param);
+			
+			$('#previewJournal').removeAttr('hidden');
+			$('#previewJournalHtml').load(url, param);
+			$('#btnExportXls').removeAttr('disabled');
+			$('#btnPrint').removeAttr('disabled');
+	    });	
+		
+	}
+	
+	function exportXsl(){
+		var activity = printObject.tR0001Entity.glTrxClass;
+    	var type = printObject.tR0001Entity.glType;
+    	var voucher = printObject.tR0001Entity.glVoucherId
+    	var transaction = printObject.tR0001Entity.glTrxDateStr;
+    	var dueDate = printObject.tR0001Entity.glTrxDueStr;
+    	var client = printObject.tR0001Entity.glTrxClientDesc;
+    	var voucherId = activity+"-"+type+"-"+voucher;
+		var url = '/gui-re-broker/accounting/entry-journal/export-excel?';
+		
+		var param = "";
+		param = param+"voucher="+voucher+"&";
+		param = param+"transactionDate="+transaction+"&";
+		param = param+"dueDate="+dueDate+"&";
+		param = param+"voucherId="+voucherId+"&";
+		param = param+"client="+client;
+		
+		param = encodeURI(param);
+		
+		window.open(url+param, '_blank');
+	}
+	
+	function print(){
+		var activity = printObject.tR0001Entity.glTrxClass;
+    	var type = printObject.tR0001Entity.glType;
+    	var voucher = printObject.tR0001Entity.glVoucherId
+    	var transaction = printObject.tR0001Entity.glTrxDateStr;
+    	var dueDate = printObject.tR0001Entity.glTrxDueStr;
+    	var client = printObject.tR0001Entity.glTrxClientDesc;
+    	var voucherId = activity+"-"+type+"-"+voucher;
+		
+		var url = '/gui-re-broker/accounting/entry-journal/print?';
+		var param = "";
+		param = param+"voucher="+voucher+"&";
+		param = param+"transactionDate="+transaction+"&";
+		param = param+"dueDate="+dueDate+"&";
+		param = param+"voucherId="+voucherId+"&";
+		param = param+"client="+client;
+		
+		param = encodeURI(param);
+		
+		window.open(url+param, '_blank');
+	}
+	/*]]>*/
+</script>
+</html>

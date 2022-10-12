@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+	<th:block th:fragment="view-tab">
+		<div class="card mb-3">
+			<div class="card-body">
+				<div id="divPlacingSlip" class="row">
+					<div class="col-md-3">
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input"
+								name="t8-placingSlip" id="t8-placingSlip"> <label
+								class="custom-control-label" for="t8-placingSlip">Placing
+								Slip</label>
+						</div>
+					</div>
+					<div class="col-md-1">
+						<label>Remarks </label>
+					</div>
+					<div class="col-md-6">
+						<input type="text" name="t8-placingSlipRemarks"
+							id="t8-placingSlipRemarks" class="form-control" />
+					</div>
+				</div>
+				<br>
+				<div id="divQuotation" class="row">
+					<div class="col-md-3">
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input"
+								name="t8-quotation" id="t8-quotation"> <label
+								class="custom-control-label" for="t8-quotation">Quotation</label>
+						</div>
+					</div>
+					<div class="col-md-1">
+						<label>Remarks </label>
+					</div>
+					<div class="col-md-6">
+						<input type="text" name="t8-quotationRemarks"
+							id="t8-quotationRemarks" class="form-control" />
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="row justify-content-center">
+							<label>Client Confirmation</label>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="input-group">
+							<input id="t8-clientConfirmationDate"
+								name="t8-clientConfirmationDate" type="text"
+								class="form-control" disabled>
+							<div class="input-group-append">
+								<button id='t8-btnclientConfirmationDate'
+									class="btn btn-primary" type="button">
+									<i class="fas fa-calendar"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-5">
+						<input type="text" name="t8-clientConfirmationInfo"
+							id="t8-clientConfirmationInfo" class="form-control" />
+					</div>
+				</div>
+
+				<br>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input"
+								name="t8-closing" id="t8-closing"> <label
+								class="custom-control-label" for="t8-closing">Closing</label>
+						</div>
+					</div>
+					<div class="col-md-1">
+						<label>Remarks </label>
+					</div>
+					<div class="col-md-6">
+						<input type="text" name="t8-closingRemarks" id="t8-closingRemarks"
+							class="form-control" />
+					</div>
+				</div>
+
+				<br>
+				<div class="row justify-content-center">
+					<div class="col-md-2">
+						<button id="t8-send" class="btn btn-success col-md-12">Send</button>
+					</div>
+				</div>
+				<br>
+
+			</div>
+		</div>
+		<script type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+				$('#t8-clientConfirmationDate').datepicker({
+					dateFormat: 'dd/mm/yy',
+					changeMonth: true,
+					changeYear: true,
+				});
+	
+				$('#t8-btnclientConfirmationDate').click(function() {
+					$('#t8-clientConfirmationDate').datepicker('show');
+				});
+				
+				$('#t8-placingSlip').change(function() {
+					$('#t8-quotation').prop('checked', false);
+					$('#t8-closing').prop('checked', false);
+				});
+				
+				$('#t8-quotation').change(function() {
+					$('#t8-placingSlip').prop('checked', false);
+					$('#t8-closing').prop('checked', false);
+				});
+				
+				$('#t8-closing').change(function() {
+					$('#t8-placingSlip').prop('checked', false);
+					$('#t8-quotation').prop('checked', false);
+				});
+				
+			/*]]>*/	
+		</script>
+	</th:block>
+
+</body>
+
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+</head>
+
+<body>
+
+	<th:block th:fragment="insurance-tab">
+		<div class="card mb-3">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-12">
+						<table id="insuranceTable" data-toolbar-align="right" data-toggle="table" data-sortable="true"
+							data-url="" data-side-pagination="server" data-pagination="true" data-page-size="5"
+							data-unique-id="idKey" data-pagination-v-align="top" data-page-list="[5, 10, 25, 50, ALL]">
+							<thead>
+								<tr>
+									<th data-field="trxInsId">Insurer</th>
+									<th data-field="trxInsType">Position</th>
+									<th data-field="trxInsShare">Share</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+				<br>
+				<br>
+
+				<div class="row">
+					
+					<div class="col-md-12">
+						<label>Finance History</label><br>
+						<table id="financeHistoryTable" data-toolbar-align="right" data-toggle="table"
+							data-sortable="true" data-url="" data-side-pagination="server" data-pagination="true"
+							data-page-size="5" data-unique-id="idKey" data-pagination-v-align="top"
+							data-page-list="[5, 10, 25, 50, ALL]">
+							<thead>
+								<tr>
+									<th data-field="trxDate">Date</th>
+									<th data-field="trxType">Type</th>
+									<th data-field="trxVoucherId">Voucher</th>
+									<th data-field="trxOldType">Type Ref</th>
+									<th data-field="trxOldVoucherId">Voucher Ref</th>
+									<th data-field="trxDescription">Description</th>
+									<th data-field="trxCurrId">Curr</th>
+									<th data-field="trxInvcAmount">Amount</th>
+									<th data-field="trxSetAmount">Settlement</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<script type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+			var listT3AddObject = [];
+
+			$(function () {
+				rest('GET', '/gui-re-broker/marketing-report/production/get-dropdownName').done(function (data) {
+					$('#t3-name').select2({
+						width: '100%',
+						data: data
+					});
+				});
+				new AutoNumeric('#t3-commission', {
+					currencySymbol: '%',
+					decimalCharacter: '.',
+					digitGroupSeparator: ',',
+					decimalPlaces: '4',
+					maximumValue: '100',
+					minimumValue: '0',
+					currencySymbolPlacement: AutoNumeric.options.currencySymbolPlacement.suffix
+				});
+				new AutoNumeric('#t3-commissionAmount', {
+					decimalCharacter: '.',
+					digitGroupSeparator: ',',
+					maximumValue: '9999999999999999.00',
+					minimumValue: '0'
+				});
+
+				$('#t3-addTable').bootstrapTable('hideColumn', 'id');
+				$('#t3-addTable').bootstrapTable('hideColumn', 'nameId');
+
+				t3Reset();
+			});
+
+			function t3Reset() {
+				$('#t3-name').val('').trigger('change');
+				$('#t3-taxId').val('0');
+				AutoNumeric.getAutoNumericElement('#t3-commission').set('0.00');
+				AutoNumeric.getAutoNumericElement('#t3-commissionAmount').set('0.00');
+			}
+
+			function t3Add() {
+				var valReq = validationRequiredAddT3();
+
+				if (valReq.length > 0) {
+					alert('Please fill : ' + valReq + '.');
+
+					return null;
+				}
+
+				var commVal = parseFloat(AutoNumeric.getAutoNumericElement('#t3-commission').get());
+				var commAmtVal = parseFloat(AutoNumeric.getAutoNumericElement('#t3-commissionAmount').get());
+				if (commVal == 0 && commAmtVal == 0) {
+					alert('Commission(%) or Commission(Amt) must greater than 0');
+
+					return null;
+				} else if (commVal > 0 && commAmtVal > 0) {
+					alert("Commission(%) and Commission(Amt), both can't greater than 0");
+
+					return null
+				}
+
+				var id = create_UUID();
+				var nameId = $('#t3-name').val();
+				var name = $('#t3-name option:selected').html();
+				var taxId = $('#t3-taxId').val();
+				var commission = $('#t3-commission').val();
+				var commissionAmount = $('#t3-commissionAmount').val();
+				var action = "<button class=\"btn btn-danger\" onclick=\"t3RemoveAdd('" + id + "')\">"
+					+ "<i class=\"fa fa-trash\"></i>"
+					+ "</button>";
+
+				var data = {
+					id: id,
+					nameId: nameId,
+					name: name,
+					taxId: taxId,
+					commission: commission.replace('%', ''),
+					commissionAmount: commissionAmount,
+					action: action
+				};
+
+				listT3AddObject.push(data);
+
+				$('#t3-addTable').bootstrapTable('load', listT3AddObject);
+
+				t2Com = t2Com + parseFloat(commissionAmount.replace(/,/g, ""));
+
+				t3Reset();
+			}
+
+			function validationRequiredAddT3() {
+				var field = [];
+
+				var name = $('#t3-name').val();
+				if (!name.trim())
+					field.push("Name");
+
+				var commission = AutoNumeric.getAutoNumericElement('#t3-commission').get();
+				if (!commission.trim())
+					AutoNumeric.getAutoNumericElement('#t3-commission').set('0.0000');
+
+				var commissionAmount = AutoNumeric.getAutoNumericElement('#t3-commissionAmount').get();
+				if (!commissionAmount.trim())
+					AutoNumeric.getAutoNumericElement('#t3-commissionAmount').set('0.00');
+
+				return field;
+			}
+
+			function t3RemoveAdd(id) {
+				var t3AddObject = $('#t3-addTable').bootstrapTable('getRowByUniqueId', id);
+				t2Com = t2Com - parseFloat(t3AddObject.commissionAmount.replace(/,/g, ""));
+				$('#t3-addTable').bootstrapTable('removeByUniqueId', id);
+			}
+
+			$('#t3-name').change(function () {
+				var name = $('#t3-name').val();
+				if (!$.trim(name))
+					$('#t3-taxId').val('0');
+				else
+					setNameT3();
+			});
+
+			function setNameT3() {
+				var url = /*[[@{/marketing-report/production/ma-0012}]]*/;
+				var saCode = $('#t3-name').val();
+
+				$.ajax({
+					dataType: 'JSON',
+					url: url + "?saCode=" + saCode
+				}).then(function (data) {
+					$('#t3-taxId').val(data.saTaxId);
+				});
+			}
+
+			/*]]>*/
+		</script>
+	</th:block>
+
+</body>
+
+</html>

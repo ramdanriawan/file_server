@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+</head>
+
+<body>
+
+	<th:block th:fragment="memo-tab">
+		<div class="card mb-3">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-3">
+						<label>U/W Memo</label>
+
+					</div>
+					<div class="col-md-9">
+						<textarea class="form-control" id="txInsMemo" name="txInsMemo" rows="5"></textarea>
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-md-3">
+						<label>Action to Take</label>
+
+					</div>
+					<div class="col-md-9">
+						<textarea class="form-control" id="txActTake" name="txActTake" rows="5"></textarea>
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-md-12" align="center">
+						<button id='btnAddMemoTab' class="btn btn-primary">add</button>
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-md-12" align="center">
+						<table id="memoTable" data-toolbar-align="right" data-toggle="table" data-sortable="true"
+							data-url="" data-side-pagination="server" data-pagination="true" data-page-size="5"
+							data-unique-id="idKey" data-pagination-v-align="top" data-page-list="[5, 10, 25, 50, ALL]">
+							<thead>
+								<tr>
+									<th data-field="txDateAct">Date</th>
+									<th data-field="txInsMemo">U/W Memo</th>
+									<th data-field="txActTake">Action To Take</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+			$(function () {
+
+			});
+		</script>
+	</th:block>
+
+</body>
+
+</html>

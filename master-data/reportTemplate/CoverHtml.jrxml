@@ -1,0 +1,806 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CoverHtml" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="40" rightMargin="40" topMargin="40" bottomMargin="40" isIgnorePagination="true" uuid="6852d899-f65c-430b-8217-16a9005a12d3">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="dataset_reins" uuid="1357de4c-66f8-4226-bc1f-be2dd61eff56">
+		<parameter name="P_VOUCHER_ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="P_TRX_ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="P_REINS_CODE" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT T6B.TRX_INS_ID, T6B.TRX_INS_SHARE, M5.CLI_NAME FROM TR0006B T6B, MA0005 M5
+	WHERE T6B.TRX_VOUCHER_ID = $P{P_VOUCHER_ID}
+    AND T6B.TRX_TRX_ID = $P{P_TRX_ID}
+    AND T6B.TRX_INS_ID = M5.CLI_CODE;]]>
+		</queryString>
+		<field name="TRX_INS_ID" class="java.lang.String">
+			<fieldDescription><![CDATA[Kode Asuransi/Re]]></fieldDescription>
+		</field>
+		<field name="TRX_INS_SHARE" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[Share (%)]]></fieldDescription>
+		</field>
+		<field name="CLI_NAME" class="java.lang.String">
+			<fieldDescription><![CDATA[Nama Nasabah]]></fieldDescription>
+		</field>
+	</subDataset>
+	<subDataset name="dataset_cli" uuid="5272d1bd-6c71-4699-8dee-33d2013361d2">
+		<parameter name="P_VOUCHER_ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT T.TRX_CLIENT, M5.CLI_NAME FROM TR0006 T, MA0005 M5
+	WHERE T.TRX_VOUCHER_ID = $P{P_VOUCHER_ID}
+    	AND T.TRX_TRX_ID = 'RQ'
+    	AND T.TRX_CLIENT = M5.CLI_CODE;]]>
+		</queryString>
+		<field name="TRX_CLIENT" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="CLI_NAME" class="java.lang.String">
+			<fieldDescription><![CDATA[Nama Nasabah]]></fieldDescription>
+		</field>
+	</subDataset>
+	<subDataset name="dataset_reins_sum" uuid="7acdf433-37ea-4117-b805-bf889c746a47">
+		<parameter name="P_VOUCHER_ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="P_TRX_ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="P_REINS_CODE" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT SUM(T.TRX_INS_SHARE) TRX_INS_SHARE FROM TR0006B T
+	WHERE T.TRX_VOUCHER_ID = $P{P_VOUCHER_ID}
+    AND T.TRX_TRX_ID = $P{P_TRX_ID}
+    AND TRX_INS_ID like '%$P!{P_REINS_CODE}%';]]>
+		</queryString>
+		<field name="TRX_INS_SHARE" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[Share (%)]]></fieldDescription>
+		</field>
+		<variable name="SUM_SHARE" class="java.math.BigDecimal" calculation="Sum">
+			<variableExpression><![CDATA[$F{TRX_INS_SHARE}]]></variableExpression>
+			<initialValueExpression><![CDATA[new BigDecimal("0")]]></initialValueExpression>
+		</variable>
+	</subDataset>
+	<subDataset name="dataset_ii" uuid="bd15de8b-d4aa-40c1-90e5-d0cc9adc6e0a">
+		<parameter name="P_VOUCHER_ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="P_TRX_ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT DISTINCT DATE_FORMAT(MIN(T.TRX_INS_START), '%d/%m/%Y') TRX_INS_START,
+	DATE_FORMAT(MAX(T.TRX_INS_END), '%d/%m/%Y') TRX_INS_END,
+	M11.TC_DESC FROM TR0006A T, MA0011 M11
+	WHERE T.TRX_VOUCHER_ID = $P{P_VOUCHER_ID}
+    	AND T.TRX_TRX_ID = $P{P_TRX_ID}
+    	AND T.TRX_COVER_CODE = M11.TC_CODE]]>
+		</queryString>
+		<field name="TRX_INS_START" class="java.lang.String">
+			<fieldDescription><![CDATA[Mulai Asuransi]]></fieldDescription>
+		</field>
+		<field name="TRX_INS_END" class="java.lang.String">
+			<fieldDescription><![CDATA[Akhir Asuransi]]></fieldDescription>
+		</field>
+		<field name="TC_DESC" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<subDataset name="dataset_ii_sum" uuid="81af91ca-4cf8-4d17-a14f-2a3b94f65da3">
+		<parameter name="P_VOUCHER_ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="P_TRX_ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT SUM(TRX_SUM_INSURED) SUM_INSURED FROM TR0006A T
+	WHERE T.TRX_VOUCHER_ID = $P{P_VOUCHER_ID}
+    	AND T.TRX_TRX_ID = $P{P_TRX_ID}]]>
+		</queryString>
+		<field name="SUM_INSURED" class="java.math.BigDecimal"/>
+	</subDataset>
+	<subDataset name="dataset_cli_sum" uuid="e8c7b88a-e1cb-4d9e-979b-a93adbc1b110">
+		<parameter name="P_VOUCHER_ID" class="java.lang.String">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="REINS_SHARE" class="java.math.BigDecimal">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<queryString>
+			<![CDATA[SELECT SUM(T.TRX_SHARE) ORDER_HEREON FROM TR0006 T
+	WHERE T.TRX_VOUCHER_ID = $P{P_VOUCHER_ID}
+    	AND T.TRX_TRX_ID = 'RQ';]]>
+		</queryString>
+		<field name="ORDER_HEREON" class="java.math.BigDecimal"/>
+	</subDataset>
+	<parameter name="P_DATE" class="java.lang.String"/>
+	<parameter name="P_VOUCHER_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_CLIENT_NAME" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_REINS_CODE" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_SLIP_NO" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT DISTINCT T.TRX_TRX_ID, T.TRX_VOUCHER_ID, T.TRX_CLIENT,
+	T.TRX_INSURED_NAME,
+	SUM(T.TRX_SUM_INSURED) TRX_SUM_INSURED,
+	T.TRX_TSI_AMOUNT,
+	M10.CO_LOGO, M10.CO_NAME,
+	(SELECT TB.TRX_INS_SHARE FROM TR0006B TB
+		WHERE TB.TRX_VOUCHER_ID = $P{P_VOUCHER_ID}
+		AND TB.TRX_TRX_ID = 'RQ'
+		AND TB.TRX_INS_ID = $P{P_REINS_CODE}) REINS_SHARE
+	FROM TR0006 T, MA0010 M10
+	WHERE T.TRX_VOUCHER_ID = $P{P_VOUCHER_ID}
+	AND T.TRX_TRX_ID = 'RQ';]]>
+	</queryString>
+	<field name="TRX_TRX_ID" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TRX_VOUCHER_ID" class="java.lang.String">
+		<fieldDescription><![CDATA[No. Voucher]]></fieldDescription>
+	</field>
+	<field name="TRX_CLIENT" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TRX_INSURED_NAME" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TRX_SUM_INSURED" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TRX_TSI_AMOUNT" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CO_LOGO" class="java.lang.Object">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CO_NAME" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="REINS_SHARE" class="java.math.BigDecimal"/>
+	<group name="footer">
+		<groupFooter>
+			<band height="25" splitType="Prevent">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="20" uuid="94e87c5b-a10d-47dd-bea6-b51e7a4e65e1"/>
+					<textElement>
+						<font fontName="Arial" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Dear Sirs/Madams"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="50">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="50" uuid="488e3b66-9404-466f-814a-2d7c2be9c9ac"/>
+					<textElement textAlignment="Justified" markup="styled">
+						<font fontName="Arial" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["In accordance with your instructions, we have effected reinsurance cover for your account as mentioned under our Closing Slip or Evidence of Cover (attached). Please examine this document carefully and notify us immediately if it is incorrect, or does not meet your requirements, or if the security is unacceptable. Unless we receive such notice, it is deemed that this document reflects the coverage you require and the security contained herein is duly approved."]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="51">
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="0" y="10" width="170" height="20" uuid="4de0fc16-bd68-4b5e-b9a7-6fe2ba1a6599"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font fontName="Arial" size="10" isBold="true" isUnderline="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Summary of Cover"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="13" y="36" width="125" height="15" uuid="07351401-cf42-46f7-ac42-3b356410865e"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Middle" markup="styled">
+						<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Closing Slip or EOC No."]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="138" y="36" width="11" height="15" uuid="27f89b4b-0ab8-49ff-9029-bac9b4a90ff2"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[":"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="149" y="36" width="365" height="15" uuid="18dffbe0-9b53-4f90-ba32-67fd055cd7cf"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Middle" markup="styled">
+						<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["<style isBold='true' pdfFontName='Helvetica-Bold'>" + $P{P_SLIP_NO} + "</style>"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="15">
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="13" y="0" width="125" height="15" uuid="9b3017a8-9b93-4902-95cb-2bc77c995bef"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Reinsured"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="138" y="0" width="11" height="15" uuid="11d1215f-206a-4707-92f9-2656b1276d4f"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[":"]]></textFieldExpression>
+				</textField>
+				<componentElement>
+					<reportElement x="149" y="0" width="366" height="15" uuid="7434d6bf-5404-4f8f-a413-c111d1f3d038"/>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+						<datasetRun subDataset="dataset_cli" uuid="8260856a-d3c1-424c-8a68-a1a938ea2063">
+							<datasetParameter name="P_VOUCHER_ID">
+								<datasetParameterExpression><![CDATA[$F{TRX_VOUCHER_ID}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:listContents height="15" width="366">
+							<textField>
+								<reportElement isPrintRepeatedValues="false" x="0" y="0" width="366" height="15" uuid="de67ff99-6fd1-40ae-8f91-83fde63f8b90"/>
+								<box>
+									<bottomPen lineWidth="0.0"/>
+								</box>
+								<textElement verticalAlignment="Top">
+									<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{CLI_NAME}]]></textFieldExpression>
+							</textField>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+			</band>
+			<band height="15">
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="138" y="0" width="11" height="15" uuid="d94963ee-38b8-445f-b9a3-eb5112c27fc1"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[":"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="13" y="0" width="125" height="15" uuid="90afa00e-39dc-4366-a1fa-e23e69286d1f"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Assured"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="149" y="0" width="366" height="15" isRemoveLineWhenBlank="true" uuid="317a45b8-002f-468d-ad10-5f4cc3a19b1a"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Top" markup="html">
+						<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{TRX_INSURED_NAME}]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="15">
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="13" y="0" width="125" height="15" uuid="98d6cdeb-3ea1-431b-8128-01e2f8f0ee70"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Type"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="138" y="0" width="11" height="15" uuid="d2840454-198f-4834-b66e-4a30909aebf2"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[":"]]></textFieldExpression>
+				</textField>
+				<componentElement>
+					<reportElement x="149" y="0" width="366" height="15" uuid="ffcaf0c3-c187-443b-9210-2459fa979372"/>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+						<datasetRun subDataset="dataset_ii" uuid="9f16fc2b-d6fa-4710-8825-17ed2c3e5617">
+							<datasetParameter name="P_VOUCHER_ID">
+								<datasetParameterExpression><![CDATA[$F{TRX_VOUCHER_ID}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="P_TRX_ID">
+								<datasetParameterExpression><![CDATA[$F{TRX_TRX_ID}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:listContents height="15" width="366">
+							<textField>
+								<reportElement isPrintRepeatedValues="false" x="0" y="0" width="366" height="15" uuid="6312c83b-6425-44a0-8db0-1cd70584ab8e"/>
+								<box>
+									<bottomPen lineWidth="0.0"/>
+								</box>
+								<textElement>
+									<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{TC_DESC}]]></textFieldExpression>
+							</textField>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+			</band>
+			<band height="15">
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="13" y="0" width="125" height="15" uuid="b40376d9-d79a-4deb-b198-2bc49a2bd318"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Period"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="138" y="0" width="11" height="15" uuid="ce8c48a2-ff26-4d59-8536-0470eb36816c"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[":"]]></textFieldExpression>
+				</textField>
+				<componentElement>
+					<reportElement x="149" y="0" width="366" height="15" uuid="2e586435-609b-4f6f-a78d-2af80328d860"/>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+						<datasetRun subDataset="dataset_ii" uuid="622c7804-bdae-4603-8686-799868551902">
+							<datasetParameter name="P_VOUCHER_ID">
+								<datasetParameterExpression><![CDATA[$F{TRX_VOUCHER_ID}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="P_TRX_ID">
+								<datasetParameterExpression><![CDATA[$F{TRX_TRX_ID}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:listContents height="15" width="366">
+							<textField>
+								<reportElement isPrintRepeatedValues="false" x="0" y="0" width="366" height="15" uuid="b8cc30a0-e4b6-4975-9fa8-b46b2a7344c4"/>
+								<box>
+									<bottomPen lineWidth="0.0"/>
+								</box>
+								<textElement>
+									<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+								</textElement>
+								<textFieldExpression><![CDATA[($F{TRX_INS_START} == null ? "-" : $F{TRX_INS_START})
++ "  to  "
++ ($F{TRX_INS_END} == null ? "-" : $F{TRX_INS_END})]]></textFieldExpression>
+							</textField>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+			</band>
+			<band height="20">
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="13" y="0" width="125" height="15" uuid="f3d4f1d9-e1c7-43de-9fdc-2e00fa388f66"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Sum Reinsured / Limits"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="138" y="0" width="11" height="15" uuid="acfd7799-21ac-498a-939b-5b970329b604"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[":"]]></textFieldExpression>
+				</textField>
+				<componentElement>
+					<reportElement x="149" y="0" width="366" height="15" uuid="4e3ec918-41dd-4c1b-9e48-7572d18cb926"/>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+						<datasetRun subDataset="dataset_ii_sum" uuid="8381756a-5049-425d-a016-017a20ef73a1">
+							<datasetParameter name="P_VOUCHER_ID">
+								<datasetParameterExpression><![CDATA[$F{TRX_VOUCHER_ID}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="P_TRX_ID">
+								<datasetParameterExpression><![CDATA[$F{TRX_TRX_ID}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:listContents height="15" width="366">
+							<textField pattern="#,##0.00">
+								<reportElement isPrintRepeatedValues="false" x="0" y="0" width="366" height="15" uuid="fb034181-141b-413c-9119-f678323b09b5"/>
+								<box>
+									<bottomPen lineWidth="0.0"/>
+								</box>
+								<textElement>
+									<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$F{SUM_INSURED}]]></textFieldExpression>
+							</textField>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+			</band>
+			<band height="15">
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="138" y="0" width="11" height="15" uuid="053b922f-bb9e-4827-816c-5fd8f7142343"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[":"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="13" y="0" width="125" height="15" uuid="b5a956aa-4b70-437d-a924-dd6445d61827"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Order Hereon"]]></textFieldExpression>
+				</textField>
+				<componentElement>
+					<reportElement x="149" y="0" width="366" height="15" uuid="77617039-777c-4f69-8529-2e3507b0a09d"/>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+						<datasetRun subDataset="dataset_cli_sum" uuid="8eb48e82-b64d-4f2c-9b05-3dc0d1c3d866">
+							<datasetParameter name="P_VOUCHER_ID">
+								<datasetParameterExpression><![CDATA[$F{TRX_VOUCHER_ID}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="REINS_SHARE">
+								<datasetParameterExpression><![CDATA[$F{REINS_SHARE}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:listContents height="15" width="366">
+							<textField>
+								<reportElement x="0" y="0" width="365" height="15" uuid="82e7ce82-4a84-4225-9668-1c280c1af17b"/>
+								<textElement>
+									<font fontName="Arial"/>
+								</textElement>
+								<textFieldExpression><![CDATA[new java.text.DecimalFormat("#,##0.0000;(#,##0.0000)")
+        .format(
+            $P{REINS_SHARE} != null ? $P{REINS_SHARE} : $F{ORDER_HEREON}
+        ) + "%"
++"    of 100.0000%"]]></textFieldExpression>
+							</textField>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+			</band>
+			<band height="25">
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="138" y="0" width="10" height="15" uuid="3c2aab2a-2e1f-400b-979e-f26c8f2d37ae"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[":"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="13" y="0" width="125" height="15" uuid="7c5ba1a2-6e20-42e3-a788-5eea2d5f67d7"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Reinsurers"]]></textFieldExpression>
+				</textField>
+				<componentElement>
+					<reportElement x="148" y="0" width="366" height="15" uuid="bda189eb-686c-43a6-9460-a6b9e7fce635"/>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+						<datasetRun subDataset="dataset_reins" uuid="fe74eceb-1979-4889-b418-481e00939962">
+							<datasetParameter name="P_VOUCHER_ID">
+								<datasetParameterExpression><![CDATA[$F{TRX_VOUCHER_ID}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="P_TRX_ID">
+								<datasetParameterExpression><![CDATA[$F{TRX_TRX_ID}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="P_REINS_CODE">
+								<datasetParameterExpression><![CDATA[$P{P_REINS_CODE}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:listContents height="15" width="366">
+							<textField>
+								<reportElement isPrintRepeatedValues="false" x="1" y="0" width="365" height="15" isRemoveLineWhenBlank="true" uuid="c64132ff-8e76-4611-b04e-533ea6592ce2">
+									<printWhenExpression><![CDATA[$F{TRX_INS_ID}.equals($P{P_REINS_CODE})
+    || $P{P_REINS_CODE} == null
+    || "".equals($P{P_REINS_CODE})]]></printWhenExpression>
+								</reportElement>
+								<box>
+									<bottomPen lineWidth="0.0"/>
+								</box>
+								<textElement verticalAlignment="Top">
+									<font fontName="Arial" size="10" isBold="false" isUnderline="false"/>
+								</textElement>
+								<textFieldExpression><![CDATA[!$P{P_REINS_CODE}.equals("") ?
+$F{CLI_NAME} : ($F{TRX_INS_SHARE} + "%" + "    " + $F{CLI_NAME})]]></textFieldExpression>
+							</textField>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+			</band>
+			<band height="23">
+				<componentElement>
+					<reportElement x="149" y="2" width="366" height="20" uuid="d5136a18-5247-4d0b-a38b-3f757d37a35b"/>
+					<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+						<datasetRun subDataset="dataset_reins_sum" uuid="442b6ef2-d00d-402b-97c6-cc9537ae024f">
+							<datasetParameter name="P_VOUCHER_ID">
+								<datasetParameterExpression><![CDATA[$F{TRX_VOUCHER_ID}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="P_TRX_ID">
+								<datasetParameterExpression><![CDATA[$F{TRX_TRX_ID}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="P_REINS_CODE">
+								<datasetParameterExpression><![CDATA[$P{P_REINS_CODE}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:listContents height="20" width="366">
+							<textField isStretchWithOverflow="true">
+								<reportElement x="0" y="1" width="365" height="15" uuid="b71bae0f-1a7a-464e-b298-0fe665233446"/>
+								<textElement verticalAlignment="Middle" markup="styled">
+									<font fontName="Arial" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+								</textElement>
+								<textFieldExpression><![CDATA[!$P{P_REINS_CODE}.equals("") ?
+"" : ($V{SUM_SHARE} + "%")
++ ("    <style isBold='true'>of 100.0000%</style>")]]></textFieldExpression>
+							</textField>
+						</jr:listContents>
+					</jr:list>
+				</componentElement>
+				<line>
+					<reportElement x="149" y="0" width="65" height="1" uuid="3617cb9e-f30b-4927-9686-e621d0e2b208">
+						<printWhenExpression><![CDATA[$P{P_REINS_CODE}.equals("")]]></printWhenExpression>
+					</reportElement>
+				</line>
+			</band>
+			<band/>
+			<band height="30">
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="0" y="10" width="170" height="20" uuid="5febacda-90d8-45b8-a0c0-e66af2964def"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font fontName="Arial" size="10" isBold="true" isUnderline="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Please Note"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="35">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="30" uuid="a30fe55d-8c5f-4aee-bff5-854d3bebe495"/>
+					<textElement textAlignment="Justified">
+						<font fontName="Arial" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["All Reinsurer(s) participation(s) hereon are subject to all terms, clauses and conditions including any PPC/PPW terms, Reinsurer(s) subjectivities, warranties and/or amendments."]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="45">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="40" uuid="0a9828aa-0df7-400d-9477-92eb7a98d7d0"/>
+					<textElement textAlignment="Justified">
+						<font fontName="Arial" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["The Summary of Cover has been prepared by us for your ease of reference to identify the subscribing Reinsurers and their respective participations (as percentage of the whole) on the above referenced reinsurance contract. Please note that the summary is not authorised by subscribing reinsurers."]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="30">
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="0" y="10" width="170" height="20" uuid="ca61b1ed-b105-49cf-b857-60ede2ea56a8"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font fontName="Arial" size="10" isBold="true" isUnderline="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Important Notice"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="25">
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="0" y="0" width="398" height="20" uuid="e0a589ab-9712-4d06-891a-0fee7cb31085"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font fontName="Arial" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Duty to disclose Material Information:"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="55">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="50" uuid="6854f854-277f-4495-b320-e5bea20ec19a"/>
+					<textElement textAlignment="Justified">
+						<font fontName="Arial" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["We would draw your particular attention to the duty to disclose Material information. Material Information is information that would influence a Reinsurer in deciding whether a risk is acceptable and, if so, the premium, terms and conditions to be applied. Failure to disclose such information could result in the reinsurance being rendered void so that claims would not be paid."]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="45">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="40" uuid="7c2455f8-9830-4e49-916a-ffdade5a810c"/>
+					<textElement textAlignment="Justified">
+						<font fontName="Arial" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["The duty of disclosure is re-imposed when there are changes or variations in cover and when the reinsurance document is renewed or extended. In addition, that substantially increase the risk or relate to compliance with a warranty or condition in the reinsurance document must be notified at once."]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="45">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="40" uuid="1cd2be85-0cd2-499b-ab59-7de9b651ad8c"/>
+					<textElement textAlignment="Justified">
+						<font fontName="Arial" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Notwithstanding that material information may be sourced and available elsewhere within CB&H Reinsurance Brokers it remains your responsibility to ensure that such information is disclosed to the CB&H Reinsurance Brokers team to enable us to fulfil our obligations to you."]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="35">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="30" uuid="2d2cd62a-1222-4afd-bd3a-7fae5463899e"/>
+					<textElement textAlignment="Justified">
+						<font fontName="Arial" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["To ensure that cover is not prejudiced, please refer to the CB&H Reinsurance Brokers team if you have any doubt about any information or as to what information needs to be disclosed."]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="30">
+				<textField>
+					<reportElement isPrintRepeatedValues="false" x="0" y="10" width="398" height="20" uuid="fb72b492-b16d-4bc9-af68-98fa4fdf7d6a"/>
+					<box>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement>
+						<font fontName="Arial" size="10" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Premium:"]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="55">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="515" height="50" uuid="e2799efa-bd8b-40be-a2d1-37ef51294073"/>
+					<textElement textAlignment="Justified">
+						<font fontName="Arial" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["In the event of any circumstances arising that could lead to premium not being settled in accordance to the PPC/PPW date(s) indicated on the Reinsurance Facultative Slip above, we would kindly request you to notify us immediately. Failure to comply with this obligation of PPC/PPW might rendered the reinsurance cover invalid and could lead to claims not being met."]]></textFieldExpression>
+				</textField>
+			</band>
+			<band height="120">
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="17" width="515" height="20" uuid="b516c2fc-ac74-48a1-bb86-dc8566041fed"/>
+					<textElement textAlignment="Justified">
+						<font fontName="Arial" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Yours faithfully,"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="100" width="515" height="20" uuid="b9aab63a-960e-4b20-b448-e2fcfff4de06"/>
+					<textElement textAlignment="Justified">
+						<font fontName="Arial" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Authorised Signatory"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true">
+					<reportElement stretchType="RelativeToTallestObject" x="0" y="37" width="516" height="20" uuid="aac9e97a-b827-4087-a91e-a60134e5d3ba"/>
+					<textElement>
+						<font fontName="Arial" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{CO_NAME}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="60" splitType="Stretch">
+			<textField>
+				<reportElement x="187" y="0" width="140" height="50" uuid="ba1510eb-9ab2-4755-b953-8699bbe4f004"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["COMPANY_LOGO"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="52" splitType="Stretch">
+			<printWhenExpression><![CDATA[$V{PAGE_NUMBER} > 1]]></printWhenExpression>
+			<textField>
+				<reportElement x="0" y="5" width="105" height="37" uuid="fdaf4c29-ad42-4111-8a49-2ce47b6d4da3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["COMPANY_LOGO"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="50" splitType="Stretch">
+			<printWhenExpression><![CDATA[$V{PAGE_NUMBER} == 1]]></printWhenExpression>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="0" y="20" width="515" height="20" uuid="f1a7964d-4f5b-4497-8d67-7dc332b6331e"/>
+				<box>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Arial" size="12" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{P_CLIENT_NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="515" height="20" uuid="175d5484-8902-478e-8bb6-3bff4d7dbc32"/>
+				<box>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement markup="html">
+					<font fontName="Arial" size="12" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Jakarta, " + $P{P_DATE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<lastPageFooter>
+		<band height="96">
+			<textField>
+				<reportElement isPrintRepeatedValues="false" x="0" y="0" width="170" height="13" uuid="3dfeca82-66d1-45c3-a551-afa5c8e15882"/>
+				<box>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Arial" size="10" isBold="true" isItalic="true" isUnderline="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Note:"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="13" width="515" height="61" uuid="8a32f5a4-1343-4ac8-87bd-939422ff7014"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Arial" isBold="false" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["In accordance with the issuance of this Placing Slip or Evidence of Cover, this risk has been bound, therefore during policy period reinsurance will be obliged to and fully liable for the line taken including for any revision and/or alteration to related documents, correspondences nor endorsement issued irrespective of the policy and therefore reinsurer liability will remain enforce and cannot be ceased for whatsoever reason."]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+</jasperReport>

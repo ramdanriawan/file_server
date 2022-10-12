@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+</head>
+
+<body>
+
+	<th:block th:fragment="finance-tab">
+		<div class="card mb-3">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-12">
+						<table id="t7Table" data-toolbar-align="right" data-toggle="table" data-sortable="true"
+						data-url="" data-unique-id="idKey">
+							<thead>
+								<tr>
+									<th data-field="txInsDesc">Underwriter</th>
+									<th data-field="txCurrId" data-halign="center" data-align="center"></th>
+									<th data-field="txInsAmountFmt" data-halign="right" data-align="right">DLA</th>
+									<th data-field="txInsReceivedRcFmt" data-halign="right" data-align="right">O/S RC</th>
+									<th data-field="txInsReceivedPyFmt" data-halign="right" data-align="right">O/S PY</th>
+									<th data-field="receive" data-halign="right" data-align="right">Receive</th>
+									<th data-field="action" data-halign="center" data-align="center"></th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+				
+				<br><br>
+			
+				<div class="row">
+					<div class="col-md-1">
+						<label>Entry Date</label>
+					</div>
+					<div class="col-md-2">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="input-group">
+									<input id="t7EntryDate" name="t7EntryDate" type="text" class="form-control" disabled>
+									<div class="input-group-append">
+										<button id='btnt7EntryDate' class="btn btn-primary" type="button">
+											<i class="fas fa-calendar"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-1">
+						<label>Bank</label>
+					</div>
+					<div class="col-md-4">
+						<select id="bank" name="bank" class="form-control">
+						</select>
+						<input type="hidden" name="t7CurrBank" id="t7CurrBank"/>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-md-7">
+						
+					</div>
+					<div class="col-md-3">
+					<input type="checkbox" id="adjustment"> <label for="adjustment">Adjustment</label>
+						<input type="text" name="t7Diff" id="t7Diff" 
+							class="form-control" style="text-align: right;" required disabled/>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-md-1">
+						<label>&nbsp;</label><br>
+						<div class="custom-control custom-radio">
+							<input type="radio" class="custom-control-input"
+								name="t7-radio-rcpy" id="t7-received-radio" value="rc" checked>
+							<label class="custom-control-label" for="t7-received-radio">Received</label>
+						</div>
+					</div>
+					<div class="col-md-1">
+					</div>
+					<div class="col-md-3">
+						<label>Reff. ID</label><br> <input type="text" maxlength=20
+							name="t7ReffId1" id="t7ReffId1" class="form-control"/>
+						</div>
+					<div class="col-md-2">
+						<label>Exchange Rate</label><br> <input type="text" name="t7ExchangeRate1" id="t7ExchangeRate1" 
+							class="form-control" style="text-align: right;" required />
+						</div>
+					<div class="col-md-3">
+						<label>&nbsp;</label>
+						<br> <input type="text" name="t7Pyrc1" id="t7Pyrc1" 
+							class="form-control" style="text-align: right;" required disabled/>
+					</div>
+					<div class="col-md-2">
+						<label>&nbsp;</label><br>
+						<button class="btn btn-success col-md-12" id="t7btnReceived">Received</button>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-md-1">
+						<label>&nbsp;</label><br>
+						
+						<div class="custom-control custom-radio">
+							<input type="radio" class="custom-control-input"
+								name="t7-radio-rcpy" id="t7-payment-radio" value="py">
+							<label class="custom-control-label" for="t7-payment-radio">Payment</label>
+						</div>
+					</div>
+					<div class="col-md-1">
+					</div>
+					<div class="col-md-3">
+						<label></label><br> <input type="text" maxlength=20
+							name="t7ReffId2" id="t7ReffId2" class="form-control"/>
+						</div>
+					<div class="col-md-2">
+						<label></label><br> <input type="text" name="t7ExchangeRate2" id="t7ExchangeRate2" 
+							class="form-control" style="text-align: right;" required />
+						</div>
+					<div class="col-md-3">
+						<label></label><br> <input type="text" name="t7Pyrc2" id="t7Pyrc2" 
+							class="form-control" style="text-align: right;" required disabled/>
+					</div>
+					<div class="col-md-2">
+						<label>&nbsp;</label><br>
+						<button class="btn btn-success col-md-12" id="t7btnPayment">Payment</button>
+					</div>
+				</div>
+				
+				<br><br>
+				
+				<div id="previewJournal" class="card-body" hidden="true">
+					<input type="hidden" name="finance-voucher" id="finance-voucher"/>
+					<div class="row justify-content-end">
+						<button id="btnExportXlsFinance" class="btn btn-success col-md-2">
+							Export to Excel</button>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<button id="btnPrintFinance" class="btn btn-secondary col-md-1">
+							Print</button>
+					</div>
+					
+					<div id="previewJournalHtml" class="viewHtml">
+						
+					</div>
+					<br>
+					<div class="row justify-content-center">
+						<button id="btnClosePreviewJournalFinance" type="button" class="btn btn-danger col-md-2">Close</button>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+		
+		<script type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+			$(function () {
+				$('#bank').select2({ width: '100%' });
+				
+				function initDropdownBank() {
+					return $.ajax({
+						type: 'GET', global: false, dataType: 'json',
+						url: /*[[@{/static-data/dropdown-bank}]]*/
+					});
+				}
+				initDropdownBank().done(function(data) {
+					$('#bank').select2({width: '100%', data: data}).trigger('change');
+				});
+			});
+			
+			new AutoNumeric('#t7ExchangeRate1', {
+			    decimalCharacter : '.',
+			    digitGroupSeparator : ',',
+			    decimalPlaces : '2',
+			    maximumValue : '99999.00',
+			    minimumValue : '0'
+			});
+			AutoNumeric.getAutoNumericElement('#t7ExchangeRate1').set('0.00');
+			
+			new AutoNumeric('#t7ExchangeRate2', {
+			    decimalCharacter : '.',
+			    digitGroupSeparator : ',',
+			    decimalPlaces : '2',
+			    maximumValue : '99999.00',
+			    minimumValue : '0'
+			});
+			AutoNumeric.getAutoNumericElement('#t7ExchangeRate2').set('0.00');
+			
+			new AutoNumeric('#t7Pyrc1', {
+			    decimalCharacter : '.',
+			    digitGroupSeparator : ',',
+			    maximumValue : '999999999999999999.00'
+			});
+			AutoNumeric.getAutoNumericElement('#t7Pyrc1').set('0.00');
+			
+			new AutoNumeric('#t7Pyrc2', {
+			    decimalCharacter : '.',
+			    digitGroupSeparator : ',',
+			    maximumValue : '999999999999999999.00'
+			});
+			AutoNumeric.getAutoNumericElement('#t7Pyrc2').set('0.00');
+			
+			new AutoNumeric('#t7Diff', {
+			    decimalCharacter : '.',
+			    digitGroupSeparator : ',',
+			    decimalPlaces : '2'
+			});
+			AutoNumeric.getAutoNumericElement('#t7Diff').set('0.00');
+			
+			$('#t7EntryDate').datepicker({
+				dateFormat: 'dd/mm/yy',
+				changeMonth: true,
+				changeYear: true
+			});
+			
+			$('#btnt7EntryDate').click(function(){
+				$('#t7EntryDate').datepicker('show');
+			});
+			
+			function getExchangeDateCurr(date, curr) {
+				var url = /*[[@{/static-data/exchangeNonEom}]]*/;
+				url += "?date=" + date;
+				url += "&curr=" + curr;
+				
+				return $.ajax({
+			        url: url
+			    });
+			}
+			
+			$('#t7btnReceived').click(function() {
+				var validation = validationReceived();
+				
+				if(validation.length>0) {
+					$('#validationTabClaim').text(validation);
+					$('#validation-modal').modal('show');
+					
+					return false;
+				}
+				
+				var isProcess = confirm('Are you sure you want to proceed?');
+				if(isProcess)
+					financeProcess('rc');
+			});
+			
+			$('#t7btnPayment').click(function() {
+				var validation = validationPayment();
+				
+				if(validation.length>0) {
+					$('#validationTabClaim').text(validation);
+					$('#validation-modal').modal('show');
+					
+					return false;
+				}
+				var isProcess = confirm('Are you sure you want to proceed?');
+				if(isProcess)
+					financeProcess('py');
+			});
+			
+			$('#btnt7EntryDate').click(function(){
+				$('#t7EntryDate').datepicker('show');
+			});
+			
+			$('#t7ExchangeRate1, #t7ExchangeRate2').change(function(){
+				calculateReceive();
+			});
+			
+			function t7checkboxChange(id) {
+				if(isChecked(id)) {
+					$('#receive_' + id).prop('disabled', false);
+				}else {
+					$('#receive_' + id).prop('disabled', true);
+					AutoNumeric.getAutoNumericElement('#receive_' + id).set($('#hreceive_' + id).val());
+				}
+				
+				calculateReceive();
+			}
+			
+			function t7receiveChange() {				
+				calculateReceive();
+			}
+			
+			function calculateReceive() {
+				var totalRc = 0.00;
+				var totalPy = 0.00;
+				var totalOsRc = 0.00;
+				var totalOsPy = 0.00;
+				var currClaim;
+				var t7Table = $('#t7Table').bootstrapTable('getData');
+				for(var i=0; i<t7Table.length; i++) {
+					var valueRc = 0.00;
+					var valuePy = 0.00;
+					var valueOsRc = 0.00;
+					var valueOsPy = 0.00;
+					var idCheckbox = 't7_' + t7Table[i].idKey;
+					var idReceive = 'receive_' + idCheckbox;
+					
+					if(isChecked(idCheckbox) && getValueRadio() == 'rc') {
+						valueRc = getValueAutonumeric('#' + idReceive);
+						valueOsRc = parseFloat(t7Table[i].txInsReceivedRcFmt.replace(/,/g, ""));
+						currClaim = t7Table[i].txCurrId;
+					}
+					if(isChecked(idCheckbox) && getValueRadio() == 'py') {
+						valuePy = getValueAutonumeric('#' + idReceive);
+						valueOsPy = parseFloat(t7Table[i].txInsReceivedPyFmt.replace(/,/g, ""));
+						currClaim = t7Table[i].txCurrId;
+					}
+					
+					totalRc += valueRc;
+					totalPy += valuePy;
+					totalOsRc += valueOsRc;
+					totalOsPy += valueOsPy;
+				}
+				
+				var exchangeRate1 = getValueAutonumeric('#t7ExchangeRate1');
+				var exchangeRate2 = getValueAutonumeric('#t7ExchangeRate2');
+				
+				AutoNumeric.getAutoNumericElement('#t7Pyrc1').set(totalRc * exchangeRate1);
+				AutoNumeric.getAutoNumericElement('#t7Pyrc2').set(totalPy * exchangeRate2);	
+				
+				//diff
+				if(currClaim != null) {
+					var url = /*[[@{/static-data/exchangeNonEom}]]*/;
+					var appDate = $('#t7EntryDate').val();
+					$.ajax({
+				        url: url + "?date=" + appDate + "&curr=" + currClaim
+				    }).then(function(exchange) {
+				    	var diff = 0.00;
+				    	var exchangeRate = parseFloat(exchange.replace(/,/g, ""));
+						if(getValueRadio() == 'rc') {
+							var pyrc = getValueAutonumeric('#t7Pyrc1');	
+							
+							if(currClaim != 'IDR')
+								diff = totalOsRc - (pyrc/exchangeRate);
+							else
+								diff = totalOsRc - pyrc;
+						}else if(getValueRadio() == 'py') {
+							var pyrc = getValueAutonumeric('#t7Pyrc2');	
+							
+							if(currClaim != 'IDR')
+								diff = totalOsPy - (pyrc/exchangeRate);
+							else
+								diff = totalOsPy - pyrc;
+						}
+							
+						AutoNumeric.getAutoNumericElement('#t7Diff').set(diff);
+				    });
+				}
+			}
+			
+			$('#finance-tab').click(function(){
+				var params = new Object();
+				params.txVoucherId = $('#t1TxVoucherId').val();
+				params.txType = 'CS';
+
+				var url = /*[[@{/marketing/claims-internal/get-finance}]]*/;
+				$.ajax({type: 'POST', global: false, dataType: 'json', async: true,  
+					contentType:'application/json',
+					url: url, 
+					data: JSON.stringify(params), 
+					success: function (result) {
+						var t7Table = [];
+						var reffIn = "";
+						var reffOt = "";
+				    	for(var i=0; i<result.length; i++) {    
+				    		result[i].txInsAmountFmt = formatter_2.format(result[i].txInsAmount).replace('$', '');
+				    		result[i].txInsReceivedRcFmt = formatter_2.format(result[i].txInsAmount - result[i].txInsReceivedRc).replace('$', '');
+				    		result[i].txInsReceivedPyFmt = formatter_2.format(result[i].txInsAmount - result[i].txInsReceivedPy).replace('$', '');
+				    		
+				    		if(result[i].txInsReffIn != null && result[i].txInsReffIn != '')
+				    			reffIn = result[i].txInsReffIn;
+				    		if(result[i].txInsReffOt != null && result[i].txInsReffOt != '')
+					    		reffOt = result[i].txInsReffOt;
+				    		
+				    		var idReceive = "receive_t7_" + result[i].idKey;
+				    		result[i].receive = "<input type=\"text\" id=\"" + idReceive + "\" class=\"form-control\" style=\"text-align: right;\" onChange=t7receiveChange() required disabled >"
+				    					+ "<input type=\"hidden\" id=\"h" + idReceive + "\">";
+				    		
+				    		result[i].action = "<div class=\"input-group\">"
+				    					+ "<div class=\"custom-control custom-checkbox\">" 
+										+ "<input type=\"checkbox\" class=\"custom-control-input\" name=\"t7_" + result[i].idKey + "\" id=\"t7_" + result[i].idKey + "\" onChange=t7checkboxChange(this.id)>"
+										+ "<label class=\"custom-control-label\" for=\"t7_" + result[i].idKey + "\"></label>"
+										+ "</div>"
+										+ "</div>"
+				    		
+				    		t7Table.push(result[i]);
+				    	}
+				    	
+				    	$('#t7ReffId1').val(reffIn);
+				    	$('#t7ReffId2').val(reffOt);
+				    	
+				    	$('#t7Table').bootstrapTable('load', t7Table);
+				    	
+						t7OldTable = $('#t7Table').bootstrapTable('getData');
+						
+						for(var i=0; i<t7OldTable.length; i++) { 
+							var idCheckbox = "t7_" + result[i].idKey
+							var idReceive = "receive_" + idCheckbox;
+							
+							var defaultReceive = 0.00;
+							if(getValueRadio() == 'rc')
+								defaultReceive = t7OldTable[i].txInsAmount - t7OldTable[i].txInsReceivedRc;
+							else
+								defaultReceive = t7OldTable[i].txInsAmount - t7OldTable[i].txInsReceivedPy;
+							
+				    		new AutoNumeric('#'+idReceive, {
+							    decimalCharacter : '.',
+							    digitGroupSeparator : ','
+							});
+				    		$('#h' + idReceive).val(defaultReceive);
+				    		
+							AutoNumeric.getAutoNumericElement('#'+idReceive).set(defaultReceive);
+							
+							if(t7OldTable[i].txInsAmount >= 0 && defaultReceive <= 0.00)
+								$('#' + idCheckbox).prop('disabled', true);
+							else if(t7OldTable[i].txInsAmount < 0 && defaultReceive >= 0.00)
+								$('#' + idCheckbox).prop('disabled', true);
+						}
+						
+						calculateReceive();				    	
+					}
+				});
+			});
+			
+			function getValueAutonumeric(id) {
+				var value = 0.00;
+				
+				var val = AutoNumeric.getAutoNumericElement(id).get();
+				if(val != '' && val != null)
+					value = parseFloat(val);
+				
+				return value;
+			}
+			
+			function validationReceived() {
+				var val = [];
+				
+				var t7Table = $('#t7Table').bootstrapTable('getData');
+				
+				var totalCheck = 0;
+				for(var i=0; i<t7Table.length; i++) {
+					var idCheckbox = 't7_' + t7Table[i].idKey;
+					if($('#' + idCheckbox).prop('checked') == true)
+						totalCheck = totalCheck + 1;
+				}
+				
+				if(totalCheck == 0)
+					val.push(" No Data selected");
+				else if(totalCheck > 1)
+					val.push(" Cannot process multiple data");
+				
+				var t7ReffId1 = $('#t7ReffId1').val();
+				if(t7ReffId1 == "")
+					val.push(" Reff. ID Received is required");
+				
+				return val;
+			}
+			
+			function validationPayment() {
+				var val = [];
+				
+				var t7Table = $('#t7Table').bootstrapTable('getData');
+				
+				var totalCheck = 0;
+				for(var i=0; i<t7Table.length; i++) {
+					var idCheckbox = 't7_' + t7Table[i].idKey;
+					if($('#' + idCheckbox).prop('checked') == true)
+						totalCheck = totalCheck + 1;
+				}
+				
+				if(totalCheck == 0)
+					val.push(" No Data selected");
+				
+				var t7ReffId2 = $('#t7ReffId2').val();
+				if(t7ReffId2 == "")
+					val.push(" Reff. ID Payment is required");
+				
+				return val;
+			}
+			
+			function financeProcess(type) {
+				var params = new Object()
+				params.type = type;
+				params.txVoucherId = $('#t1TxVoucherId').val();
+				params.entryDate = $('#t7EntryDate').val();
+				params.bank = $('#bank option:selected').val();
+				
+				params.currBank = $('#t7CurrBank').val();
+				params.isAdjustment = $('#adjustment').prop('checked');
+				params.diff = $('#t7Diff').val();
+				
+				if(type == 'rc') {
+					params.reffId = $('#t7ReffId1').val();
+					params.exchangeRate = $('#t7ExchangeRate1').val();
+					params.pyrc = $('#t7Pyrc1').val();
+				}else {
+					params.reffId = $('#t7ReffId2').val();
+					params.exchangeRate = $('#t7ExchangeRate2').val();
+					params.pyrc = $('#t7Pyrc2').val();
+				}
+				
+				var t7TableSelected = [];
+				var t7Table = $('#t7Table').bootstrapTable('getData');
+				
+				for(var i=0; i<t7Table.length; i++) {
+					var idCheckbox = 't7_' + t7Table[i].idKey;
+					if(isChecked(idCheckbox)) {
+						var idReceive = 'receive_' + idCheckbox;
+						var value = $('#' + idReceive).val();
+						
+						t7Table[i].receiveValue = value;	
+						t7TableSelected.push(t7Table[i]);
+					}
+				}
+				
+				params.t7Table = t7TableSelected;
+				
+				var url = /*[[@{/marketing/claims-internal/process-finance}]]*/;
+				$.ajax({type: 'POST', global: false, dataType: 'json', async: true,  
+					contentType:'application/json',
+					url: url, 
+					data: JSON.stringify(params), 
+					success: function (result) {
+						$("#finance-voucher").val(result.financeVoucher);
+
+						showPreviewJournalFinance();
+						
+						$('#finance-tab').click();
+					}
+				});
+			}
+			
+			$('#btnClosePreviewJournalFinance').click(function() {
+				$('#previewJournal').prop('hidden', true);
+			});
+			
+			$('#btnExportXlsFinance').click(function() {
+				exportXslFinance();
+			});
+			
+			$('#btnPrintFinance').click(function() {
+				printFinance();
+			});
+			
+			function showPreviewJournalFinance() {
+				var voucher = $('#finance-voucher').val();
+				
+				var url = '/gui-re-broker/marketing/claims-internal/finance-search';
+				var param = "";
+				param = param+"voucher="+voucher;
+				
+				param = encodeURI(param);
+				
+				$('#previewJournal').removeAttr('hidden');
+				$('#previewJournalHtml').load(url, param);
+			}
+			
+			function exportXslFinance() {
+				var voucher = $('#finance-voucher').val();
+				
+				var url = '/gui-re-broker/marketing/claims-internal/finance-export-excel?';
+				
+				var param = "";
+				param = param+"voucher="+voucher;
+				
+				param = encodeURI(param);
+				
+				window.open(url+param, '_blank');
+			}
+			
+			function printFinance(){
+				var voucher = $('#finance-voucher').val();
+				
+				var url = '/gui-re-broker/marketing/claims-internal/finance-view-pdf?';
+				var param = "";
+				param = param+"voucher="+voucher;
+				
+				param = encodeURI(param);
+				
+				window.open(url+param, '_blank');
+			}
+			
+			//default
+			t7receivedRadio();
+			
+			$('input[type="radio"][name="t7-radio-rcpy"]').change(function() {
+				var value = getValueRadio();
+				
+				if(value == 'rc')
+					t7receivedRadio();
+				else
+					t7paymentRadio();
+				
+				$('#finance-tab').click();
+			});
+			
+			function t7receivedRadio() {
+				$('#t7ReffId1').prop('disabled', false);
+				$('#t7ExchangeRate1').prop('disabled', false);
+				$('#t7btnReceived').prop('disabled', false);
+				$('#t7ReffId2').prop('disabled', true);
+				$('#t7ExchangeRate2').prop('disabled', true);
+				$('#t7btnPayment').prop('disabled', true);
+			}
+			
+			function t7paymentRadio() {
+				$('#t7ReffId1').prop('disabled', true);
+				$('#t7ExchangeRate1').prop('disabled', true);
+				$('#t7btnReceived').prop('disabled', true);
+				$('#t7ReffId2').prop('disabled', false);
+				$('#t7ExchangeRate2').prop('disabled', false);
+				$('#t7btnPayment').prop('disabled', false);
+			}
+			
+			function getValueRadio() {
+				return $('input[type="radio"][name="t7-radio-rcpy"]:checked').val();
+			}
+			
+			function isChecked(id) {
+				return $('#' + id).prop('checked');
+			}
+			
+			$('#bank').change(function() {
+				var code = $('#bank').val();
+				setT7CurrBank(code);
+			});
+			
+			function setT7CurrBank(code) {
+				var url = /*[[@{/static-data/currCoa}]]*/;
+				
+				$.ajax({
+			        url: url + "?coaCode=" + code,
+			    }).then(function(data) {
+			    	$('#t7CurrBank').val(data);
+			    	setT7Exchange();
+			    });
+			}
+			
+			function setT7Exchange() {
+				var url = /*[[@{/static-data/exchangeNonEom}]]*/;
+				var appDate = $('#t7EntryDate').val();
+				
+				$.ajax({
+			        url: url + "?date=" + appDate + "&curr=" + $('#t7CurrBank').val()
+			    }).then(function(data) {
+			    	var value = data;
+			    	if($('#t7CurrBank').val() == 'IDR' && data == 0)
+			    		value = '1.00';
+			    	
+			    	AutoNumeric.getAutoNumericElement('#t7ExchangeRate1').set(value);
+			    	AutoNumeric.getAutoNumericElement('#t7ExchangeRate2').set(value);
+			    	
+			    	$('#t7ExchangeRate1').trigger("change");
+			    	$('#t7ExchangeRate2').trigger("change");
+			    });
+			}
+			
+		</script>
+	</th:block>
+
+</body>
+
+</html>

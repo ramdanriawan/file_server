@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+	<th:block th:fragment="value-tab">
+		<div class="card mb-3">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-12">
+						<table id="t5-addTable" data-toggle="table" data-sortable="true"
+							data-unique-id="id">
+							<thead>
+								<tr>
+									<th data-field="id" data-sortable="true">id</th>
+									<th data-field="interestInsured" data-sortable="true">Interest</th>
+									<th data-field="curr">Curr</th>
+									<th data-field="sumInsured" data-halign="right"
+										data-align="right">Sum Insured</th>
+									<th data-field="premiumRe" data-halign="right"
+										data-align="right">Premium(re)</th>
+									<th data-field="totalRe" data-halign="right" data-align="right">Total(re)</th>
+									<th data-field="premium" data-halign="right" data-align="right">Premium</th>
+									<th data-field="total" data-halign="right" data-align="right">Total</th>
+									<th data-field="discount" data-halign="right"
+										data-align="right">Discount</th>
+									<th data-field="netIncome" data-halign="right"
+										data-align="right">Net Income</th>
+									<th data-field="premiumRate" data-halign="right"
+										data-align="right">Premium Rate</th>
+									<th data-field="bFeeRe" data-halign="right" data-align="right">BFee(Re)</th>
+									<th data-field="bFee" data-halign="right" data-align="right">BFee</th>
+									<th data-field="vatRe" data-halign="right" data-align="right">vat(Re)</th>
+									<th data-field="vat" data-halign="right" data-align="right">vat</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Modal Client -->
+		<div class="modal fade" id="value-modal" tabindex="-1" role="dialog"
+			aria-labelledby="value-modal" aria-hidden="true">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="client-modal-label">Value Detail</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-4">
+								<div class="row justify-content-center">
+									<label>REINSURANCE</label>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<label></label>
+							</div>
+							<div class="col-md-4">
+								<div class="row justify-content-center">
+									<label>CLIENT</label>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<input type="text" name="t5-premiumRe" id="t5-premiumRe"
+									class="form-control" style="text-align: right;"/>
+							</div>
+							<div class="col-md-4">
+								<div class="row justify-content-center">
+									<label>PREMIUM</label>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<input type="text" name="t5-premium" id="t5-premium"
+									class="form-control" style="text-align: right;"/>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<input type="text" name="t5-bFeeRe" id="t5-bFeeRe"
+									class="form-control" style="text-align: right;" disabled/>
+							</div>
+							<div class="col-md-4">
+								<div class="row justify-content-center">
+									<label>B FEE/RI COM</label>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<input type="text" name="t5-bFee" id="t5-bFee"
+									class="form-control" style="text-align: right;" disabled/>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<label></label>
+							</div>
+							<div class="col-md-4">
+								<div class="row justify-content-center">
+									<label>DISCOUNT</label>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<input type="text" name="t5-discount" id="t5-discount"
+									class="form-control" style="text-align: right;"/>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<input type="text" name="t5-netPay" id="t5-netPay"
+									class="form-control" style="text-align: right;" disabled/>
+							</div>
+							<div class="col-md-4">
+								<div class="row justify-content-center">
+									<label>NET PY/RC</label>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<input type="text" name="t5-netRec" id="t5-netRec"
+									class="form-control" style="text-align: right;" disabled/>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<input type="text" name="t5-netIncome" id="t5-netIncome"
+									class="form-control" style="text-align: right;" disabled/>
+							</div>
+							<div class="col-md-4">
+								<div class="row justify-content-center">
+									<label>NET INCOME</label>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<label></label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<input type="text" name="t5-vatRe" id="t5-vatRe"
+									class="form-control" style="text-align: right;" disabled/>
+							</div>
+							<div class="col-md-4">
+								<div class="row justify-content-center">
+									<label>VAT</label>
+								</div>
+							</div>
+							<div class="col-md-4" hidden="true">
+								<input type="text" name="t5-vat" id="t5-vat"
+									class="form-control" style="text-align: right;" disabled/>
+							</div>
+						</div>
+						<br>
+						<div class="row justify-content-center">
+							<div class="col-md-2">
+								<button class="btn btn-success" id="t5-btnSave">Save</button>
+								&nbsp;&nbsp;
+								<button class="btn btn-danger" id="t5-btnReset">Reset</button>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /Modal Client -->
+		<script type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+			var t5EditData = null;
+			var t5EditDataCopy = null;
+			
+			$(function() {
+				t5HideColumn();
+				new AutoNumeric('#t5-premiumRe', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5-premiumRe').set('0.00');
+				new AutoNumeric('#t5-premium', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5-premium').set('0.00');
+				new AutoNumeric('#t5-bFeeRe', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5-bFeeRe').set('0.00');
+				new AutoNumeric('#t5-bFee', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5-bFee').set('0.00');
+				new AutoNumeric('#t5-vatRe', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5-vatRe').set('0.00');
+				new AutoNumeric('#t5-vat', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5-vat').set('0.00');
+				new AutoNumeric('#t5-netPay', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5-netPay').set('0.00');
+				new AutoNumeric('#t5-discount', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5-discount').set('0.00');
+				new AutoNumeric('#t5-netRec', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5-netRec').set('0.00');
+				new AutoNumeric('#t5-netIncome', {
+					decimalCharacter : '.',
+					digitGroupSeparator : ',',
+					maximumValue : '9999999999999999.00'
+				});
+				AutoNumeric.getAutoNumericElement('#t5-netIncome').set('0.00');
+
+				$('#t5-addTable').on('click-row.bs.table', function(e, row, $tr) {
+					t5EditData = row;
+					t5EditDataCopy = row;
+					
+					resetEditValue();
+					
+					$('#value-modal').modal('show');
+				});
+				
+				$('#t5-premiumRe').on('keyup change', function() {
+					calculateBfeeRe();
+					recalculate();
+				});
+				
+				$('#t5-premium').on('keyup change', function() {
+					calculateBfeeCli();
+					recalculate();
+				});
+				
+				$('#t5-discount').on('keyup change', function() {
+					recalculate();				
+				});
+				
+				$('#t5-btnSave').click(function() {
+					saveEditValue();
+					$('#value-modal').modal('hide');
+				});
+				
+				$('#t5-btnReset').click(function() {
+					resetEditValue();
+					t5EditDataCopy = null;
+				});
+				
+			});
+			
+			function resetEditValue() {		
+				var interest = $('#t2-addTable').bootstrapTable('getRowByUniqueId', t5EditData.id);
+				var premiumAmt = getNumberWithDef(interest.premiumAmount);
+				
+				AutoNumeric.getAutoNumericElement('#t5-premiumRe').set(
+						t5EditData.premiumRe);
+				AutoNumeric.getAutoNumericElement('#t5-premium').set(
+						t5EditData.premium);
+				AutoNumeric.getAutoNumericElement('#t5-bFeeRe').set(
+						t5EditData.bFeeRe);
+				AutoNumeric.getAutoNumericElement('#t5-bFee').set(
+						t5EditData.bFee);
+				AutoNumeric.getAutoNumericElement('#t5-vat').set(
+						t5EditData.vat);
+				AutoNumeric.getAutoNumericElement('#t5-discount').set(
+						t5EditData.discount);
+				
+				$('#t5-premium').prop('disabled', false);
+				$('#t5-premiumRe').prop('disabled', false);
+				
+				if(premiumAmt > 0) {
+					AutoNumeric.getAutoNumericElement('#t5-netRec').set(
+							t5EditData.total);
+					AutoNumeric.getAutoNumericElement('#t5-netPay').set(
+							t5EditData.totalRe);
+					AutoNumeric.getAutoNumericElement('#t5-netIncome').set(
+							t5EditData.netIncome);
+					AutoNumeric.getAutoNumericElement('#t5-vatRe').set(
+							t5EditData.vatRe);
+					
+					$('#t5-premium').prop('disabled', true);
+					$('#t5-premiumRe').prop('disabled', true);
+					
+					return false;
+				}
+				
+				//Net Pay = Premium (re) - Bfee (re);
+				var premiumRe = parseFloat(t5EditData.premiumRe.replace(/,/g, ""));
+				var bFeeRe = parseFloat(t5EditData.bFeeRe.replace(/,/g, ""));
+				var netpay = premiumRe - bFeeRe;
+				
+				//Net Rec = Premium (cli) - Bfee (cli) - vat (cli) - discount;
+				var premiumCli = parseFloat(t5EditData.premium.replace(/,/g, ""));
+				var bFeeCli = parseFloat(t5EditData.bFee.replace(/,/g, ""));
+				var vatCli = parseFloat(t5EditData.vat.replace(/,/g, ""));
+				var discount = parseFloat(t5EditData.discount.replace(/,/g, ""));
+				var netrec = premiumCli - bFeeCli - discount;
+				
+				var netIncome = (netrec-netpay) / taxRate009;
+				
+				AutoNumeric.getAutoNumericElement('#t5-netRec').set(
+						netrec);
+				AutoNumeric.getAutoNumericElement('#t5-netPay').set(
+						netpay);
+				AutoNumeric.getAutoNumericElement('#t5-netIncome').set(
+						netIncome);
+				AutoNumeric.getAutoNumericElement('#t5-vatRe').set(
+						netIncome * (ppn/100));
+				
+				return true;
+			}
+			
+			function calculateBfeeRe() {
+				var bFeeBuy = 0.00;
+				var premiumRe = parseFloat(AutoNumeric.getAutoNumericElement('#t5-premiumRe').get());
+				
+				var reinsTable = $('#t4-addTable').bootstrapTable('getData');
+				for(var i=0; i<reinsTable.length; i++) {					
+					var riCommRe = parseFloat(reinsTable[i].bFee.replace(/,/g, ""));
+					var premiumReSub = premiumRe * reinsTable[i].premiPortion/100;
+					
+					//bFee = Premium (re) * RI Comm (%);
+					var bfeeBuySub = premiumReSub * (riCommRe/100);
+					bFeeBuy += bfeeBuySub;
+					console.log(' premiumReSub : ' + premiumReSub);
+					console.log(' bfeeBuySub : ' + bfeeBuySub);
+				}
+								
+				AutoNumeric.getAutoNumericElement('#t5-bFeeRe').set(bFeeBuy);
+			}
+			
+			function calculateBfeeCli() {
+				var interest = $('#t2-addTable').bootstrapTable('getRowByUniqueId', t5EditData.id);
+				
+				var premiumCli = parseFloat(AutoNumeric.getAutoNumericElement('#t5-premium').get());
+				var deductionII = parseFloat(interest.deduction.replace(/,/g, ""));
+				
+				//bFee = Premium (cli) * Deduction (%);
+				var bFeeSell = premiumCli * (deductionII/100);
+				
+				AutoNumeric.getAutoNumericElement('#t5-bFee').set(bFeeSell);
+			}
+			
+			function recalculate() {
+				//Net Pay = Premium (re) - Bfee (re) - vat (re);
+				var premiumRe = parseFloat(AutoNumeric.getAutoNumericElement('#t5-premiumRe').get());
+				var bFeeRe = parseFloat(AutoNumeric.getAutoNumericElement('#t5-bFeeRe').get());
+				var netpay = premiumRe - bFeeRe;
+				
+				//Net Rec = Premium (cli) - Bfee (cli) - vat (cli) - discount;
+				var premiumCli = parseFloat(AutoNumeric.getAutoNumericElement('#t5-premium').get());
+				var bFeeCli = parseFloat(AutoNumeric.getAutoNumericElement('#t5-bFee').get());
+				var vatCli = parseFloat(AutoNumeric.getAutoNumericElement('#t5-vat').get());
+				var discount = parseFloat(AutoNumeric.getAutoNumericElement('#t5-discount').get());
+				var netrec = premiumCli - bFeeCli - vatCli - discount;
+				
+				var netIncome = (netrec-netpay) / taxRate009;
+				var vatRe = netIncome * (ppn/100);
+				
+				var interest = $('#t2-addTable').bootstrapTable('getRowByUniqueId', t5EditData.id);
+				var premiumAmt = getNumberWithDef(interest.premiumAmount);
+				if(premiumAmt > 0) {
+					netrec = premiumCli - discount;
+					netpay = premiumRe - bFeeRe;
+					netIncome = (netrec-netpay) / taxRate009;
+					vatRe = netIncome * (ppn/100);
+				}
+				
+				AutoNumeric.getAutoNumericElement('#t5-netRec').set(
+						netrec);
+				AutoNumeric.getAutoNumericElement('#t5-netPay').set(
+						netpay);
+				AutoNumeric.getAutoNumericElement('#t5-netIncome').set(
+						netIncome);
+				AutoNumeric.getAutoNumericElement('#t5-vatRe').set(
+						vatRe);
+				return true;
+			}		
+			
+			function saveEditValue() {
+				var json = JSON.stringify(t5EditData);
+				t5EditDataCopy = JSON.parse(json);
+				
+				var premiumRe = parseFloat(AutoNumeric.getAutoNumericElement('#t5-premiumRe').get());
+				var bFeeRe = parseFloat(AutoNumeric.getAutoNumericElement('#t5-bFeeRe').get());
+				var vatRe = parseFloat(AutoNumeric.getAutoNumericElement('#t5-vatRe').get());
+				
+				var premium = parseFloat(AutoNumeric.getAutoNumericElement('#t5-premium').get());
+				var bFee = parseFloat(AutoNumeric.getAutoNumericElement('#t5-bFee').get());
+				var vat = parseFloat(AutoNumeric.getAutoNumericElement('#t5-vat').get());
+				var discount = parseFloat(AutoNumeric.getAutoNumericElement('#t5-discount').get());
+				
+				var netRec = parseFloat(AutoNumeric.getAutoNumericElement('#t5-netRec').get());
+				var netPay = parseFloat(AutoNumeric.getAutoNumericElement('#t5-netPay').get());
+				var netIncome = parseFloat(AutoNumeric.getAutoNumericElement('#t5-netIncome').get());
+				
+				t5EditDataCopy['premiumRe'] = formatter.format(premiumRe).replace('$', '');
+				t5EditDataCopy['bFeeRe'] = formatter.format(bFeeRe).replace('$', '');
+				t5EditDataCopy['vatRe'] = formatter.format(vatRe).replace('$', '');
+
+				t5EditDataCopy['premium'] = formatter.format(premium).replace('$', '');
+				t5EditDataCopy['bFee'] = formatter.format(bFee).replace('$', '');
+				t5EditDataCopy['vat'] = formatter.format(vat).replace('$', '');
+
+				t5EditDataCopy['discount'] = formatter.format(discount).replace('$', '');
+				t5EditDataCopy['netIncome'] = formatter.format(netIncome).replace('$', '');
+				
+				t5EditDataCopy['totalRe'] = formatter.format(netPay).replace('$', '');
+				t5EditDataCopy['total'] = formatter.format(netRec).replace('$', '');
+				
+				$('#t5-addTable').bootstrapTable('updateByUniqueId', {
+			        id: t5EditDataCopy.id,
+			        row: t5EditDataCopy
+				});
+			}
+
+			function t5HideColumn() {
+				$('#t5-addTable').bootstrapTable('hideColumn', 'id');
+				$('#t5-addTable').bootstrapTable('hideColumn', 'premiumRate');
+				$('#t5-addTable').bootstrapTable('hideColumn', 'bFeeRe');
+				$('#t5-addTable').bootstrapTable('hideColumn', 'bFee');
+				$('#t5-addTable').bootstrapTable('hideColumn', 'vatRe');
+				$('#t5-addTable').bootstrapTable('hideColumn', 'vat');
+			}
+			
+			function recalculateTableValueT5() {				
+				var t5Table = $('#t5-addTable').bootstrapTable('getData');
+				var t5TableNew = [];
+				
+				for(var j=0; j<t5Table.length; j++) {
+					var premiumRe = 0.00;				
+					var sumShareRe = 0.00;
+					var sumPremiRe = 0.00;
+					var sumRiCommRe = 0.00;
+					var reinsTable = $('#t4-addTable').bootstrapTable('getData');
+					for(var i=0; i<reinsTable.length; i++) {
+						sumShareRe += parseFloat(reinsTable[i].share.replace(/,/g, ""));
+						sumPremiRe += parseFloat(reinsTable[i].premiumRate.replace(/,/g, ""));
+						sumRiCommRe += parseFloat(reinsTable[i].bFee.replace(/,/g, ""));
+					}
+					
+					if(reinsTable.length >0) {
+						sumPremiRe = sumPremiRe / reinsTable.length;
+						sumRiCommRe = sumRiCommRe / reinsTable.length;
+					}
+							
+					var flagSummary = false;
+					
+					if(sumShareRe>100.00) {
+						sumShareRe = 100.00;
+						flagSummary = true;	
+					}
+					
+					var interest = $('#t2-addTable').bootstrapTable('getRowByUniqueId', t5Table[j].id);
+
+					var periodVal = 1.00;
+					var insuredFrom = interest.insuredPeriod;
+					var insuredTo = interest.insuredPeriodTo;
+					
+					if(insuredFrom !== '' && insuredFrom != null 
+							&& insuredTo !== '' && insuredTo != null) {
+						insuredFrom = insuredFrom.split('/');
+						insuredTo = insuredTo.split('/');
+						
+						var fromDate = new Date(insuredFrom[2], insuredFrom[1]-1, insuredFrom[0]);
+						var toDate = new Date(insuredTo[2], insuredTo[1]-1, insuredTo[0]);
+						var millisBetween = toDate.getTime() - fromDate.getTime();
+						if(Math.abs(millisBetween) > (1000 * 3600 * 24)){
+							var days = millisBetween / (1000 * 3600 * 24);
+						    periodVal = Math.ceil(Math.abs(days));
+						}
+						periodVal = periodVal/365;
+					}
+					
+					var tsi = parseFloat(interest.sumInsured.replace(/,/g, ""));
+					var shareCli = 0.00;
+					var ciTable = $('#addTable').bootstrapTable('getData');
+					if(ciTable.length>0) {
+						shareCli = parseFloat(ciTable[0].share.replace(/,/g, ""));
+					}
+					
+					// Premium (re) = sumInsured (ii) * premiumRate (%) (re) * weighted (%) (ii);
+					var weight = getNumberWithDef(interest.weighted);
+					var bFeeBuy = 0.00;
+					for(var i=0; i<reinsTable.length; i++) {
+						var premiumReSub = 0.00;
+		
+						var share = getNumberWithDef(reinsTable[i].share);
+						var amountTsiPerReas = tsi * (share/100);
+						
+						var amountReas = getNumberWithDef(reinsTable[i].amount);				//amount != 0
+						if(amountReas != 0)
+							amountTsiPerReas = amountReas;
+						
+						var premi = parseFloat(reinsTable[i].premiumRate);
+						premiumReSub = amountTsiPerReas * (premi/100) * (weight/100) * periodVal;
+						
+						var premiumAmtReSub = getNumberWithDef(reinsTable[i].premiumAmount);	//premium amount != 0
+						if(premiumAmtReSub != 0)
+							premiumReSub = premiumAmtReSub;
+						
+						premiumRe += premiumReSub;
+						
+						//bFee = Premium (re) * RI Comm (%);
+						var riCommRe = getNumberWithDef(reinsTable[i].bFee);
+						var bFeeBuySub = premiumReSub * (riCommRe/100);
+						
+						var riCommReAmount = getNumberWithDef(reinsTable[i].bFeeAmount);		//ricomm amount != 0
+						if(riCommReAmount != 0)
+							bFeeBuySub = riCommReAmount;
+						
+						bFeeBuy += bFeeBuySub;
+						
+						reinsTable[i].premi = premiumReSub;
+						reinsTable[i].comm = bFeeBuySub;
+					}
+					
+					for(var i=0; i<reinsTable.length; i++) {
+						var premi = reinsTable[i].premi;
+						var premiPortion = premi/premiumRe * 100;
+						
+						var comm = reinsTable[i].comm;
+						var commPortion = comm/bFeeBuy * 100;
+						
+						reinsTable[i].premiPortion = premiPortion;
+						reinsTable[i].commPortion = commPortion;
+						$('#t4-addTable').bootstrapTable('updateByUniqueId', {
+							id: reinsTable[i].id, 
+							row: reinsTable[i]
+						});
+					}
+					
+					if(flagSummary) {
+						premiumRe = tsi * (sumPremiRe/100) * (weight/100) * (sumShareRe/100) * periodVal;
+						bFeeBuy = premiumRe * (sumRiCommRe/100);
+					}
+					
+					//Total (re) = Premium (re) - bFee;
+					var totalRe = premiumRe - bFeeBuy;
+					
+					//Premium (cli) = sumInsured (ii) * premiumRate (%) (ii) * weighted (%) (ii);
+					var premiumCli = 0.00;
+					var premi = parseFloat(interest.premiumRate.replace(/,/g, ""));
+					premiumCli = tsi * (shareCli/100) * (premi/100) * (weight/100) * periodVal;
+					
+					var deductionII = parseFloat(interest.deduction.replace(/,/g, ""));
+					//bFee = Premium (cli) * Deduction (%);
+					var bFeeSell = premiumCli * (deductionII/100);
+					//vat = 0;
+					var vatSell = 0.00;
+					
+					var discount = 0.00;
+					//Total (cli) = Premium - bFee - discount;
+					var totalCli = premiumCli - bFeeSell - discount;
+						
+					//client
+					var premiumAmt = getNumberWithDef(interest.premiumAmount);
+					if(premiumAmt != 0.00) {
+						premiumCli = premiumAmt;
+						totalCli = premiumCli - discount;
+						
+						//default
+						bFeeSell = 0.00;
+					}
+					
+					//Net Income = Total (cli) - Total (re) * 10/11;
+					var netIncome = (totalCli - totalRe) / taxRate009;
+					//vat = Premium (re) * RI Comm (%) * 1/11;
+					var vatBuy = netIncome * (ppn/100);
+					
+					t5Table[j]['premiumRe'] = formatter.format(premiumRe).replace('$', '');
+					t5Table[j]['bFeeRe'] = formatter.format(bFeeBuy).replace('$', '');
+					t5Table[j]['vatRe'] = formatter.format(vatBuy).replace('$', '');
+
+					t5Table[j]['premium'] = formatter.format(premiumCli).replace('$', '');
+					t5Table[j]['bFee'] = formatter.format(bFeeSell).replace('$', '');
+					t5Table[j]['vat'] = formatter.format(vatSell).replace('$', '');
+
+					t5Table[j]['discount'] = formatter.format(discount).replace('$', '');
+					t5Table[j]['netIncome'] = formatter.format(netIncome).replace('$', '');
+					
+					t5Table[j]['totalRe'] = formatter.format(totalRe).replace('$', '');
+					t5Table[j]['total'] = formatter.format(totalCli).replace('$', '');
+					
+					t5TableNew.push(t5Table[j]);
+				}
+				
+				$('#t5-addTable').bootstrapTable('load', t5TableNew);
+			}
+			
+			function getNumberWithDef(str) {
+				if(str == null || str == '')
+					str = '0.00';
+				
+				var num = parseFloat(str.replace(/,/g, ""));
+				
+				return num;
+			}
+			
+			/*]]>*/
+		</script>
+	</th:block>
+
+</body>
+
+</html>
+
+

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+
+<body>
+
+	<th:block th:fragment="interest-insured-tab">
+		<div class="card mb-3">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-6">
+						<label>*Type of Cover</label> <br> 
+						<select name="t2-typeOfCover" id="t2-typeOfCover" class="form-control" required>
+							<option value=""></option>
+						</select>
+					</div>
+				</div>
+				
+				<br>
+				
+				<div class="row">
+					<div class="col-md-6">
+						<label>*Interest Insured</label> <br>
+						<textarea class="form-control" id="t2-interestInsured"
+							name="t2-interestInsured" rows="4"></textarea>
+					</div>
+					<div class="col-md-6">
+						<label>*Location</label> <br>
+						<textarea class="form-control" id="t2-location"
+							name="t2-location" rows="4"></textarea>
+					</div>
+				</div>
+				
+				<br>
+				
+				<div class="row">
+					<div class="col-md-4">
+						<div class="input-group">
+							<div class="col-md-4">
+								<label>*Curr</label> <br> 
+								<select name="t2-curr" id="t2-curr" 
+									class="form-control" required>
+								</select>
+							</div>
+							<div class="col-md-8">
+								<label>*TSI</label> <br>
+								<input type="text" name="t2-tsi" id="t2-tsi" 
+									class="form-control" style="text-align: right;" required />
+							</div>
+						</div>
+					</div>
+					<div class="col-md-1">
+						<label>*PPW</label> <br> 
+						<input type="text" name="t2-ppw" id="t2-ppw"
+							class="form-control col-md-12"/>
+					</div>
+					<div class="col-md-1">
+						<label>*Validity</label> <br> 
+						<input type="text" name="t2-validity" id="t2-validity"
+							class="form-control col-md-12"/>
+					</div>
+					<div class="col-md-2">
+						<label>*Premium Rate (%)</label> <br> 
+						<input type="text" name="t2-premiumRate" id="t2-premiumRate" 
+							class="form-control" style="text-align: right;" required />
+					</div>
+					<div class="col-md-2" hidden="true">
+						<label>*Brokerage Fee (%)</label> <br> 
+						<input type="text" name="t2-brkrfee" id="t2-brkrfee" 
+							class="form-control" style="text-align: right;" required />
+					</div>
+					<div class="col-md-2">
+						<label>*Weighted (%)</label> <br>
+						<input type="text" name="t2-weighted" id="t2-weighted" 
+							class="form-control" style="text-align: right;" required />
+					</div>
+					<div class="col-md-2">
+						<br>
+						<div class="custom-control custom-checkbox">
+							<input type="checkbox" class="custom-control-input"
+								name="t2-includeTax" id="t2-includeTax"> 
+							<label class="custom-control-label" for="t2-includeTax">Excld. Tax</label>
+						</div>
+					</div>
+				</div>
+				
+				<br>
+				
+				<div class="row">
+					<label>&nbsp;&nbsp;Insured Period</label>
+				</div>
+				
+				<div class="row">
+					<div class="col-md-2">
+						<input type="radio" id="t2-ipTba" name="t2-ip" value="tba">
+    					<label for="t2-ip">&nbsp;&nbsp;TBA</label>
+    				</div>
+				</div>
+				
+				<br>
+				
+				<div class="row">
+					<div class="col-md-2">
+						<input type="radio" id="t2-ipRange" name="t2-ip" value="range">
+    					<label for="t2-ip">&nbsp;&nbsp;Period</label>
+    				</div>
+					
+					<div class="col-md-5">
+						<div class="row">
+							<div class="col-md-5">
+								<div class="input-group">
+									<input id="t2-insuredPeriod" name="t2-insuredPeriod"
+										type="text" class="form-control" disabled>
+									<div class="input-group-append">
+										<button id='t2-btnInsuredPeriod' class="btn btn-primary"
+											type="button">
+											<i class="fas fa-calendar"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<div class="row justify-content-center">
+									<label> - </label>
+								</div>
+							</div>
+							<div class="col-md-5">
+								<div class="input-group">
+									<input id="t2-insuredPeriodTo" name="t2-insuredPeriodTo"
+										type="text" class="form-control" disabled>
+									<div class="input-group-append">
+										<button id='t2-btnInsuredPeriodTo' class="btn btn-primary"
+											type="button">
+											<i class="fas fa-calendar"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<br>
+				
+				<div class="row">
+					<div class="col-md-2">
+						<input type="radio" id="t2-ipDuration" name="t2-ip" value="duration">
+    					<label for="t2-ip">&nbsp;&nbsp;Duration</label>
+    				</div>
+					
+					<div class="col-md-5">
+						<div class="row">
+							<div class="col-md-5">
+								<input type="text" name="t2-durationSize" 
+								id="t2-durationSize" class="form-control" 
+								style="text-align: right;" />
+							</div>
+							<div class="col-md-2">
+								<div class="row justify-content-center">
+									<label> Start </label>
+								</div>
+							</div>
+							<div class="col-md-5">
+								<div class="input-group">
+									<input id="t2-durationStart" name="t2-durationStart"
+										type="text" class="form-control" disabled>
+									<div class="input-group-append">
+										<button id='t2-btnDurationStart' class="btn btn-primary"
+											type="button">
+											<i class="fas fa-calendar"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<br>
+				
+				<div class="row">
+					<div class="col-md-12">
+						<label>Policy No</label><br> <input type="text"
+							name="t2-remarks" id="t2-remarks" class="form-control" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/		
+			
+			$(function() {		
+				$('#t2-curr').attr('disabled', true);
+				$('#t2-tsi').attr('disabled', true);
+				
+				$('#t2-includeTax').prop('checked', false);
+				
+				rest('GET', /*[[@{/marketing/direct-production_bds/get-dropdownTypeOfCover}]]*/).done(function(data) {
+					$('#t2-typeOfCover').select2({width : '100%', data : data});
+				});
+				
+				new AutoNumeric('#t2-tsi', {
+				    decimalCharacter : '.',
+				    digitGroupSeparator : ',',
+				    maximumValue : '9999999999999999.00'
+				});
+				
+				new AutoNumeric('#t2-premiumRate', {
+					currencySymbol : '%',
+				    decimalCharacter : '.',
+				    digitGroupSeparator : ',',
+				    decimalPlaces : '6',
+				    maximumValue : '100',
+				    minimumValue : '0',
+				    currencySymbolPlacement: AutoNumeric.options.currencySymbolPlacement.suffix
+				});
+				
+				new AutoNumeric('#t2-brkrfee', {
+					currencySymbol : '%',
+				    decimalCharacter : '.',
+				    digitGroupSeparator : ',',
+				    decimalPlaces : '4',
+				    maximumValue : '100',
+				    minimumValue : '0',
+				    currencySymbolPlacement: AutoNumeric.options.currencySymbolPlacement.suffix
+				});
+				
+				new AutoNumeric('#t2-weighted', {
+					currencySymbol : '%',
+				    decimalCharacter : '.',
+				    digitGroupSeparator : ',',
+				    decimalPlaces : '4',
+				    maximumValue : '100',
+				    minimumValue : '0',
+				    currencySymbolPlacement: AutoNumeric.options.currencySymbolPlacement.suffix
+				});
+				
+				new AutoNumeric('#t2-durationSize', {
+					decimalPlaces: '0',
+				    digitGroupSeparator : ',',
+				    minimumValue : '0',
+				    maximumValue : '999999'
+				});
+				
+				new AutoNumeric('#t2-ppw', {
+					decimalPlaces: '0',
+				    digitGroupSeparator : ',',
+				    minimumValue : '0',
+				    maximumValue : '99'
+				});
+				
+				new AutoNumeric('#t2-validity', {
+					decimalPlaces: '0',
+				    digitGroupSeparator : ',',
+				    minimumValue : '0',
+				    maximumValue : '99'
+				});
+				
+				$('#t2-insuredPeriod').datepicker({
+					dateFormat: 'dd/mm/yy',
+					changeMonth: true,
+					changeYear: true
+				});
+				$('#t2-insuredPeriodTo').datepicker({
+					dateFormat: 'dd/mm/yy',
+					changeMonth: true,
+					changeYear: true
+				});
+				$('#t2-durationStart').datepicker({
+					dateFormat: 'dd/mm/yy',
+					changeMonth: true,
+					changeYear: true
+				});
+				
+				$('#t2-typeOfCover').change(function() {					
+					actionTypeOfCoverChange(false);		
+				});
+				
+				$('#t2-btnInsuredPeriod').click(function(){
+					$('#t2-insuredPeriod').datepicker('show');
+				});
+				$('#t2-btnInsuredPeriodTo').click(function(){
+					$('#t2-insuredPeriodTo').datepicker('show');
+				});
+				$('#t2-btnDurationStart').click(function(){
+					$('#t2-durationStart').datepicker('show');
+				});
+				
+				t2Reset();
+
+				$('#t2-ipTba').attr('checked', true);
+				$('#t2-ipTba').trigger('change');
+			});
+			
+			$('#t2-ipTba').change(function() {
+				if(this.checked) {
+					$('#t2-btnInsuredPeriod').attr('disabled', true);
+					$('#t2-btnInsuredPeriodTo').attr('disabled', true);
+					$('#t2-btnDurationStart').attr('disabled', true);
+					$('#t2-durationSize').attr('disabled', true);
+					
+					$('#t2-insuredPeriod').datepicker('setDate', null);
+					$('#t2-insuredPeriodTo').datepicker('setDate', null);
+					$('#t2-durationStart').datepicker('setDate', null);
+					AutoNumeric.getAutoNumericElement('#t2-durationSize').set('0');
+				}
+			});
+			
+			$('#t2-ipRange').change(function() {
+				if(this.checked) {
+					$('#t2-btnInsuredPeriod').attr('disabled', false);
+					$('#t2-btnInsuredPeriodTo').attr('disabled', false);
+					$('#t2-btnDurationStart').attr('disabled', true);
+					$('#t2-durationSize').attr('disabled', true);
+					
+					$('#t2-durationStart').datepicker('setDate', null);
+					AutoNumeric.getAutoNumericElement('#t2-durationSize').set('0');
+				}
+			});
+			
+			$('#t2-ipDuration').change(function() {
+				if(this.checked) {
+					$('#t2-btnInsuredPeriod').attr('disabled', true);
+					$('#t2-btnInsuredPeriodTo').attr('disabled', true);
+					$('#t2-btnDurationStart').attr('disabled', false);
+					$('#t2-durationSize').attr('disabled', false);
+					
+					$('#t2-insuredPeriod').datepicker('setDate', null);
+					$('#t2-insuredPeriodTo').datepicker('setDate', null);
+				}
+			});
+			
+			$('#t2-insuredPeriod').change(function() {		
+				$('#t2-insuredPeriodTo').datepicker('option', 'minDate', $('#t2-insuredPeriod').val());
+			});
+			
+			function t2Reset() {				
+				AutoNumeric.getAutoNumericElement('#t2-premiumRate').set('0.0000');
+				AutoNumeric.getAutoNumericElement('#t2-brkrfee').set('0.0000');
+				AutoNumeric.getAutoNumericElement('#t2-tsi').set('0.00');
+				AutoNumeric.getAutoNumericElement('#t2-weighted').set('100.0000');
+				AutoNumeric.getAutoNumericElement('#t2-durationSize').set('0');
+				$('#t2-insuredPeriod').val();
+				$('#t2-insuredPeriodTo').val();
+				$('#t2-interestInsured').empty();
+				$('#t2-location').empty();
+			}
+			
+			$('#t2-weighted').on('keyup paste change', function() {
+				calculatePremium();
+			});
+			
+			$('#t2-includeTax').on('change', function() {
+				isEdit_t5dbrokerage = false;
+				isEdit_t5dtaxinBfee = false;
+				
+				calculateBFeeExTax();
+			});
+			
+			function actionTypeOfCoverChange(isInit) {
+				
+				$('#t7-documentType').html('').select2('data', []);
+				
+				var tcCode = $('#t2-typeOfCover').val();
+				if(tcCode == "" && !isInit) {
+					AutoNumeric.getAutoNumericElement('#t2-premiumRate').set('0.0000');
+					AutoNumeric.getAutoNumericElement('#t2-brkrfee').set('0.0000');
+					t2PremiumRate = 0;
+					t2BFee = 0;
+					
+					return null;	
+				}else if(tcCode == "") {
+					return null;
+				}
+				
+				var urlMa011 = /*[[@{/marketing/direct-production_bds/ma-0011}]]*/;
+				var param = '?tcCode=' + tcCode;
+				rest('GET', urlMa011+param).done(function(data) {
+					if(!isInit) {
+						AutoNumeric.getAutoNumericElement('#t2-premiumRate').set(data.tcPremium);
+						AutoNumeric.getAutoNumericElement('#t2-brkrfee').set(data.tcBrofeePct);
+					}
+					AutoNumeric.getAutoNumericElement('#t4-premiumRate').set(data.tcPremium);
+					AutoNumeric.getAutoNumericElement('#t4-brkrfee').set(data.tcBrofeePct);
+					
+					t2PremiumRate = data.tcPremium;
+					t2BFee = data.tcBrofeePct;
+					isUsePpn = data.tcSalesTax;
+					if(!isInit)
+						calculateValue();
+				});
+				
+				var tcData = $('#t6-addTable').bootstrapTable('getData');				
+				if(isInit) {
+					isInitEdit = false;
+				}else {
+					var urlTermCondition = /*[[@{/marketing/direct-production_bds/term-and-condition}]]*/;
+					$('#t6-addTable').bootstrapTable('refreshOptions', {
+					    url: urlTermCondition + param
+					});	
+				}
+				
+				var urlDocumentType = /*[[@{/marketing/direct-production_bds/dropdown-document-type}]]*/;
+				rest('GET', urlDocumentType + param).done(function(data) {
+					$('#t7-documentType').select2({
+						width : '100%',
+						data : data
+					});
+				});
+			}
+			
+			$('#t2-premiumRate').on('keyup paste change', function() {
+				calculatePremium();
+			});
+			
+			/*]]>*/
+		</script>
+	</th:block>
+
+</body>
+
+
+</html>

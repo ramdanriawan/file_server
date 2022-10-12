@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="renewal" pageWidth="595" pageHeight="842" columnWidth="515" leftMargin="50" rightMargin="30" topMargin="50" bottomMargin="30" uuid="6d4c75ba-3404-4ec2-9a27-126f01b1a3cf">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="67"/>
+	<parameter name="idKey" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+	vir.*,
+	(SELECT CO_LOGO FROM MA0010) AS LOGO,
+	(SELECT CO_NAME FROM MA0010) AS NAME,
+	(SELECT PA_CHILD_VALUE FROM MA0014 where PA_PARENT_CODE = 'SYSDATE' and PA_CHILD_CODE = 'SYSDATE001') AS APP_DATE,
+	(SELECT TRX_VOUCHER_ID FROM TR0019 where TRX_OLD_VOUCHER_ID = vir.TRX_VOUCHER_ID) AS ID_REF
+FROM
+	VIEW_INQ_RENEWAL vir
+WHERE
+	vir.ID_KEY = $P{idKey}]]>
+	</queryString>
+	<field name="ID_KEY" class="java.lang.Long">
+		<property name="com.jaspersoft.studio.field.label" value="ID_KEY"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vir"/>
+	</field>
+	<field name="TRX_INS_START" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.label" value="TRX_INS_START"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vir"/>
+	</field>
+	<field name="TRX_INS_END" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.label" value="TRX_INS_END"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vir"/>
+	</field>
+	<field name="TRX_VOUCHER_ID" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="TRX_VOUCHER_ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vir"/>
+	</field>
+	<field name="TRX_TYPE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="TRX_TYPE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vir"/>
+	</field>
+	<field name="TRX_CLIENT" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="TRX_CLIENT"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vir"/>
+	</field>
+	<field name="CLI_NAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="CLI_NAME"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vir"/>
+	</field>
+	<field name="CLI_ADDRESS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="CLI_ADDRESS"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vir"/>
+	</field>
+	<field name="TRX_COVER_CODE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="TRX_COVER_CODE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vir"/>
+	</field>
+	<field name="TRX_INS_ID" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="TRX_INS_ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vir"/>
+	</field>
+	<field name="INS_NAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="INS_NAME"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vir"/>
+	</field>
+	<field name="TRX_DESCRIPTION" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="TRX_DESCRIPTION"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vir"/>
+	</field>
+	<field name="TRX_INS_REMARKS" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="TRX_INS_REMARKS"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vir"/>
+	</field>
+	<field name="TRX_CURR_ID" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="TRX_CURR_ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vir"/>
+	</field>
+	<field name="TRX_SUM_INSURED" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="TRX_SUM_INSURED"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vir"/>
+	</field>
+	<field name="TRX_PREMIUM_SELL" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="TRX_PREMIUM_SELL"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vir"/>
+	</field>
+	<field name="TC_DESC" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="TC_DESC"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vir"/>
+	</field>
+	<field name="TC_RENEWABLE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="TC_RENEWABLE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vir"/>
+	</field>
+	<field name="TC_RENEWABLE_STR" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="TC_RENEWABLE_STR"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vir"/>
+	</field>
+	<field name="TRX_SHARE" class="java.math.BigDecimal">
+		<property name="com.jaspersoft.studio.field.label" value="TRX_SHARE"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vir"/>
+	</field>
+	<field name="TRX_INSURED_NAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="TRX_INSURED_NAME"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vir"/>
+	</field>
+	<field name="ID_REF" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ID_REF"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="vir"/>
+	</field>
+	<field name="LOGO" class="java.lang.Object">
+		<property name="com.jaspersoft.studio.field.label" value="LOGO"/>
+	</field>
+	<field name="NAME" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="NAME"/>
+	</field>
+	<field name="APP_DATE" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="APP_DATE"/>
+	</field>
+	<field name="COLUMN_26" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="ID_REF"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="20" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="210" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<image>
+				<reportElement x="0" y="0" width="100" height="52" uuid="7a4c62e1-783f-4fe0-8473-135f6e74b4c7"/>
+				<imageExpression><![CDATA[$F{LOGO}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="100" y="32" width="180" height="20" uuid="2a5c7934-78ee-4427-aab4-280a26a43cdd">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="360" y="50" width="150" height="20" uuid="06c72f42-17e5-4692-8016-2390d6c261b8">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Jakarta, "+new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("MM-dd-yyyy").parse($F{APP_DATE}))]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="360" y="70" width="150" height="20" uuid="7d6745f8-8a62-4571-a886-8a14c7c3338e">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Ref. Id : "+$F{TRX_TYPE}+" - "+$F{ID_REF}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="92" width="30" height="20" uuid="e8e9bcd6-07e7-4e7f-89e6-cdafe15f56a6">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[To]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="0" y="112" width="280" height="20" uuid="18438d9c-f69e-43a4-9d1a-23e992d0fe9c">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CLI_NAME}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="0" y="132" width="280" height="20" uuid="4d61d976-37db-4e29-8884-715f422c493b">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CLI_ADDRESS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="0" y="160" width="510" height="30" uuid="9f4c1033-b9f4-494a-8c57-3022d934c439"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA["\nRE: Reminder for Renewal of "+$F{TC_DESC}+"\n"+
+"\n"+
+"Dear Madam/Sir\n"+
+"\n"+
+"We wish to remind you that your type of insurance.  Policy Number : "+$F{TRX_INS_REMARKS}+", Contract No. RQ - "+$F{TRX_VOUCHER_ID}+" policy expires on "+new SimpleDateFormat("dd/MM/yyyy").format($F{TRX_INS_END})+". Please let us know whether you would like to renew the policy under the same or changes terms.\n"+
+"\n"+
+"Summary of Cover\n"+
+"Closing Slip or Evidence of Cover No.: "+$F{TRX_COVER_CODE}+"/"+$F{TRX_VOUCHER_ID}.substring( 4, 8).toString()+"/"+$F{TRX_VOUCHER_ID}.substring( 2, 4).toString()+"/"+$F{TRX_VOUCHER_ID}.substring( 8).toString()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="168" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<staticText>
+				<reportElement x="180" y="0" width="20" height="20" uuid="71afc133-81eb-4b22-8595-fe1596428b7f">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="200" y="0" width="310" height="20" uuid="f65299ce-b3f0-41ee-852b-7302dd4af8c7">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{CLI_NAME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="180" y="20" width="20" height="20" uuid="86fee457-5a63-43b4-b965-c2941b104008">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="200" y="20" width="310" height="20" uuid="f2698b81-edd5-4eca-acdd-d78be68469b3">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TRX_INSURED_NAME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="180" y="40" width="20" height="20" uuid="5cd91439-ee36-46d1-93f0-86f092a6240d">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="200" y="40" width="310" height="20" uuid="db2129ed-2597-4ffb-a0a5-a2c1ca96b59a">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TC_DESC}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="180" y="60" width="20" height="20" uuid="3a758ee9-6ad3-4530-8d6e-7e179cc7ea1f">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="200" y="60" width="310" height="20" uuid="5832462d-a51c-465d-aaa1-11cdef60dfd0">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format($F{TRX_INS_START})+"  to  "+new SimpleDateFormat("dd/MM/yyyy").format($F{TRX_INS_END})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="180" y="80" width="20" height="20" uuid="f07235b7-70ff-4ef1-a2a6-18154b48e74d">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="200" y="80" width="310" height="20" uuid="bab0c981-29b5-4df9-bdd2-92dc92f91655">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TRX_SUM_INSURED}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="180" y="100" width="20" height="20" uuid="bf378cb8-5bec-465b-a2bc-ec4246546555">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="200" y="100" width="310" height="20" uuid="f15afcb7-09db-4e90-a400-b78d2703654f">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TRX_SHARE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="50" y="0" width="130" height="20" uuid="fad076a4-bec7-4b6a-9747-0794c6e47fea">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Reinsured]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="20" width="130" height="20" uuid="54a1ae0d-c4be-43c3-a727-a8df2dec57f4">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Assured]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="40" width="130" height="20" uuid="8509f9cd-5fdf-4b1b-aaf8-2ab97264423f">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="60" width="130" height="20" uuid="7db66c6e-2217-482f-9000-3f19c5946381">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Period]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="80" width="130" height="20" uuid="b62f1518-eb5b-4366-b145-ae397ffbac4b">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Sum Reinsured / Limits]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="100" width="130" height="20" uuid="16fcc4d5-470b-4206-a2cc-d28849364301">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Order Hereon]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="200" y="120" width="310" height="20" uuid="09e5e606-4ff6-411f-aac7-1594b506d92d">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{INS_NAME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="50" y="120" width="130" height="20" uuid="5ca988e6-acf7-4e8f-8456-06ac66e8611e">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Reinsurers]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="120" width="20" height="20" uuid="ca3c1de5-15a0-457b-a337-d4a2de6f68b4">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="25" width="509" height="30" uuid="5c3cd390-887b-40d7-9a79-2496696329c4"/>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[----- this is computer generated document no signature required -----]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="79" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="59" width="180" height="20" uuid="adfe6e2e-7d54-488b-a823-87146995d889">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NAME}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="d9843137-d895-4274-81f0-0ec5a87bd675"/>
+				<textElement>
+					<font fontName="Times New Roman" size="12"/>
+				</textElement>
+				<text><![CDATA[Thank you.]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

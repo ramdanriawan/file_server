@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+	<th:block th:fragment="check-list-tab">
+		<br>
+		<div class="row">
+			<div class="col-md-6">
+				<div id="cart" class="card mb-3">
+					<div id="paymentContentHeader" class="card-header">
+						<b><span id="titlePage">Payment Method</span></b>
+					</div>
+					<div class="card-body scroll">
+						<div class="row">
+							<div class="col-md-3">
+								<label>Client</label>
+							</div>
+							<div class="col-md-9">
+								<input id="t7-clientDesc" name="t7-clientDesc" type="text"
+									class="form-control" disabled/>
+								<input id="t7-client" name="t7-client" type="text"
+									class="form-control" hidden="true" disabled/>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-3">
+								<label>Reinsurance</label>
+							</div>
+							<div class="col-md-9">
+								<input id="t7-reinsuranceDesc" name="t7-reinsuranceDesc" type="text"
+									class="form-control" disabled />
+								<input id="t7-reinsurance" name="t7-reinsurance" type="text"
+									class="form-control" hidden="true" disabled/>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-3">
+								<label>For</label><br> <select name="t7-for" id="t7-for"
+									class="form-control" required>
+								<option value=""></option>
+								</select>
+							</div>
+							<div class="col-md-4">
+								<label>Pay Date</label><br>
+								<div class="input-group">
+									<input id="t7-payDate" name="t7-payDate" type="text"
+										class="form-control" disabled>
+									<div class="input-group-append">
+										<button id='t7-btnPayDate' class="btn btn-primary"
+											type="button">
+											<i class="fas fa-calendar"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<label>Portion(%)</label><br> <input id="t7-portion"
+									name="t7-portion" type="text" class="form-control" style="text-align: right;" />
+							</div>
+							<div class="col-md-2">
+								<label>&nbsp;</label><br>
+								<button id="t7-add" class="btn btn-success col-md-12"
+									onclick="t7AddData1()">Add</button>
+							</div>
+						</div>
+						<label>&nbsp;</label>
+						<br>
+						<table id="t7-addTable-1" data-toggle="table" data-unique-id="id">
+							<thead>
+								<tr>
+									<th data-field="id">Id</th>
+									<th data-field="type">Type</th>
+									<th data-field="payDate">Date</th>
+									<th data-field="portion" data-halign="right" data-align="right">Portion(%)</th>
+									<th data-field="action" data-halign="center" data-align="center">Action</th>
+								</tr>
+							</thead>
+						</table>
+
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div id="cart" class="card mb-3">
+					<div id="documentContentHeader" class="card-header">
+						<b><span id="titlePage">Document</span></b>
+					</div>
+					<div class="card-body scroll">
+						<div class="row">
+							<div class="col-md-8">
+								<select name="t7-documentType" id="t7-documentType" class="form-control">
+									<option value=""></option>
+								</select>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-9">
+								<input type="file" class="form-control" id="t7-inputUpload" name="t7-inputUpload" accept=".pdf, .xls, .xlsx">
+							</div>
+							<div class="col-md-3">
+								<button id="t7-upload" class="btn btn-success col-md-12" onclick="t7AddData2()">Upload</button>
+							</div>
+						</div>
+						<br>
+						<table id="t7-addTable-2" data-toggle="table" data-unique-id="id">
+							<thead>
+								<tr>
+									<th data-field="id">Id</th>
+									<th data-field="documentId">Document Id</th>
+									<th data-field="document">Document</th>
+									<th data-field="file">File</th>
+									<th data-field="path">Path</th>
+									<th data-field="status">Status</th>
+									<th data-field="typeOfCover">Type Of Cover</th>
+									<th data-field="action" data-halign="center" data-align="center">Action</th>
+								</tr>
+							</thead>
+						</table>
+						<br>
+						<br>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+			$(function() {
+				$('#t7-for').select2({
+					width : '100%'
+				});
+				
+				$('#t7-documentType').select2({
+					width : '100%', data:[]
+				});
+				
+				$('#t7-payDate').datepicker({
+					dateFormat: 'dd/mm/yy',
+					changeMonth: true,
+					changeYear: true
+				});
+				
+				$('#t7-btnPayDate').click(function(){
+					$('#t7-payDate').datepicker('show');
+				});
+				
+				new AutoNumeric('#t7-portion', {
+					currencySymbol : '%',
+				    decimalCharacter : '.',
+				    digitGroupSeparator : ',',
+				    decimalPlaces : '4',
+				    maximumValue : '100',
+				    minimumValue : '0',
+				    currencySymbolPlacement: AutoNumeric.options.currencySymbolPlacement.suffix
+				});
+				AutoNumeric.getAutoNumericElement('#t7-portion').set('0.0000');
+				
+				tHideColumn();
+			});
+			
+			function tHideColumn() {
+				$('#t7-addTable-1').bootstrapTable('hideColumn', 'id');
+				$('#t7-addTable-2').bootstrapTable('hideColumn', 'id');
+				$('#t7-addTable-2').bootstrapTable('hideColumn', 'documentId');
+				$('#t7-addTable-2').bootstrapTable('hideColumn', 'path');
+				$('#t7-addTable-2').bootstrapTable('hideColumn', 'typeOfCover');
+			}
+			
+			function t7AddData1() {
+				var valReq = validationRequiredAddT7_1();
+				
+				if(valReq.length>0) {
+					alert('Please fill : '+ valReq + '.');
+					
+					return null;
+				}
+				
+				var portion = $('#t7-portion').val();
+				var portionNumber = parseFloat(portion);
+				
+				if(portionNumber <= 0) {
+					alert('Portion(%) must greater than 0!');
+				
+					return null;
+				}
+				
+				var id = create_UUID();
+				var typeId = $('#t7-for option:selected').val();
+				var type = $('#t7-for option:selected').text();
+				var payDate = $('#t7-payDate').val();
+				var action = "<button class=\"btn btn-danger\" onclick=\"t7RemoveData1('"+id+"')\">" 
+				+ "<i class=\"fa fa-trash\"></i>" 
+				+ "</button>";
+				
+				var data = {
+					id: id,
+					typeId: typeId,
+					type: type,
+					payDate: payDate,
+					portion: portion.replace('%',''),
+					action: action
+				}
+				
+				$('#t7-addTable-1').bootstrapTable('append', data);
+				
+				$('#t7-for').val($('#t7-for option:first-child').val()).trigger('change');
+				$('#t7-payDate').datepicker('setDate', null);
+				AutoNumeric.getAutoNumericElement('#t7-portion').set('0.0000');
+				
+				var table = $('#t7-addTable-1').bootstrapTable('getData');
+				var tableOrder = [];
+				for(var i=0; i<table.length; i++) {
+					tableOrder.push(table[i]);
+				}
+				
+				tableOrder.sort(compareValueChecklist1);
+				$('#t7-addTable-1').bootstrapTable('load', tableOrder);
+			}
+			
+			function t7RemoveData1(id) {
+				$('#t7-addTable-1').bootstrapTable('removeByUniqueId', id);
+				
+				var rows = $('#t7-addTable-1').bootstrapTable('getData');
+			}
+			
+			function validationRequiredAddT7_1() {		
+				var field = [];
+				
+				var payFor = $('#t7-for').val();
+				if(payFor == null)
+					payFor = '';
+				if(!payFor.trim())
+					field.push("For");
+				
+				var payDate = $('#t7-payDate').val();
+				if(!payDate.trim())
+					field.push("Pay Date");
+				
+				var portion = $('#t7-portion').val();
+				if(!portion.trim())
+					field.push("Portion(%)");
+				
+				return field;
+			}
+			
+			function t7AddData2() {
+				var valReq = validationRequiredAddT7_2();
+				
+				if(valReq.length>0) {
+					alert('Please fill : '+ valReq + '.');
+					
+					return null;
+				}
+				
+				//========== UPLOAD FILE ==========
+				var file_data = $('#t7-inputUpload').prop('files')[0];
+				
+				if(file_data.size/1000>2000) {
+					alert("Maximum file 2MB!");
+					return null;
+				}	
+				
+				var form_data = new FormData();
+				form_data.append("file", file_data);
+				
+				$.ajax({
+				    url: /*[[@{/marketing-report/production/upload-file}]]*/, 
+				    cache: false,
+				    contentType: false,
+				    processData: false,
+				    data: form_data,
+				    type: 'post',
+				    success: function(data) {
+				    }
+				  });
+				//========== UPLOAD FILE ==========
+				
+				var id = create_UUID();
+				var documentId = $('#t7-documentType').val();
+				var document = $('#t7-documentType').select2('data')[0].text.split("-")[0].trim();
+				var status = $('#t7-documentType').select2('data')[0].text.split("-")[1].trim();
+				
+				var arrayPath = $('#t7-inputUpload').val().split("\\");
+				
+				var file = arrayPath[arrayPath.length - 1];
+				var action = "<button class=\"btn btn-danger\" onclick=\"t7RemoveData2('"+id+"')\">" 
+				+ "<i class=\"fa fa-trash\"></i>" 
+				+ "</button>";
+				
+				var path = /*[[${path}]]*/;
+				var typeOfCover = $('#t2-typeOfCover').val();
+				var data = {
+					id: id,
+					documentId: documentId,
+					document: document,
+					status: status,
+					file: file,
+					path: path,
+					typeOfCover: typeOfCover,
+					action: action
+				}
+				
+				$('#t7-addTable-2').bootstrapTable('append', data);
+				
+				$('#t7-inputUpload').val('');
+				$('#t7-documentType').val($('#t7-documentType option:first-child').val()).trigger('change');
+			}
+			
+			function validationRequiredAddT7_2() {
+				var field = [];
+				
+				if(!$('#t7-documentType').val().trim())
+					field.push("Document Type");
+				
+				if(!$('#t7-inputUpload').val().trim())
+					field.push("File");
+				
+				return field;
+			}
+			
+			function t7RemoveData2(id) {		
+				$('#t7-addTable-2').bootstrapTable('removeByUniqueId', id);
+			}
+			
+			function setMinDate(minDate, appDate) {
+				$('#t7-payDate').datepicker('destroy');
+				$('#t7-payDate').datepicker({
+					minDate: minDate,
+					dateFormat: 'dd/mm/yy',
+					changeMonth: true,
+					changeYear: true,
+				}).datepicker('setDate', appDate);
+				$('#t7-payDate').datepicker('setDate', null);
+			}
+			
+			function initPayDate() {
+				$('#t7-payDate').datepicker('destroy');
+				$('#t7-payDate').datepicker({
+					dateFormat: 'dd/mm/yy',
+					changeMonth: true,
+					changeYear: true,
+					minDate: /*[[${appDate}]]*/
+				});
+			}
+			
+			Array.prototype.inArray = function(comparer) { 
+			    for(var i=0; i<this.length; i++) { 
+			        if(comparer(this[i])) return true; 
+			    }
+			    return false; 
+			};
+			
+			Array.prototype.pushIfNotExist = function(element, comparer) { 
+			    if(!this.inArray(comparer)) {
+			        this.push(element);
+			    }
+			};
+			
+			function t7UpdateDropdownFor() {
+				var listFor = getListFor();
+				
+				$('#t7-for').empty();
+				$('#t7-for').select2({ width : '100%', data : listFor});
+				$('#t7-for').val($('#t7-for option:first-child').val()).trigger('change');
+			}
+			
+			function getListFor() {
+				var listFor = [];
+				
+				var client = $('#addTable').bootstrapTable('getData');
+				for(var i=0; i<client.length; i++) {
+					var id = client[i].client;
+					var text = client[i].clientDesc;
+					
+					var data = {
+						id: id,
+						text: text
+					}
+					
+					listFor.pushIfNotExist(data, function(e) { 
+					    return e.id === data.id && e.text === data.text; 
+					});
+				}
+				
+				var reins = $('#t4-addTable').bootstrapTable('getData');
+				for(var i=0; i<reins.length; i++) {
+					var id = reins[i].reinsuranceId;
+					var text = reins[i].reinsurance;
+					
+					var data = {
+						id: id,
+						text: text
+					}
+					
+					listFor.pushIfNotExist(data, function(e) { 
+					    return e.id === data.id && e.text === data.text; 
+					});
+				}
+				
+				return listFor;
+			}
+			
+			function compareValueChecklist1(a, b) {
+				var dataA = a.payDate.split('/');
+				var dataB = b.payDate.split('/');
+				
+				var valueA = dataA[2] + dataA[1] + dataA[0];
+				var valueB = dataB[2] + dataB[1] + dataB[0];
+			  	
+			  	let comparison = 0;
+			  	if(parseFloat(valueA) > parseFloat(valueB))
+			    	comparison = 1;
+			  	else if(parseFloat(valueA) < parseFloat(valueB))
+			    	comparison = -1;
+			  
+			  	return comparison;
+			}
+			
+			/*]]>*/
+		</script>
+	</th:block>
+
+</body>
+
+</html>

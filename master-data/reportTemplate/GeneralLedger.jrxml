@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="GeneralLedger" pageWidth="1024" pageHeight="595" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="1004" leftMargin="10" rightMargin="10" topMargin="10" bottomMargin="10" uuid="0cdc44af-92fa-4d0b-bb8f-472e68a1bc54">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="198"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_USER" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_COMPANY" class="java.lang.String"/>
+	<parameter name="P_MM_PREV" class="java.lang.String"/>
+	<parameter name="P_YY_PREV" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_FROM_START" class="java.lang.String"/>
+	<parameter name="P_FROM" class="java.lang.String"/>
+	<parameter name="P_TO" class="java.lang.String"/>
+	<parameter name="P_COA_FROM" class="java.lang.String"/>
+	<parameter name="P_COA_TO" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/app/report/GeneralLedger/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_OFF_CODE" class="java.util.List"/>
+	<queryString>
+		<![CDATA[SELECT COA.COA_CODE, COA.COA_DESCRIP, COA.COA_CURR_ID, COA.COA_NORMAL,
+	 CASE
+		WHEN ($P{P_MM_PREV} = '01' AND COA_NORMAL = 'C') THEN BAL.GL_BAL_CREDIT1-BAL.GL_BAL_DEBIT1
+		WHEN ($P{P_MM_PREV} = '02' AND COA_NORMAL = 'C') THEN BAL.GL_BAL_CREDIT2-BAL.GL_BAL_DEBIT2
+		WHEN ($P{P_MM_PREV} = '03' AND COA_NORMAL = 'C') THEN BAL.GL_BAL_CREDIT3-BAL.GL_BAL_DEBIT3
+		WHEN ($P{P_MM_PREV} = '04' AND COA_NORMAL = 'C') THEN BAL.GL_BAL_CREDIT4-BAL.GL_BAL_DEBIT4
+		WHEN ($P{P_MM_PREV} = '05' AND COA_NORMAL = 'C') THEN BAL.GL_BAL_CREDIT5-BAL.GL_BAL_DEBIT5
+		WHEN ($P{P_MM_PREV} = '06' AND COA_NORMAL = 'C') THEN BAL.GL_BAL_CREDIT6-BAL.GL_BAL_DEBIT6
+		WHEN ($P{P_MM_PREV} = '07' AND COA_NORMAL = 'C') THEN BAL.GL_BAL_CREDIT7-BAL.GL_BAL_DEBIT7
+		WHEN ($P{P_MM_PREV} = '08' AND COA_NORMAL = 'C') THEN BAL.GL_BAL_CREDIT8-BAL.GL_BAL_DEBIT8
+		WHEN ($P{P_MM_PREV} = '09' AND COA_NORMAL = 'C') THEN BAL.GL_BAL_CREDIT9-BAL.GL_BAL_DEBIT9
+		WHEN ($P{P_MM_PREV} = '10' AND COA_NORMAL = 'C') THEN BAL.GL_BAL_CREDIT10-BAL.GL_BAL_DEBIT10
+		WHEN ($P{P_MM_PREV} = '11' AND COA_NORMAL = 'C') THEN BAL.GL_BAL_CREDIT11-BAL.GL_BAL_DEBIT11
+		WHEN ($P{P_MM_PREV} = '12' AND COA_NORMAL = 'C') THEN BAL.GL_BAL_CREDIT0-BAL.GL_BAL_DEBIT0
+		WHEN ($P{P_MM_PREV} = '01' AND COA_NORMAL = 'D') THEN BAL.GL_BAL_DEBIT1-BAL.GL_BAL_CREDIT1
+		WHEN ($P{P_MM_PREV} = '02' AND COA_NORMAL = 'D') THEN BAL.GL_BAL_DEBIT2-BAL.GL_BAL_CREDIT2
+		WHEN ($P{P_MM_PREV} = '03' AND COA_NORMAL = 'D') THEN BAL.GL_BAL_DEBIT3-BAL.GL_BAL_CREDIT3
+		WHEN ($P{P_MM_PREV} = '04' AND COA_NORMAL = 'D') THEN BAL.GL_BAL_DEBIT4-BAL.GL_BAL_CREDIT4
+		WHEN ($P{P_MM_PREV} = '05' AND COA_NORMAL = 'D') THEN BAL.GL_BAL_DEBIT5-BAL.GL_BAL_CREDIT5
+        		WHEN ($P{P_MM_PREV} = '06' AND COA_NORMAL = 'D') THEN BAL.GL_BAL_DEBIT6-BAL.GL_BAL_CREDIT6
+        		WHEN ($P{P_MM_PREV} = '07' AND COA_NORMAL = 'D') THEN BAL.GL_BAL_DEBIT7-BAL.GL_BAL_CREDIT7
+	       	WHEN ($P{P_MM_PREV} = '08' AND COA_NORMAL = 'D') THEN BAL.GL_BAL_DEBIT8-BAL.GL_BAL_CREDIT8
+	       	WHEN ($P{P_MM_PREV} = '09' AND COA_NORMAL = 'D') THEN BAL.GL_BAL_DEBIT9-BAL.GL_BAL_CREDIT9
+        		WHEN ($P{P_MM_PREV} = '10' AND COA_NORMAL = 'D') THEN BAL.GL_BAL_DEBIT10-BAL.GL_BAL_CREDIT10
+        		WHEN ($P{P_MM_PREV} = '11' AND COA_NORMAL = 'D') THEN BAL.GL_BAL_DEBIT11-BAL.GL_BAL_CREDIT11
+        		WHEN ($P{P_MM_PREV} = '12' AND COA_NORMAL = 'D') THEN BAL.GL_BAL_DEBIT0-BAL.GL_BAL_CREDIT0
+    	 ELSE 0 END BALANCE1,
+	 CASE
+		WHEN (COA_NORMAL = 'D') THEN (PREV_TRX.DEBIT-PREV_TRX.CREDIT)
+	 ELSE (PREV_TRX.CREDIT-PREV_TRX.DEBIT)
+	 END BALANCE2
+    	 FROM GL0001 BAL, MA0004 COA
+	 LEFT JOIN (SELECT T2.GL_ACCOUNT, SUM(T2.GL_ORG_DEBIT) DEBIT, SUM(T2.GL_ORG_CREDIT) CREDIT
+		  FROM TR0001 T1, TR0002 T2
+			WHERE T1.GL_VOUCHER_ID = T2.GL_VOUCHER_ID
+    				AND T1.GL_TRX_DATE >= $P{P_FROM_START}
+        				AND T1.GL_TRX_DATE < $P{P_FROM}
+				AND $X{IN, T1.GL_TRX_OFFICE_ID , P_OFF_CODE}
+   		  GROUP BY T2.GL_ACCOUNT) PREV_TRX ON (COA.COA_CODE = PREV_TRX.GL_ACCOUNT)
+ 	 WHERE BAL.COA_CODE = COA.COA_CODE
+		 AND BAL.GL_BAL_YEAR = $P{P_YY_PREV}
+		 AND COA.COA_CODE >= $P{P_COA_FROM}
+		 AND COA.COA_CODE <= $P{P_COA_TO}
+	 ORDER BY COA.COA_CODE ASC]]>
+	</queryString>
+	<field name="COA_CODE" class="java.lang.String">
+		<fieldDescription><![CDATA[Kode COA]]></fieldDescription>
+	</field>
+	<field name="COA_DESCRIP" class="java.lang.String">
+		<fieldDescription><![CDATA[Nama COA]]></fieldDescription>
+	</field>
+	<field name="COA_CURR_ID" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="COA_NORMAL" class="java.lang.String">
+		<fieldDescription><![CDATA[Normal Balance]]></fieldDescription>
+	</field>
+	<field name="BALANCE1" class="java.math.BigDecimal"/>
+	<field name="BALANCE2" class="java.math.BigDecimal"/>
+	<group name="Mutation" isStartNewPage="true" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{COA_CODE}]]></groupExpression>
+		<groupHeader>
+			<band height="75" splitType="Prevent">
+				<textField>
+					<reportElement x="383" y="0" width="200" height="20" uuid="89ca0f5b-d2bb-4b28-8f1d-67676bb141d3"/>
+					<textElement textAlignment="Center">
+						<font size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["GENERAL LEDGER"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="0" y="0" width="170" height="20" uuid="3782df69-4b31-48fd-b1c4-5719e97395d4"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{P_COMPANY}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="396" y="20" width="47" height="20" uuid="7ea22379-1307-4ac6-924c-b5085c65a0e7"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Period : "]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="824" y="15" width="71" height="20" uuid="5fb39a94-3442-4710-b8e4-dea5c1d274cf"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Printed Date"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="834" y="0" width="61" height="20" uuid="15b92f44-4baa-4d39-87f4-b9bd16b23b26"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Printed By"]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement x="443" y="20" width="55" height="20" uuid="5935b1f3-0be6-4d19-aeea-fe75aa5d810b"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("yyyy-MM-dd").parse($P{P_FROM})]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy HH:mm">
+					<reportElement x="903" y="15" width="100" height="20" uuid="c2e891e8-26a0-4a4b-998a-d3afab0b8727"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="903" y="0" width="100" height="20" uuid="37c0813f-5547-44b9-8b60-d88862673ff4"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{P_USER}]]></textFieldExpression>
+				</textField>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement x="512" y="20" width="60" height="20" uuid="a120b012-b195-4d84-8529-bd27a257c8d5"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("yyyy-MM-dd").parse($P{P_TO})]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="497" y="20" width="15" height="20" uuid="cab17b6a-c5b0-4c65-9dcd-99a30f710d99"/>
+					<textElement textAlignment="Center">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA["-"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="888" y="0" width="15" height="20" uuid="af535c59-c5cb-4de8-ba31-2e6a4d9ee7f5"/>
+					<textElement textAlignment="Center">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[":"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="888" y="15" width="15" height="20" uuid="ff8cb159-dd23-42d5-8f1f-6e71d2a9ceda"/>
+					<textElement textAlignment="Center">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[":"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="888" y="30" width="15" height="20" uuid="2f908747-a10a-45a7-a1c5-98ffc3bd11de"/>
+					<textElement textAlignment="Center">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[":"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="824" y="30" width="71" height="20" uuid="c0e757ed-82bb-4346-956c-2d843da799b6"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Page"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+					<reportElement x="0" y="55" width="431" height="20" uuid="0b8ca380-e6d8-44fd-9876-8e3835a2eb0b"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{COA_CODE} != null ?
+ "Chart of Account :  " + $F{COA_CODE} + " - " + $F{COA_DESCRIP} + " - " + $F{COA_CURR_ID}
+:
+ ""]]></textFieldExpression>
+				</textField>
+				<textField pattern="#,##0.00;(#,##0.00)">
+					<reportElement x="687" y="55" width="130" height="20" uuid="8b0f1f46-074a-4c8d-bd35-b34d31279fee"/>
+					<textElement textAlignment="Right">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA[(
+    $F{BALANCE1} == null ? new BigDecimal("0") : $F{BALANCE1}
+).add(
+    $F{BALANCE2} == null ? new BigDecimal("0") : $F{BALANCE2}
+)]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="568" y="55" width="119" height="20" uuid="84bf6623-65c7-419e-8692-a4d3c9cdae65"/>
+					<textElement>
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression><![CDATA["Beginning Balance :"]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="903" y="32" width="35" height="15" uuid="d05707d4-c75e-427b-a258-6b9614123b59"/>
+					<textElement textAlignment="Right">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{PAGE_NUMBER}+ " of"]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Report">
+					<reportElement x="938" y="32" width="40" height="15" uuid="df6c482f-b62a-47ae-9dc0-36e81f177b83"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="Detail">
+		<groupExpression><![CDATA[$F{COA_CODE}]]></groupExpression>
+		<groupHeader>
+			<band height="50">
+				<subreport>
+					<reportElement x="0" y="0" width="1004" height="50" uuid="e9a31ca1-3283-4029-9183-ca2f92a925f0"/>
+					<subreportParameter name="P_TO">
+						<subreportParameterExpression><![CDATA[$P{P_TO}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="P_OFF_CODE">
+						<subreportParameterExpression><![CDATA[$P{P_OFF_CODE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="P_COA_CODE">
+						<subreportParameterExpression><![CDATA[$F{COA_CODE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="P_FROM">
+						<subreportParameterExpression><![CDATA[$P{P_FROM}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="P_BALANCE1">
+						<subreportParameterExpression><![CDATA[$F{BALANCE1}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="P_COA_NORMAL">
+						<subreportParameterExpression><![CDATA[$F{COA_NORMAL}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter name="P_BALANCE2">
+						<subreportParameterExpression><![CDATA[$F{BALANCE2}]]></subreportParameterExpression>
+					</subreportParameter>
+					<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "GLDetail.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+</jasperReport>

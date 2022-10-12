@@ -1,0 +1,112 @@
+CREATE OR REPLACE VIEW `VIEW_INQ_EXTENSION` AS SELECT
+    `T6`.`ID_KEY` AS `ID_KEY`,
+    `T6`.`TRX_VOUCHER_ID` AS `TRX_VOUCHER_ID`,
+    `T6`.`TRX_CLIENT` AS `TRX_CLIENT`,
+    `M`.`CLI_NAME` AS `CLI_NAME`,
+    `T6`.`TRX_CURR_ID` AS `TRX_CURR_ID`,
+    `T6`.`TRX_TSI_AMOUNT` AS `TRX_TSI_AMOUNT`,
+    `T6`.`CREATE_BY` AS `CREATE_BY`,
+    `T6`.`CREATE_ON` AS `CREATE_ON`,
+    (
+    SELECT DISTINCT
+        `T6A`.`TRX_COVER_CODE`
+    FROM
+        `TR0006A` `T6A`
+    WHERE
+        `T6`.`TRX_VOUCHER_ID` = `T6A`.`TRX_VOUCHER_ID`
+) AS `TRX_COVER_CODE`,
+(
+    SELECT
+        `M11`.`TC_DESC`
+    FROM
+        `MA0011` `M11`
+    WHERE
+        `M11`.`TC_CODE` =(
+        SELECT DISTINCT
+            `T6A`.`TRX_COVER_CODE`
+        FROM
+            `TR0006A` `T6A`
+        WHERE
+            `T6`.`TRX_VOUCHER_ID` = `T6A`.`TRX_VOUCHER_ID`
+    )
+) AS `TC_DESC`,
+(
+    SELECT
+        `T12`.`TRX_DESCRIPTION`
+    FROM
+        `TR0012` `T12`
+    WHERE
+        `T12`.`TRX_DATA_STATUS` = '11' AND `T12`.`TRX_OLD_VOUCHER_ID` = `T6`.`TRX_VOUCHER_ID` AND `T12`.`TRX_TYPE` = 'SE'
+    GROUP BY
+        `T12`.`TRX_OLD_VOUCHER_ID`
+) AS `TRX_DESCRIPTION`,
+(
+    SELECT
+        `T6A`.`TRX_INS_START`
+    FROM
+        `TR0006A` `T6A`
+    WHERE
+        `T6A`.`TRX_INS_START` IS NOT NULL AND `T6A`.`TRX_VOUCHER_ID` = `T6`.`TRX_VOUCHER_ID`
+    GROUP BY
+        `T6A`.`TRX_VOUCHER_ID`
+) AS `TRX_INS_START`,
+(
+    SELECT
+        DATE_FORMAT(`T6A`.`TRX_INS_START`, '%d/%m/%Y')
+    FROM
+        `TR0006A` `T6A`
+    WHERE
+        `T6A`.`TRX_INS_START` IS NOT NULL AND `T6A`.`TRX_VOUCHER_ID` = `T6`.`TRX_VOUCHER_ID`
+    GROUP BY
+        `T6A`.`TRX_VOUCHER_ID`
+) AS `TRX_INS_START_STR`,
+(
+    SELECT
+        `T6A`.`TRX_INS_END`
+    FROM
+        `TR0006A` `T6A`
+    WHERE
+        `T6A`.`TRX_INS_START` IS NOT NULL AND `T6A`.`TRX_VOUCHER_ID` = `T6`.`TRX_VOUCHER_ID`
+    GROUP BY
+        `T6A`.`TRX_VOUCHER_ID`
+) AS `TRX_INS_END`,
+(
+    SELECT
+        DATE_FORMAT(`T6A`.`TRX_INS_END`, '%d/%m/%Y')
+    FROM
+        `TR0006A` `T6A`
+    WHERE
+        `T6A`.`TRX_INS_START` IS NOT NULL AND `T6A`.`TRX_VOUCHER_ID` = `T6`.`TRX_VOUCHER_ID`
+    GROUP BY
+        `T6A`.`TRX_VOUCHER_ID`
+) AS `TRX_INS_END_STR`,
+(
+    SELECT
+        `T6A`.`TRX_TRX_ID`
+    FROM
+        `TR0006A` `T6A`
+    WHERE
+        `T6A`.`TRX_VOUCHER_ID` = `T6`.`TRX_VOUCHER_ID`
+    GROUP BY
+        `T6A`.`TRX_VOUCHER_ID`
+) AS `TRX_TRX_ID`,
+(
+    SELECT
+        `M5`.`CLI_NAME`
+    FROM
+        `MA0005` `M5`
+    WHERE
+        `M5`.`CLI_CODE` =(
+        SELECT
+            MAX(`T6B`.`TRX_INS_ID`)
+        FROM
+            `TR0006B` `T6B`
+        WHERE
+            `T6`.`TRX_VOUCHER_ID` = `T6B`.`TRX_VOUCHER_ID` AND `T6B`.`TRX_INS_TYPE` = '0'
+    )
+) AS `TRX_REINS`
+FROM
+    (`TR0006` `T6`
+JOIN `MA0005` `M`)
+WHERE
+    `T6`.`TRX_DATA_STATUS` = '11' AND `T6`.`TRX_CLIENT` = `M`.`CLI_CODE` AND `T6`.`TRX_CLASS` = 'FAC';

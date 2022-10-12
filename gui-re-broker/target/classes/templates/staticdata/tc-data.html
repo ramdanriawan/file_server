@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<th:block th:replace="fragments/import :: info-header" />
+<th:block th:replace="fragments/import :: css-header" />
+<th:block th:replace="fragments/import :: js-header" />
+
+<link href="css/jquery-ui.min.css" th:href="@{/css/richtext.min.css}"
+	rel="stylesheet">
+
+<style>
+.richText .richText-editor {
+	height: 125px;
+}
+</style>
+</head>
+
+<body id="page-top">
+	<th:block th:replace="fragments/general :: navbar-header" />
+
+	<div id="wrapper">
+		<th:block th:replace="fragments/general :: menu" />
+
+		<div id="content-wrapper">
+			<div class="container-fluid">
+				<th:block th:replace="fragments/general :: panel-page" />
+
+
+				<!-- CONTENT PAGE -->
+				<div id="cart" class="card mb-3">
+					<div id="divContentHeader" class="card-header">
+						<b><span id="titlePage" th:text="${titlePage}"></span></b>
+					</div>
+					<div class="card-body">
+						<div id="alertSuccess" class="alert alert-success"
+							style="display: none;">
+							<strong>Success!</strong> <span id="alertSuccessMsg"
+								th:text="${M_0005}"></span>
+						</div>
+						<div id="alertSuccessDelete" class="alert alert-success"
+							style="display: none;">
+							<strong>Success!</strong> <span id="alertSuccessDeleteMsg">Delete
+								data success</span>
+						</div>
+						<div id="alertFailed" class="alert alert-danger"
+							style="display: none;">
+							<strong>Failed!</strong> <span id="alertFailedMsg"></span>
+						</div>
+
+						<div id="tcDataIndex">
+							<div class="row justify-content-end">
+								<div class="col-md-2">
+									<button id="create" class="btn btn-primary col-md-12"
+										onclick="create()">
+										<i class="fa fa-plus"></i> Create
+									</button>
+								</div>
+							</div>
+							<br>
+							<div class="row justify-content-end">
+								<div class="col-md-1">
+									<label>Group</label>
+								</div>
+								<div class="col-md-2">
+									<select id="tcDataTableFilter" name="tcDataTableFilter"
+										class="select2" style="width: 100%">
+									</select>
+								</div>
+							</div>
+							<br>
+							<table id="tcDataTable" data-toggle="table"
+								data-unique-id="idKey" data-side-pagination="server"
+								data-pagination="true" data-page-size="5"
+								data-page-list="[5, 10, 25, 50, ALL]">
+								<thead>
+									<tr>
+										<th data-field="idKey">id</th>
+										<th data-field="groupName">groupName</th>
+										<th data-field="detailsName">Detail</th>
+										<th data-field="detailsDesc">Description</th>
+										<th data-field="detailStatusStr">Status</th>
+										<th data-field="action" data-halign="center"
+											data-align="center">Action</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+
+						<div id="tcDataCreate" hidden="true">
+							<div class="row justify-content-end">
+								<div class="col-md-2">
+									<button class="btn btn-danger col-md-12" onclick="back()">
+										<i class="fa fa-chevron-left"></i> Back
+									</button>
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-md-2">
+									<label>Group</label>
+								</div>
+								<div class="col-md-3">
+									<select name="group" id="group" class="select2"
+										style="width: 100%" required>
+									</select>
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-md-2">
+									<label>Details</label>
+								</div>
+								<div class="col-md-10">
+									<textarea class="form-control" id="details" name="details"
+										rows="5"></textarea>
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-md-2">
+									<label>Description</label>
+								</div>
+								<div class="col-md-10">
+									<textarea class="form-control" id="description"
+										name="description" rows="4"></textarea>
+								</div>
+							</div>
+							<br>
+							<div class="row">
+								<div class="col-md-2">
+									<label>Status</label>
+								</div>
+								<div class="col-md-2">
+									<select name="status" id="status" class="select2"
+										style="width: 100%" required>
+										<option value="11">Active</option>
+										<option value="12">Inactive</option>
+									</select>
+								</div>
+							</div>
+							<br>
+							<th:block th:replace="fragments/button :: btn-save-reset" />
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<!-- /.container-fluid -->
+			<th:block th:replace="fragments/modal :: confirmation-save" />
+			<th:block th:replace="fragments/modal :: confirmation-delete" />
+			<th:block th:replace="fragments/general :: copyright-footer"></th:block>
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<!-- /#wrapper -->
+
+	<th:block th:replace="fragments/general :: scroll-to-top" />
+	<th:block th:replace="fragments/general :: logout-modal" />
+	<th:block th:replace="fragments/import :: js-body" />
+
+</body>
+<script th:src="@{/js/jquery.richtext.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	var editObject = null;
+	$(function() {
+		$('#details').richText({
+			id : 'details'
+		});
+		$('#tcDataTable').bootstrapTable('hideColumn', 'idKey');
+		$('#tcDataTable').bootstrapTable('hideColumn', 'groupName');
+
+		rest('GET', '/gui-re-broker/static-data/tc-data/dropdown-tc-group')
+				.done(function(data) {
+					$('#tcDataTableFilter').select2({
+						width : '100%',
+						data : data
+					});
+					$('#group').select2({
+						width : '100%',
+						data : data
+					});
+
+					if (data.length > 0) {
+						refreshTcTable(data[0].text);
+					} else {
+						$('#tcDataTable').bootstrapTable('refreshOptions', {
+							theadClasses : 'thead-dark',
+							url : ''
+						});
+					}
+				});
+
+		$('#status').select2({
+			width : '100%'
+		});
+		$('#tcDataTableFilter').change(function() {
+			refreshTcTable($('#tcDataTableFilter option:selected').text());
+		});
+
+		$('#btnReset').click(function() {
+			reset();
+		});
+		$('#btnSave').click(function() {
+			save();
+		});
+
+		$('#btnModalYes').click(function() {
+			$('#btnModalYes').attr('disabled', true);
+			saveProcess();
+		});
+		$('#btnModalYesDelete').click(function() {
+			$('#btnModalYesDelete').attr('disabled', true);
+			removeProcess();
+		});
+	});
+	function create() {
+		$('#titlePage').text(/*[[${titlePageCreate}]]*/);
+		$('#tcDataCreate').removeAttr('hidden');
+		$('#tcDataIndex').attr('hidden', true);
+	}
+	function back() {
+		editObject = null;
+		$('#group').val('Conditions').trigger('change');
+		$('#richText-details').empty();
+		$('#description').val('');
+		$('#status').val('11').trigger('change');
+		$('#titlePage').text(/*[[${titlePage}]]*/);
+
+		$('#tcDataCreate').attr('hidden', true);
+		$('#tcDataIndex').removeAttr("hidden");
+
+	}
+
+	function refreshTcTable(group) {
+		var url = '/gui-re-broker/static-data/tc-data/inquiry?group=' + group;
+		$('#tcDataTable').bootstrapTable('refreshOptions', {
+			theadClasses : 'thead-dark',
+			url : url
+		});
+	}
+
+	function edit(idKey) {
+		editObject = $('#tcDataTable')
+				.bootstrapTable('getRowByUniqueId', idKey);
+		create();
+		$('#titlePage').text(/*[[${titlePageEdit}]]*/);
+		$('#group').val(editObject.groupName).trigger('change');
+		$('#richText-details').html(editObject.detailsName).trigger('change');
+		$('#description').val(editObject.detailsDesc);
+		$('#status').val(editObject.detailStatus).trigger('change');
+	}
+
+	function reset() {
+		if (editObject == null) {
+			$('#group').val('Conditions').trigger('change');
+			$('#richText-details').html('').trigger('change');
+			$('#description').val('');
+			$('#status').val('11').trigger('change');
+		} else {
+			$('#group').val(editObject.groupName).trigger('change');
+			$('#richText-details').html(editObject.detailsName).trigger('change');
+			$('#description').val(editObject.detailsDesc);
+			$('#status').val(editObject.detailStatus).trigger('change');
+		}
+	}
+
+	function saveIsOk() {
+		if ($('#details').val() == "" || $('#description').val() == "") {
+			return false
+		}
+		return true;
+	}
+
+	function save() {
+		if (saveIsOk()) {
+			$('#modalConfirmation').modal('show');
+		} else {
+			alert('Please complete all required field');
+		}
+	}
+
+	function saveProcess() {
+		var idKey = null;
+		if (editObject != null) {
+			idKey = editObject.idKey;
+		}
+		var group = $('#group').val();
+		var details = $('#details').val();
+		var description = $('#description').val();
+		var status = $('#status').val();
+		var saveData = {
+			idKey : idKey,
+			group : group,
+			details : details,
+			description : description,
+			status : status
+		}
+		var url = '/gui-re-broker/static-data/tc-data/save';
+		restPOST('POST', url, saveData).done(function(data) {
+			$('#modalConfirmation').modal('hide');
+			if (data.status == "200") {
+				showAlertSuccess();
+			} else {
+				showAlertFailed(data.message);
+			}
+		});
+	}
+
+	var idDelete = null;
+	function remove(idKey) {
+		idDelete = idKey;
+		$('#modalConfirmationDelete').modal('show');
+	}
+
+	function removeProcess() {
+		var saveData = {
+			idKey : idDelete
+
+		}
+		var url = '/gui-re-broker/static-data/tc-data/delete';
+		restPOST('POST', url, saveData).done(function(data) {
+			$('#modalConfirmationDelete').modal('hide');
+			if (data.status == "200") {
+				showAlertSuccessDelete();
+			} else {
+				showAlertFailed(data.message);
+			}
+		});
+	}
+
+	function showAlertSuccess() {
+		$(location).attr('href', '#page-top');
+		$('#alertSuccess').fadeTo(2000, 500).slideUp(500, function() {
+			$('#alertSuccess').slideUp(500);
+			location.reload();
+		});
+	}
+	function showAlertSuccessDelete() {
+		$(location).attr('href', '#page-top');
+		$('#alertSuccessDelete').fadeTo(2000, 500).slideUp(500, function() {
+			$('#alertSuccess').slideUp(500);
+			location.reload();
+		});
+	}
+
+	function showAlertFailed(msgAlert) {
+		$(location).attr('href', '#page-top');
+		$('#alertFailedMsg').text(msgAlert);
+		$('#alertFailed').fadeTo(3000, 500).slideUp(500, function() {
+			$('#alertFailed').slideUp(500);
+			$('#btnModalYesDelete').removeAttr('disabled')
+			$('#btnModalYes').removeAttr('disabled')
+		});
+	}
+
+	/*]]>*/
+</script>
+
+</html>

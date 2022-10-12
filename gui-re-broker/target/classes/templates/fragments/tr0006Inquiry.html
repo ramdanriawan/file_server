@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+	<th:block th:fragment="tr0006-inquiry">
+		<div class="card mb-3">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-2">
+						<label>Type of Cover</label>
+					</div>
+					<div class="col-md-3">
+						<select name="typeOfCover" id="typeOfCover" class="form-control"
+							required>
+							<option value="ALL">ALL</option>
+						</select>
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-md-2">
+						<label>Client</label>
+					</div>
+					<div class="col-md-3">
+						<div class="input-group">
+							<input id="tr6-client" name="client" type="text" class="form-control"
+								disabled> <input id="tr6-cliCode" name="cliCode" type="text"
+								class="form-control" hidden>
+							<div class="input-group-append">
+								<button id='btnClient' class="btn btn-primary" type="button"
+									data-toggle="modal" data-target="#tr6-client-modal">
+									<i class="fas fa-search"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-md-2">
+						<label>Transaction Date</label>
+					</div>
+					<div class="col-md-2">
+						<div class="input-group">
+							<input id="transactionDate" name="transactionDate" type="text"
+								class="form-control" disabled>
+							<div class="input-group-append">
+								<button id='btnTransactionDate' class="btn btn-primary"
+									type="button">
+									<i class="fas fa-calendar"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-1">
+						<label>to</label>
+					</div>
+					<div class="col-md-2">
+						<div class="input-group">
+							<input id="to" name="to" type="text" class="form-control"
+								disabled>
+							<div class="input-group-append">
+								<button id='btnTo' class="btn btn-primary" type="button">
+									<i class="fas fa-calendar"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<br>
+				<div class="row" id="forModifiedProduction">
+					<div class="col-md-2">
+						<label>Insured Name</label>
+					</div>
+					<div class="col-md-3">
+						<div class="input-group">
+							<input id="insuredName" name="insuredName" type="text" class="form-control"/> 
+						</div>
+					</div>
+				</div>
+				<br>
+				<th:block th:replace="fragments/button :: btn-search-reset" />
+				<br>
+				<div id="divExporToExcelTr6" class="row justify-content-end" hidden="true">
+					<div class="col-md-2">
+						<button id="exporToExcelTr6" class="btn btn-success col-md-12" disabled>
+							Export to Excel</button>
+					</div>
+				</div>
+				<br>
+				<table id="trxTable" data-toolbar-align="right" data-toggle="table"
+					data-sortable="true" data-url="" data-side-pagination="server"
+					data-pagination="true" data-page-size="5" data-unique-id="idKey"
+					data-pagination-v-align="top" data-page-list="[5, 10, 25, 50, ALL]">
+					<thead>
+						<tr>
+							<th data-field="idKey" data-sortable="true">idKey</th>
+							<th data-field="trxDateStr">Trade Date</th>
+							<th data-field="trxVoucherId" data-sortable="true">Voucher
+								Id</th>
+							<th data-field="trxSource" data-sortable="true">Source</th>
+							<th data-field="createOnStr" data-sortable="true">Create On</th>
+							<th data-field="trxCoverCode" data-sortable="true">Type Of
+								Cover</th>
+							<th data-field="cliName" data-sortable="true">Client/Cedant</th>
+							<th data-field="trxInsuredName" data-sortable="true">Insured
+								Name</th>
+							<th data-field="trxCurrId" data-sortable="true">Curr</th>
+							<th data-field="trxTsiAmountStr" data-halign="right"
+								data-align="right">Sum Insured</th>
+							<th data-field="trxRemarks">Remarks</th>
+							<th data-field="trxInsStartStr">trxInsStart</th>
+							<th data-field="trxInsEndStr">trxInsEnd</th>
+							<th data-field="saName">saName</th>
+							<th data-field="action" data-halign="center" data-align="center">Action</th>
+						</tr>
+					</thead>
+				</table>
+			</div>
+		</div>
+		<!-- Modal Client -->
+		<div class="modal fade" id="tr6-client-modal" tabindex="-1" role="dialog"
+			aria-labelledby="tr6-client-modal" aria-hidden="true">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="tr6-client-modal-label">Client</h5>
+						<button type="button" id="btnCloseClientModal" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="row card-body justify-content-end">
+							<div class="col-md-3">
+								<select id="clientSelector" name="clientSelector"
+									class="custom-select">
+									<option value="cliName">Name</option>
+									<option value="cliCode">Client Id</option>
+								</select>
+							</div>
+							<div class="input-group col-md-3">
+								<input id="clientFilterValue" type="text" class="form-control">
+								<div class="input-group-append">
+									<button id="clientFilterSearchBtn" class="btn btn-primary"
+										type="button" onclick="tr6clientFilteredSearch()">
+										<i class="fas fa-search"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+						<br>
+						<table id="tr6tableClient" data-toggle="table" data-url=""
+							data-sortable="true" data-side-pagination="server"
+							data-pagination="true" data-page-size="5"
+							data-pagination-v-align="top"
+							data-page-list="[5, 10, 25, 50, ALL]">
+							<thead>
+								<tr>
+									<th data-field="cliCode" data-sortable="true">Client ID</th>
+									<th data-field="cliName" data-sortable="true">Client Name</th>
+									<th data-field="cliDataStatusStr">Status</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+			$(function() {
+				$('#trxTable').bootstrapTable('hideColumn', 'idKey');
+				$('#trxTable').bootstrapTable('hideColumn', 'trxRemarks');
+				$('#trxTable').bootstrapTable('hideColumn', 'trxInsStartStr');
+				$('#trxTable').bootstrapTable('hideColumn', 'trxInsEndStr');
+				$('#trxTable').bootstrapTable('hideColumn', 'saName');
+				var isModifiedProduction = /*[[${isModifiedProduction}]]*/;
+				console.log("isModifiedProduction = "+isModifiedProduction);
+				if(isModifiedProduction == null){
+					$('#trxTable').bootstrapTable('hideColumn', 'createOnStr');
+					$('#forModifiedProduction').attr('hidden', 'true');
+				}
+				
+				$('#clientSelector').select2({ width: '100%' });
+				
+				rest('GET', [[${urlTypeOfCover}]] )
+					.done(function(data) {
+						$('#typeOfCover').select2({
+							width : '100%',
+							data : data
+						});
+					});
+			
+				$('#btnClient').click(function() {			
+					$('#clientFilterValue').val('');
+					$('#clientSelector').val('cliName').trigger('change');
+					
+					var url = [[${urlClient}]];
+					url = url + "?cliType=-0";
+					$('#tr6tableClient').bootstrapTable('refreshOptions', {
+					    theadClasses: 'thead-dark',
+					    url: url,
+					    pageNumber: 1
+					});
+				});
+				
+				$('#tr6-reset-client-modal').click(function() {			
+					$('#tr6-client').val('');
+					$('#tr6-cliCode').val('');
+				});
+			
+				$('#tr6tableClient').on('click-row.bs.table',function(e, row, $tr) {
+					$('#tr6-client').val(row.cliName);
+					$('#tr6-cliCode').val(row.cliCode);
+					$('#tr6-client-modal').modal('hide');
+				});
+				$('#transactionDate').datepicker({
+					dateFormat: 'dd/mm/yy',
+					changeMonth: true,
+					changeYear: true,
+				}).datepicker('setDate', [[${appDate}]]);
+				
+				$('#to').datepicker({
+					dateFormat: 'dd/mm/yy',
+					changeMonth: true,
+					changeYear: true,
+					minDate:[[${appDate}]]
+				}).datepicker('setDate', [[${appDate}]]);
+				
+				
+				$('#to').datepicker({
+					dateFormat: 'dd/mm/yy',
+					changeMonth: true,
+					changeYear: true,
+				});
+				$('#btnTransactionDate').click(function() {
+					$('#transactionDate').datepicker('show');
+				});
+				$('#btnTo').click(function() {
+					$('#to').datepicker('show');
+				});
+				
+				$('#transactionDate').change(function() {
+					$('#to').datepicker('option','minDate', $('#transactionDate').val());
+				});
+				
+				$('#btnTo').click(function() {
+					$('#to').datepicker('show');
+				});
+				
+				$('#btnSearch').click(function() {
+					search([[${urlSearch}]]);
+					$('#exporToExcelTr6').removeAttr('disabled');
+				});
+				
+				$('#trxTable').bootstrapTable('refreshOptions', {
+				    theadClasses: 'thead-dark',
+				});
+				
+				$('#btnReset').click(function() {
+					$('#typeOfCover').val('ALL').trigger('change');
+					$('#tr6-client').val('');
+					$('#tr6-cliCode').val('');
+					$('#trxTable').bootstrapTable('refreshOptions', {
+					    theadClasses: 'thead-dark',
+					    url: ''
+					});
+					
+					$('#transactionDate').datepicker({
+						dateFormat: 'dd/mm/yy',
+						changeMonth: true,
+						changeYear: true,
+					}).datepicker('setDate', [[${appDate}]]);
+					
+					$('#to').datepicker({
+						dateFormat: 'dd/mm/yy',
+						changeMonth: true,
+						changeYear: true,
+						minDate:[[${appDate}]]
+					}).datepicker('setDate', [[${appDate}]]);
+				});
+				
+				$('#btnCloseClientModal').click(function() {
+					$('#tr6-client').val('');
+					$('#tr6-cliCode').val('');
+				});
+			});
+			
+			function tr6clientFilteredSearch(){
+				var url = /*[[${urlClient}]]*/;
+				var filterKey = $( "#clientSelector" ).select2('val');
+				var filterValue = $( "#clientFilterValue" ).val();
+				var allUrl = url;
+				
+				if(filterValue != ""){
+					allUrl = url+"?filterKey="+filterKey+"&filterValue="+filterValue;
+				}
+				
+				$('#tr6tableClient').bootstrapTable('refreshOptions', {
+				    theadClasses: 'thead-dark',
+				    url: allUrl,
+				    pageNumber: 1
+				});
+			}
+			
+			function search(url){
+				var typeOfCover = $('#typeOfCover').val();
+				var client = $('#tr6-client').val();
+				var transactionDate = $('#transactionDate').val();
+				var to = $('#to').val();
+				var insuredName = $('#insuredName').val();
+				url = url + '?typeOfCover=' + typeOfCover
+				+ '&client=' +client
+				+ '&transactionDate=' +transactionDate
+				+ '&to=' +to
+				+ '&insuredName=' + insuredName;
+				
+				$('#trxTable').bootstrapTable('refreshOptions', {
+				    theadClasses: 'thead-dark',
+				    url: url,
+				    pageNumber: 1
+				});
+			}
+			/*]]>*/
+		</script>
+	</th:block>
+
+</body>
+
+</html>

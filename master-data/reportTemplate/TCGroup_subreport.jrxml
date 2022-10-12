@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TCGroup_subreport" pageWidth="515" pageHeight="555" orientation="Landscape" columnWidth="515" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="b0d234bf-4b01-477a-b99a-f0c693e5af12">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_VOUCHER_ID" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_TC_CODE" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select TC.TRX_TC_CODE, REPLACE(
+			REPLACE(
+			 REPLACE(
+			  REPLACE(TC.TRX_TC_DATA,'font-size:','foff-size:'),'font-family','foff-family'),
+			'<font face=','<foff face='),'</font>','</foff>') TRX_TC_DATA
+	from TR0006D TC
+	where TC.TRX_VOUCHER_ID = $P{P_VOUCHER_ID}
+	and TC.TRX_TC_CODE = $P{P_TC_CODE};]]>
+	</queryString>
+	<field name="TRX_TC_CODE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="TRX_TC_DATA" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<group name="TRX_TC_CODE">
+		<groupExpression><![CDATA[$F{TRX_TC_CODE}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="140" height="20" uuid="f2f6d417-ae77-4ae6-a229-9142782db3db"/>
+				<textElement>
+					<paragraph leftIndent="5" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TRX_TC_CODE} + ":"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="162" y="0" width="353" height="20" uuid="3fdbbc56-af27-435a-bef7-87d37aa6b1e1"/>
+				<textElement markup="html">
+					<paragraph leftIndent="5" rightIndent="5" spacingBefore="5" spacingAfter="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{TRX_TC_DATA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

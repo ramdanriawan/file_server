@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+</head>
+
+<body>
+
+	<th:block th:fragment="value-tab">
+		<div id="cart" class="card mb-3">
+			<div class="card-body">
+	
+			<div class="card mb-3">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-12">
+							<table id="t4Table" data-toolbar-align="right" data-toggle="table" data-sortable="true"
+							data-url="" data-side-pagination="server" data-pagination="true" data-page-size="5"
+							data-unique-id="id" data-pagination-v-align="top" data-page-list="[5, 10, 25, 50, ALL]">
+								<thead>
+									<tr>
+										<th data-field="no">No</th>
+										<th data-field="group">Group</th>
+										<th data-field="cob">COB</th>
+										<th data-field="type">Type</th>
+										<th data-field="remarks">Remarks</th>
+										<th data-field="pla" data-halign="right" data-align="right">PLA</th>
+										<th data-field="dla" data-halign="right" data-align="right">DLA</th>
+										<th data-field="date">Date</th>
+										<th data-field="status">Status</th>
+										<th data-field="action" data-halign="center" data-align="center">Action</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+					
+					<br>
+					
+					<div class="row">
+						<div class="col-md-1">
+							<label>No.</label><br> <input type="text"
+								name="t4no" id="t4no" class="form-control" disabled/>
+						</div>
+						<div class="col-md-3">
+							<label>Group</label><br> <select name="t4group" id="t4group" 
+								class="form-control" required>
+								<option value=""></option>
+							</select>
+						</div>
+						<div class="col-md-3">
+							<label>COB</label><br> <select name="t4cob" id="t4cob"
+								class="form-control" required>
+								<option value=""></option>
+							</select>
+						</div>
+						<div class="col-md-3">
+							<label>Layer</label><br> <select name="t4layer" id="t4layer" 
+								class="form-control" required>
+								<option value="Subs Layer">Subs Layer</option>
+								<option value="1st Layer">1st Layer</option>
+								<option value="2nd Layer">2nd Layer</option>
+								<option value="3rd Layer">3rd Layer</option>
+								<option value="4th Layer">4th Layer</option>
+								<option value="5th Layer">5th Layer</option>
+							</select>
+						</div>
+						
+					</div>
+					
+					<br>
+					
+					<div class="row">
+						<div class="col-md-4">
+							<label>*Type of Claim</label><br> <select name="t4typeOfClaim" id="t4typeOfClaim"
+								class="form-control" required>
+								<option value=""></option>
+							</select>
+						</div>
+						<div class="col-md-3">
+							<label>PLA</label><br> <input type="text" name="t4pla" id="t4pla" 
+								class="form-control" style="text-align: right;" required />
+						</div>
+						<div class="col-md-3">
+							<label>DLA</label><br> <input type="text" name="t4dla" id="t4dla" 
+								class="form-control" style="text-align: right;" required />
+						</div>
+					</div>
+					
+					<br>
+					
+					<div class="row">
+						<div class="col-md-8">
+							<label>For</label><br> <input type="text"
+								name="t4remarks" id="t4remarks" class="form-control" />
+						</div>
+						<div class="col-md-1">
+							<label> &nbsp;</label> <br>
+							<button id="t4add" class="btn btn-success col-md-12"
+								onclick="t4AddData()">Add</button>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+			
+			<div class="card mb-3">
+				<div class="card-body">
+					<div class="row">
+						<div class="col-md-8">
+							<label>Treaty Non Proportional</label>
+						</div>
+					</div>
+					
+					<br>
+					
+					<div class="row">
+						<div class="col-md-3">
+							<label>OR</label><br> <input type="text" name="t4or" id="t4or" 
+								class="form-control" style="text-align: right;" required disabled/>
+						</div>
+						<div class="col-md-3">
+							<label>QS</label><br> <input type="text" name="t4qs" id="t4qs" 
+								class="form-control" style="text-align: right;" required disabled/>
+						</div>
+						<div class="col-md-3">
+							<label>UR</label><br> <input type="text" name="t4ur" id="t4ur" 
+								class="form-control" style="text-align: right;" required disabled/>
+						</div>
+					</div>
+					
+					<br>
+					
+					<div class="row">
+						<div class="col-md-3">
+							<label>Claims C</label><br> <input type="text" name="t4claimsC" id="t4claimsC" 
+								class="form-control" style="text-align: right;" required disabled/>
+						</div>
+						<div class="col-md-3">
+							<label>Claims R</label><br> <input type="text" name="t4claimsR" id="t4claimsR" 
+								class="form-control" style="text-align: right;" required disabled/>
+						</div>
+					</div>
+					
+					<br>
+					
+					<div class="row">
+						<div class="col-md-2">
+							<label>Reinstatment No.</label><br> <input type="text"
+								name="t4reinsNo" id="t4reinsNo" class="form-control"/>
+						</div>
+						<div class="col-md-3">
+							<label>Reinstatment Premium C</label><br> <input type="text" name="t4reinsPremiC" id="t4reinsPremiC" 
+								class="form-control" style="text-align: right;" required disabled/>
+						</div>
+						<div class="col-md-3">
+							<label>Reinstatment Premium R</label><br> <input type="text" name="t4reinsPremiR" id="t4reinsPremiR" 
+								class="form-control" style="text-align: right;" required disabled/>
+						</div>
+					</div>
+					
+					<br>
+					
+					<div class="row">
+						<div class="col-md-12" align="center">
+							<button class="btn btn-success col-sm-1" id="btnDc">DC Create</button>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-md-2">
+				</div>
+				<div class="col-md-8">
+					<label>Remarks</label><br> <input type="text"
+						name="t4remarks2" id="t4remarks2" class="form-control" />
+				</div>
+			</div>
+			
+			<br>
+			
+			<div class="row">
+				<div class="col-md-12" align="center">
+					<button class="btn btn-success col-sm-1" id="printPla">Print PLA</button>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+					<button class="btn btn-success col-sm-1" id="printDla">Print DLA</button>
+				</div>
+			</div>
+		
+			</div>
+		</div>
+		<script type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+
+			var t4Value = null;	
+				
+			$(function () {
+				$('#t4group').select2({width: '100%'});
+				$('#t4cob').select2({width: '100%'});
+				$('#t4layer').select2({width: '100%'});
+				$('#t4typeOfClaim').select2({width: '100%'});
+				$('#t4bank').select2({width: '100%'});
+				
+				$('#t4layer').val('1st Layer').trigger('change');
+				
+				var urlParam = /*[[@{/static-data/dropdown-param}]]*/;
+				rest('GET', urlParam + '?parentCode=COBGROUP').done(function(data) {
+					$('#t4group').select2({
+						width : '100%',
+						data : data
+					});
+				});
+				
+				var urlCOB = /*[[@{/marketing/claims-internal/get-dropdownTypeOfCoverVal}]]*/;
+				rest('GET', urlCOB).done(function(data) {
+					$('#t4cob').select2({
+						width : '100%',
+						data : data
+					});
+				});
+				
+				var urlTypeOfClaim = /*[[@{/static-data/dropdown-param}]]*/;
+				rest('GET', urlTypeOfClaim + '?parentCode=CLAIMTP').done(function(data) {
+					$('#t4typeOfClaim').select2({
+						width : '100%',
+						data : data
+					});
+				});
+				
+				var urlBank = /*[[@{/static-data/dropdown-bank}]]*/;
+				rest('GET', urlBank).done(function(data) {
+					$('#t4bank').select2({
+						width : '100%',
+						data : data
+					});
+				});
+			});
+			
+			new AutoNumeric('#t4pla', {
+			    decimalCharacter : '.',
+			    digitGroupSeparator : ',',
+			    maximumValue : '999999999999999999.00',
+			    minimumValue : '0'
+			});
+			AutoNumeric.getAutoNumericElement('#t4pla').set('0.00');
+			
+			new AutoNumeric('#t4dla', {
+			    decimalCharacter : '.',
+			    digitGroupSeparator : ',',
+			    maximumValue : '999999999999999999.00'
+			});
+			AutoNumeric.getAutoNumericElement('#t4dla').set('0.00');
+			
+			new AutoNumeric('#t4or', {
+			    decimalCharacter : '.',
+			    digitGroupSeparator : ',',
+			    maximumValue : '999999999999999999.00'
+			});
+			AutoNumeric.getAutoNumericElement('#t4or').set('0.00');
+			
+			new AutoNumeric('#t4qs', {
+			    decimalCharacter : '.',
+			    digitGroupSeparator : ',',
+			    maximumValue : '999999999999999999.00'
+			});
+			AutoNumeric.getAutoNumericElement('#t4qs').set('0.00');
+			
+			new AutoNumeric('#t4ur', {
+			    decimalCharacter : '.',
+			    digitGroupSeparator : ',',
+			    maximumValue : '999999999999999999.00'
+			});
+			AutoNumeric.getAutoNumericElement('#t4ur').set('0.00');
+			
+			new AutoNumeric('#t4claimsC', {
+			    decimalCharacter : '.',
+			    digitGroupSeparator : ',',
+			    maximumValue : '999999999999999999.00'
+			});
+			AutoNumeric.getAutoNumericElement('#t4claimsC').set('0.00');
+			
+			new AutoNumeric('#t4claimsR', {
+			    decimalCharacter : '.',
+			    digitGroupSeparator : ',',
+			    maximumValue : '999999999999999999.00'
+			});
+			AutoNumeric.getAutoNumericElement('#t4claimsR').set('0.00');
+			
+			new AutoNumeric('#t4reinsPremiC', {
+			    decimalCharacter : '.',
+			    digitGroupSeparator : ',',
+			    maximumValue : '999999999999999999.00'
+			});
+			AutoNumeric.getAutoNumericElement('#t4reinsPremiC').set('0.00');
+			
+			new AutoNumeric('#t4reinsPremiR', {
+			    decimalCharacter : '.',
+			    digitGroupSeparator : ',',
+			    maximumValue : '999999999999999999.00'
+			});
+			AutoNumeric.getAutoNumericElement('#t4reinsPremiR').set('0.00');
+			
+			new AutoNumeric('#t4reinsNo', {
+			    digitGroupSeparator : '',
+			    maximumValue : '99.00',
+			    minimumValue : '0',
+				decimalPlaces : '0'
+			});
+			AutoNumeric.getAutoNumericElement('#t4reinsNo').set('0');
+			
+			$('#t4date').datepicker({
+				dateFormat: 'dd/mm/yy',
+				changeMonth: true,
+				changeYear: true
+			});
+
+			$('#t4btnDate').click(function(){
+				$('#t4date').datepicker('show');
+			});
+			
+			function t4AddData() {
+				var valReq = t4ValidationRequiredAdd();
+				
+				if(valReq.length>0) {
+					alert('Please fill : '+ valReq + '.');
+					
+					return null;
+				}
+				
+				var id = create_UUID();
+				var idKey = "0"; //default
+				var groupId = $('#t4group option:selected').val();
+				var group = $('#t4group option:selected').text();
+				var cobId = $('#t4cob option:selected').val();
+				var cob = $('#t4cob option:selected').text();
+				var typeId = $('#t4typeOfClaim option:selected').val();
+				var type = $('#t4typeOfClaim option:selected').text();
+				var layer = $('#t4layer option:selected').text();
+				var pla = $('#t4pla').val();
+				var dla = $('#t4dla').val();
+				var remarks = $('#t4remarks').val();
+				var statusId = '0';
+				var status = 'New';
+				
+				var action = "<div class=\"input-group\">"
+				+ "<button class=\"btn btn-danger\" onclick=\"t4RemoveData('"+id+"')\">" 
+				+ "<i class=\"fa fa-trash\"></i>" 
+				+ "</button>&nbsp;"
+				+ "<button class=\"btn btn-primary\" onclick=\"t4EditData('"+id+"')\">" 
+				+ "<i class=\"fa fa-edit\"></i>" 
+				+ "</button>&nbsp;"
+				+ "<div class=\"custom-control custom-checkbox\">" 
+				+ "<input type=\"checkbox\" class=\"custom-control-input\" name=\"t4_" + id + "\" id=\"t4_" + id + "\">"
+				+ "<label class=\"custom-control-label\" for=\"t4_" + id + "\"></label>"
+				+ "</div>"
+				+ "</div>"
+				
+				var data = {
+					id: id,
+					idKey: idKey,
+					group: group,
+					groupId: groupId,
+					cobId: cobId,
+					cob: cob,
+					typeId: typeId,
+					type: type,
+					layer: layer,
+					pla: pla,
+					dla: dla,
+					remarks: remarks,
+					statusId: statusId,
+					status: status,
+					action: action
+				}
+				
+				if(t4Value != null) {
+					t4Value.group = group;
+					t4Value.groupId = groupId;
+					t4Value.cobId = cobId;
+					t4Value.cob = cob;
+					t4Value.layer = layer;
+					t4Value.typeId = typeId;
+					t4Value.type = type
+					t4Value.pla = pla;
+					t4Value.dla = dla;
+					t4Value.remarks = remarks;
+					
+					$('#t4Table').bootstrapTable('updateByUniqueId', {
+						id: t4Value.id, 
+						row: t4Value
+					});
+				}else {
+					$('#t4Table').bootstrapTable('append', data);
+				}
+				reorderNumberTableT4();	
+				
+				$('#t4no').val('');
+				$('#t4group').val('').trigger('change');
+				$('#t4cob').val('').trigger('change');
+				$('#t4layer').val('1st Layer').trigger('change');
+				$('#t4typeOfClaim').val('').trigger('change');
+				AutoNumeric.getAutoNumericElement('#t4pla').set('0.00');
+				AutoNumeric.getAutoNumericElement('#t4dla').set('0.00');
+				$('#t4remarks').val('');
+				
+				t4Value = null;
+			}
+			
+			function t4ValidationRequiredAdd() {
+				var field = [];
+				
+				if(!$('#t4group').val().trim())
+					field.push("Group");
+				
+				if(!$('#t4cob').val().trim())
+					field.push("COB");
+				
+				if(!$('#t4typeOfClaim').val().trim())
+					field.push("Type of Claim");
+				
+				return field;
+			}
+			
+			function reorderNumberTableT4() {
+				var t4Table = $('#t4Table').bootstrapTable('getData');
+				
+				for(var i=1; i<=t4Table.length; i++) {
+					var id = t4Table[i-1].id;
+					var t4Data = $('#t4Table').bootstrapTable('getRowByUniqueId', id);
+					t4Data.no = i;
+					
+					$('#t4Table').bootstrapTable('updateByUniqueId', {
+						id: id, 
+						row: t4Data
+					});	
+				}
+			}
+			
+			function t4RemoveData(id) {
+				var isDelete = confirm("Are you sure to delete?");
+				
+				if(isDelete == true) {
+					$('#t4Table').bootstrapTable('removeByUniqueId', id);
+					reorderNumberTableT4();	
+				}
+			}
+			
+			function t4EditData(id) {	
+				t4Value = $('#t4Table').bootstrapTable('getRowByUniqueId', id);
+				
+				$('#t4no').val(t4Value.no);
+				$('#t4group').val(t4Value.groupId).trigger('change');
+				$('#t4cob').val(t4Value.cobId).trigger('change');
+				$('#t4layer').val(t4Value.layer).trigger('change');
+				$('#t4typeOfClaim').val(t4Value.typeId).trigger('change');
+				AutoNumeric.getAutoNumericElement('#t4pla').set(t4Value.pla);
+				AutoNumeric.getAutoNumericElement('#t4dla').set(t4Value.dla);
+				$('#t4remarks').val(t4Value.remarks);
+			}
+			
+			function setNumberT4(id) {	
+				t4Value = $('#t4Table').bootstrapTable('getRowByUniqueId', id);
+				
+				$('#t4group').val(t4Value.groupId).trigger('change');
+				$('#t4cob').val(t4Value.cobId).trigger('change');
+				$('#t4typeOfClaim').val(t4Value.typeId).trigger('change');
+				AutoNumeric.getAutoNumericElement('#t4pla').set(t4Value.pla);
+				AutoNumeric.getAutoNumericElement('#t4dla').set(t4Value.dla);
+				$('#t4remarks').val(t4Value.remarks);
+			}
+			
+			function setNoT4() {
+				var datas = $('#t3-addTable').bootstrapTable('getData');
+			}
+			
+			$('#t4or').on('change', function() {
+				calculateQs();
+				calculateUr();
+				
+				calculatePremiumC();
+				calculatePremiumR();
+				calculateClaimsC();
+				calculateClaimsR();
+			});
+			
+			$('#t4qs').on('change', function() {
+			});
+			
+			$('#t4ur').on('change', function() {				
+				calculatePremiumC();
+				calculatePremiumR();
+				calculateClaimsC();
+				calculateClaimsR();
+			});
+			
+			$('#t4reinsPremiC').on('change', function() {
+				calculateClaimsC();
+			});
+			
+			$('#t4reinsPremiR').on('change', function() {
+				calculateClaimsR();
+			});
+			
+			$('#t4reinsNo').on('change', function() {
+				var value = $(this).val();
+		        if(value < oldReinsNo)
+		        	AutoNumeric.getAutoNumericElement('#t4reinsNo').set(oldReinsNo);
+			});
+			
+			var tr6j = new Object();
+			
+			function calculateQs() {
+				var t4or = parseFloat(AutoNumeric.getAutoNumericElement('#t4or').get());
+				var plaDla = getPlaDla();
+				
+				var t4qs = plaDla - t4or;
+				AutoNumeric.getAutoNumericElement('#t4qs').set(t4qs);
+				
+				getValueTR6J();
+			}
+			
+			function calculateUr() {
+				var deducAmt = tr6j.trxDeducAmt;
+				if(deducAmt == null)
+					deducAmt = 0.00;
+				
+				AutoNumeric.getAutoNumericElement('#t4ur').set(deducAmt);
+			}
+			
+			function calculatePremiumC() {
+				var t4or = parseFloat(AutoNumeric.getAutoNumericElement('#t4or').get());
+				var t4ur = parseFloat(AutoNumeric.getAutoNumericElement('#t4ur').get());
+				
+				var A1 = getDla();
+				if(A1 == 0)
+					A1 = getPla() - t4ur - t4or;
+				
+				var A2 = tr6j.trxLimitAmt;
+				var A3 = tr6j.trxOgnrpi * (tr6j.trxXolRate/100) * (tr6j.trxDepositRate/100);
+				
+				AutoNumeric.getAutoNumericElement('#t4reinsPremiC').set((A1/A2) * A3);
+			}
+			
+			function calculatePremiumR() {
+				var t4or = parseFloat(AutoNumeric.getAutoNumericElement('#t4or').get());
+				var t4ur = parseFloat(AutoNumeric.getAutoNumericElement('#t4ur').get());
+				
+				var A1 = getDla();
+				if(A1 == 0)
+					A1 = getPla() - t4ur - t4or;
+				
+				var A2 = tr6j.trxLimitAmt;
+				
+				var trxXolReas = tr6j.trxXolReas;
+				if(trxXolReas == 0)
+					trxXolReas = tr6j.trxXolRate;
+				
+				var trxDepositReas = tr6j.trxDepositReas;
+				if(trxDepositReas == 0)
+					trxDepositReas = tr6j.trxDepositRate;
+				
+				var A3 = tr6j.trxOgnrpi * (trxXolReas/100) * (trxDepositReas/100);
+				
+				AutoNumeric.getAutoNumericElement('#t4reinsPremiR').set((A1/A2) * A3);
+			}
+			
+			function calculateClaimsC() {
+				var t4or = parseFloat(AutoNumeric.getAutoNumericElement('#t4or').get());
+				var t4ur = parseFloat(AutoNumeric.getAutoNumericElement('#t4ur').get());
+				var premiC = AutoNumeric.getAutoNumericElement('#t4reinsPremiC').get();
+				
+				var formulaB = t4or - t4ur - premiC;
+				
+				AutoNumeric.getAutoNumericElement('#t4claimsC').set(formulaB);
+			}
+			
+			function calculateClaimsR() {
+				var t4or = parseFloat(AutoNumeric.getAutoNumericElement('#t4or').get());
+				var t4ur = parseFloat(AutoNumeric.getAutoNumericElement('#t4ur').get());
+				var premiR = AutoNumeric.getAutoNumericElement('#t4reinsPremiR').get();
+				
+				var formulaB = t4or - t4ur - premiR;
+				
+				AutoNumeric.getAutoNumericElement('#t4claimsR').set(formulaB);
+			}
+			
+			function getValueTR6J() {
+				var params = getParamTr6j();
+				params.trxVoucherId = $('#t1OldTrxVoucherId').val();
+					
+				$.ajax({
+					type: 'POST', global: false, async: false, dataType: 'json',  
+					contentType:'application/json',
+					url: /*[[@{/marketing/claims-internal/get-tr6j}]]*/, 
+					data: JSON.stringify(params), 
+					success: function(data) {
+						tr6j = data;
+					}
+				}).done(function(data) {
+					
+				}).fail(function() {
+					showAlertFailed('Failed get data Treaty Non Proportional');
+				});
+			}
+			
+			function getParamTr6j() {
+				var params = new Object();
+
+				var datas = $('#t4Table').bootstrapTable('getData');
+				for(var i=0; i<datas.length; i++) {
+					if(datas[i].typeId == '0') {
+						params.idKey = datas[i].idKey
+						params.groupId = datas[i].groupId;
+						params.layer = datas[i].layer;
+					}
+				}
+				
+				return params;
+			}
+			
+			function getGroupLayerChecked() {
+				var params = new Object();
+
+				var datas = $('#t4Table').bootstrapTable('getData');
+				for(var i=0; i<datas.length; i++) {
+					if($("#t4_" + datas[i].id).prop("checked") == true) {
+						params.group = datas[i].groupId;
+						params.layer = datas[i].layer;
+					}
+				}
+				
+				return params;
+			}
+			
+			function getIdKeyT4() {
+				var idKey = [];
+				
+				var datas = $('#t4Table').bootstrapTable('getData');
+				for(var i=0; i<datas.length; i++) {
+					if($("#t4_" + datas[i].id).prop("checked") == true)
+						idKey.push(datas[i].idKey);
+				}
+				
+				return idKey;
+			}
+			
+			function getPla() {
+				var datas = $('#t4Table').bootstrapTable('getData');
+				
+				var value = 0.00;
+				for(var i=0; i<datas.length; i++) {
+					if(datas[i].typeId == '0') {
+						var pla = parseFloat(datas[i].pla.replace(/,/g, ""));
+						value += pla;
+					}
+				}
+				
+				return value;
+			}
+			
+			function getDla() {
+				var datas = $('#t4Table').bootstrapTable('getData');
+				
+				var value = 0.00;
+				for(var i=0; i<datas.length; i++) {
+					if(datas[i].typeId == '0') {
+						var dla = parseFloat(datas[i].dla.replace(/,/g, ""));
+						value += dla;
+					}
+				}
+				
+				return value;
+			}
+			
+			function getPlaDla() {
+				var pla  = getPla();
+				var dla  = getDla();
+				
+				if(dla != null && dla != 0)
+					return dla;
+				else if(pla != null && pla != 0)
+					return pla;
+				else
+					return 0;
+			}
+			
+			/*]]>*/
+		</script>
+	</th:block>
+
+</body>
+
+</html>

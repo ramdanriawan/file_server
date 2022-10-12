@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <th:block th:replace="fragments/import :: info-header" />
+        <th:block th:replace="fragments/import :: css-header" />
+        <th:block th:replace="fragments/import :: js-header" />
+
+        <!-- Auto Numeric -->
+        <script th:src="@{/js/autoNumeric.min.js}"></script>
+    </head>
+
+    <body id="page-top">
+        <th:block th:replace="fragments/general :: navbar-header" />
+        <div id="wrapper">
+            <th:block th:replace="fragments/general :: menu" />
+            <div id="content-wrapper">
+                <div class="container-fluid">
+                    <th:block th:replace="fragments/general :: panel-page" />
+
+                    <!-- CONTENT PAGE -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <b><span id="titlePage" th:text="${titlePage}"></span></b>
+                        </div>
+                        <div id="alertSuccess" class="alert alert-success"
+                             style="display: none;">
+                            <strong>Success!</strong> <span id="alertSuccessMsg"
+                                                            th:text="${M_0005}"></span>
+                        </div>
+                        <div id="alertSuccessDelete" class="alert alert-success"
+                             style="display: none;">
+                            <strong>Success!</strong> <span id="alertSuccessDeleteMsg">Delete
+                                data success</span>
+                        </div>
+                        <div id="alertFailed" class="alert alert-danger"
+                             style="display: none;">
+                            <strong>Failed!</strong> <span id="alertFailedMsg"></span>
+                        </div>
+                        <!-- INQUIRY -->
+                        <div id="ojkSetupDirectGrid" class="card-body">
+                            <div class="row justify-content-lg-between">
+                                <div class="col-md-2">
+                                    <label>Report Code</label>
+                                    <select name="reportCode" id="reportCode" class="form-control" required>
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="row justify-content-lg-between">
+                                <div class="col-md-4">
+                                    <label>Row</label>
+                                    <select name="sheetRow" id="sheetRow" class="form-control" required>
+                                    </select>
+                                </div>
+                                <div class="col-md-1">
+                                    <label>Operator</label>
+                                    <select name="operator" id="operator" class="form-control" required>
+                                        <option value="+">+</option>
+                                        <option value="-">-</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>Chart of Account</label>
+                                    <select name="chartOfAccount" id="chartOfAccount" class="form-control" required>
+                                        <option value=""> </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-1">
+                                    <label>Level</label> <br>
+                                    <input id="kolLevel" name="kolLevel" type="number" value="0" min="0"
+                                           class="form-control" style="text-align: right;">
+                                </div>
+                                <div class="col-md-1 justify-content-end">
+                                    <br/>
+                                    <button id="buttonAdd" onclick="addGridRow()" class="btn btn-primary col-md-12">
+                                        <i class="fa fa-plus"></i> Add
+                                    </button>
+                                </div>
+                            </div>
+                            <br/>
+                            <table id="ojkRulesGrid" data-toggle="table" data-unique-id="id"
+                                   data-url="" data-side-pagination="server" data-pagination="true"
+                                   data-page-size="5" data-page-list="[5, 10, 25, 50, ALL]">
+                                <thead>
+                                    <tr>
+                                        <th data-field="id">ID</th>
+                                        <th data-field="sheetRow" data-align="right">Row</th>
+                                        <th data-field="kolomA">Uraian</th>
+                                        <th data-field="kolomB" data-align="center">Kode</th>
+                                        <th data-field="kolomC" data-align="center">Rincian</th>
+                                        <th data-field="kolLevel">Kol Level</th>
+                                        <th data-field="rOper" data-align="center">Operator</th>
+                                        <th data-field="rCoa" data-align="center">COA</th>
+                                        <th data-field="coaDescript">Deskripsi</th>
+                                        <th data-field="action" data-align="center" >Action</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                            <br/>
+                            <div class="row justify-content-center">
+                                <div class="col-md-2">
+                                    <button id="buttonSave" class="btn btn-primary col-md-12">
+                                        <i class="fa fa-save"></i> Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <th:block th:replace="fragments/modal :: confirmation-save" />
+                <th:block th:replace="fragments/modal :: confirmation-delete" />
+                <th:block th:replace="fragments/general :: copyright-footer"></th:block>
+            </div>
+        </div>
+        <th:block th:replace="fragments/general :: scroll-to-top" />
+        <th:block th:replace="fragments/general :: logout-modal" />
+        <th:block th:replace="fragments/import :: js-body" />
+    </body>
+
+    <script type="text/javascript" th:inline="javascript">
+        /*<![CDATA[*/
+
+        const reportCodeDropdown = $('#reportCode');
+        const ojkRulesGrid = $('#ojkRulesGrid');
+        const chartOfAccountDropdown = $('#chartOfAccount');
+        const rowDropdown = $('#sheetRow');
+        const operatorDropdown = $('#operator');
+        const kolLevelInput = $('#kolLevel');
+
+        $(function() {
+            ojkRulesGrid.bootstrapTable('hideColumn', 'id');
+            ojkRulesGrid.bootstrapTable('hideColumn', 'kolLevel');
+
+            rest('GET', '/gui-re-broker/static-data/ojk-report-setup-direct/dropdown-report-code')
+                .done(function (data) {
+                    reportCodeDropdown.select2({
+                        width: '100%',
+                        data: data
+                    });
+                });
+            rest('GET', '/gui-re-broker/static-data/ojk-report-setup-direct/dropdown-coa')
+                .done(function (data) {
+                    chartOfAccountDropdown.select2({
+                        width: '100%',
+                        data: data
+                    });
+                });
+
+            $('#buttonSave').click(function() {
+                save();
+            });
+            $('#btnModalYes').click(function() {
+                $('#btnModalYes').attr('disabled', true);
+                saveProcess();
+            });
+            $('#btnModalYesDelete').click(function() {
+                $('#btnModalYesDelete').attr('disabled', true);
+                removeProcess();
+            });
+        });
+
+        reportCodeDropdown.change(function() {
+            rest('GET', '/gui-re-broker/static-data/ojk-report-setup-direct/dropdown-row?reportcode=' +
+                    reportCodeDropdown.val())
+                .done(function (data) {
+                    rowDropdown.empty().select2({
+                        width: '100%',
+                        data: data
+                    });
+                });
+            ojkRulesGrid.bootstrapTable('selectPage', 1);
+            ojkRulesGrid.bootstrapTable('refreshOptions', {
+                theadClasses : 'thead-dark',
+                undefinedText: '',
+                url : '/gui-re-broker/static-data/ojk-report-setup-direct/inquiry?reportcode=' +
+                        reportCodeDropdown.val()
+            });
+        });
+
+        function addGridRow() {
+            const rowDropdownSelectedText = rowDropdown.find('option:selected').text();
+            const rowText = rowDropdownSelectedText.split('-')[0];
+            const uraianText = rowDropdownSelectedText.slice(rowDropdownSelectedText.indexOf('-')+1, );
+            const coaCode = chartOfAccountDropdown.val();
+            const kolLevel = kolLevelInput.val();
+
+            if (!areRequiredFieldsFilled()) {
+                alert('Please fill all of required fields!');
+            } else if (isDuplicate(rowText, coaCode)) {
+                alert('Duplicate Found!');
+            } else {
+                const id = create_UUID();
+                const newRow = {
+                    id: id,
+                    sheetRow: rowText,
+                    kolomA: uraianText,
+                    kolomB: '',
+                    kolomC: '',
+                    kolLevel: kolLevel,
+                    rOper: operatorDropdown.val(),
+                    rCoa: coaCode,
+                    coaDescrip: '',
+                    action: "<button class=\"btn btn-danger\" onclick=\"removeAddedRow('" + id + "')\">" +
+                        "<i class=\"fa fa-trash\"></i></button>"
+                }
+                let appendData = [];
+                appendData.push(newRow);
+
+                ojkRulesGrid.bootstrapTable('append', appendData);
+            }
+        }
+
+        function create_UUID() {
+            var dt = new Date().getTime();
+            var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = (dt + Math.random()*16)%16 | 0;
+                dt = Math.floor(dt/16);
+                return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+            });
+            return uuid;
+        }
+
+        function areRequiredFieldsFilled() {
+            if (reportCodeDropdown.val() != "" && rowDropdown.val() != "" && chartOfAccountDropdown.val() != "") {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function isDuplicate(row, coa) {
+            const tableData = ojkRulesGrid.bootstrapTable('getData');
+
+            for (let i in tableData) {
+                if ((tableData[i].sheetRow == row) && (tableData[i].rCoa == coa)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function removeAddedRow(id){
+            ojkRulesGrid.bootstrapTable('removeByUniqueId', id);
+        }
+
+        var idDelete = null;
+        function remove(idKey) {
+            idDelete = idKey;
+            $('#modalConfirmationDelete').modal('show');
+        }
+
+        function removeProcess() {
+            var saveData = {
+                idKey : idDelete,
+                reportCode: reportCodeDropdown.val()
+            }
+            var url = '/gui-re-broker/static-data/ojk-report-setup-direct/delete';
+            restPOST('POST', url, saveData).done(function(data) {
+                $('#modalConfirmationDelete').modal('hide');
+                if (data.status == "200") {
+                    showAlertSuccessDelete();
+                } else {
+                    showAlertFailed(data.message);
+                }
+            });
+        }
+
+        function saveIsOk() {
+            if (reportCodeDropdown.val() == '') {
+                return false
+            }
+            return true;
+        }
+
+        function save() {
+            if (saveIsOk()) {
+                $('#modalConfirmation').modal('show');
+            } else {
+                alert('Please fill all required fields');
+            }
+        }
+
+        function saveProcess() {
+            $('#modalConfirmation').modal('hide');
+
+            const tableRows = ojkRulesGrid.bootstrapTable('getData');
+
+            let rowsData = [];
+            for(let i = 0;i<tableRows.length;i++) {
+                rowsData.push(tableRows[i]);
+            }
+
+            let dataObject = {
+                reportCode: reportCodeDropdown.val(),
+                rows: rowsData
+            }
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(dataObject),
+                url: /*[[@{/static-data/ojk-report-setup-direct/save}]]*/,
+                success: function (dataObject) {
+                    if (dataObject)
+                        showAlertSuccess();
+                    else
+                        showAlertFailed(/*[[${M_0006}]]*/);
+                },
+                complete: function (jqXHR, textStatus) {
+                    if (textStatus != "success")
+                        showAlertFailed(/*[[${M_0006}]]*/);
+                }
+
+            });
+        }
+
+        function showAlertSuccess() {
+            $(location).attr('href', '#page-top');
+            $('#alertSuccess').fadeTo(2000, 500).slideUp(500, function() {
+                $('#alertSuccess').slideUp(500);
+                $('#btnModalYes').removeAttr('disabled')
+                ojkRulesGrid.bootstrapTable('refresh');
+            });
+        }
+
+        function showAlertSuccessDelete() {
+            $(location).attr('href', '#page-top');
+            $('#alertSuccessDelete').fadeTo(2000, 500).slideUp(500, function() {
+                $('#alertSuccess').slideUp(500);
+                ojkRulesGrid.bootstrapTable('refresh');
+                $('#btnModalYesDelete').removeAttr('disabled')
+            });
+        }
+
+        function showAlertFailed(msgAlert) {
+            $(location).attr('href', '#page-top');
+            $('#alertFailedMsg').text(msgAlert);
+            $('#alertFailed').fadeTo(3000, 500).slideUp(500, function() {
+                $('#alertFailed').slideUp(500);
+                $('#btnModalYesDelete').removeAttr('disabled')
+                $('#btnModalYes').removeAttr('disabled')
+            });
+        }
+        /*]]>*/
+    </script>
+</html>

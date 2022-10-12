@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<th:block th:replace="fragments/import :: info-header" />
+<th:block th:replace="fragments/import :: css-header" />
+<th:block th:replace="fragments/import :: js-header" />
+
+<!-- Auto Numeric -->
+<script th:src="@{/js/autoNumeric.min.js}"></script>
+</head>
+
+<body id="page-top">
+	<th:block th:replace="fragments/general :: navbar-header" />
+
+	<div id="wrapper">
+		<th:block th:replace="fragments/general :: menu" />
+
+		<div id="content-wrapper">
+			<div class="container-fluid">
+				<th:block th:replace="fragments/general :: panel-page" />
+
+				<!-- CONTENT PAGE -->
+				<div class="card mb-3">
+					<div class="card-header">
+						<b><span id="titlePage" th:text="${titlePage}"></span></b>
+					</div>
+					<div id="alertSuccess" class="alert alert-success"
+						style="display: none;">
+						<strong>Success!</strong> <span id="alertSuccessMsg"
+							th:text="${M_0005}"></span>
+					</div>
+					<div id="alertSuccessDelete" class="alert alert-success"
+						style="display: none;">
+						<strong>Success!</strong> <span id="alertSuccessDeleteMsg">Delete
+							data success</span>
+					</div>
+					<div id="alertFailed" class="alert alert-danger"
+						style="display: none;">
+						<strong>Failed!</strong> <span id="alertFailedMsg"></span>
+					</div>
+					<!-- INQUIRY -->
+					<div id="budgetAndTargetInq" class="card-body">
+
+
+						<div class="row justify-content-end">
+							<div class="col-md-2">
+								<button id="btnExport" class="btn btn-success col-md-12">
+									Export to Excel</button>
+							</div>
+							<div class="col-md-2">
+								<button id="btnCreate" class="btn btn-primary col-md-12">
+									<i class="fa fa-plus"></i> Create
+								</button>
+							</div>
+							<div id="exportJson"></div>
+						</div>
+
+						<br>
+
+						<div class="row justify-content-end">
+							<div class="row justify-content-end col-md-2">
+									<label>Year</label>
+							</div>
+							<div class="col-md-2">
+								<select id="year" class="select2 form-control"
+									style="width: 100%">
+								</select>
+							</div>
+						</div>
+
+						<br>
+
+						<table id="tableBt" data-toggle="table" data-sortable="true"
+							data-url="" data-pagination="true" data-side-pagination="server"
+							data-page-size="5" data-unique-id="idKey"
+							data-pagination-v-align="top"
+							data-page-list="[5, 10, 25, 50, ALL]">
+							<thead>
+								<tr>
+									<th data-field="idKey">idKey</th>
+									<th data-field="tbYear">year</th>
+									<th data-field="saCode">saCode</th>
+									<th data-field="tbMonth">tbMonth</th>
+									<th data-field="coaCode" data-sortable="true">COA</th>
+									<th data-field="description">Description</th>
+									<th data-field="tbMonthStr">Month</th>
+									<th data-field="saName" data-sortable="true" data-align="right">Officer</th>
+									<th data-field="tbAmountStr" data-halign="right"
+										data-align="right" data-sortable="true">Amount</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+
+					<div id="budgetAndTargetCreateEdit" class="card-body" hidden="true">
+						<div class="row card-body justify-content-end">
+							<button id="btnBack" class="btn btn-danger col-md-2">
+								<i class="fa fa-chevron-left"></i> Back
+							</button>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-2">
+								<label>Year</label>
+							</div>
+							<div class="col-md-2">
+								<input type='text' name="yearCreate" id="yearCreate"
+									class="form-control" disabled />
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-2">
+								<label>Chart Of Account</label>
+							</div>
+							<div id="divCoaCode" class="col-md-2" hidden="true">
+								<input id="h_coa" disabled />
+							</div>
+							<div class="input-group col-md-3">
+								<input type="text" class="form-control" id="coa" disabled>
+
+								<div class="input-group-append">
+									<button class="btn btn-primary" id="btnCoaSearch" type="button"
+										data-toggle="modal" data-target="#coa-modal">
+										<i class="fas fa-search"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-2">
+								<label>Officer</label>
+							</div>
+
+							<div class="col-md-2">
+								<select name="officer" id="officer" class="select2 form-control"
+									style="width: 100%">
+									<option value=""></option>
+								</select>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-2">
+								<label>Month</label>
+							</div>
+
+							<div class="col-md-2">
+								<select name="month" id="month" class="select2 form-control"
+									style="width: 100%">
+									<option value="1">January</option>
+									<option value="2">February</option>
+									<option value="3">March</option>
+									<option value="4">April</option>
+									<option value="5">May</option>
+									<option value="6">June</option>
+									<option value="7">July</option>
+									<option value="8">August</option>
+									<option value="9">September</option>
+									<option value="10">October</option>
+									<option value="11">November</option>
+									<option value="12">December</option>
+								</select>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-2">
+								<label>Amount</label>
+							</div>
+							<div class="col-sm-2">
+								<input type="text" class="form-control" id="amount"
+									style="text-align: right;" placeholder="0.00">
+							</div>
+							<div class="custom-control custom-checkbox">
+								<input type="checkbox" class="custom-control-input"
+									id="forEachMonth"> <label class="custom-control-label"
+									for="forEachMonth">for each month</label>
+							</div>
+						</div>
+						<th:block th:replace="fragments/button :: btn-save-cancel" />
+					</div>
+				</div>
+
+				<th:block th:replace="fragments/general :: copyright-footer"></th:block>
+
+			</div>
+			<!-- /.container-fluid -->
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	<!-- /#wrapper -->
+
+	<th:block th:replace="fragments/modal :: confirmation-save" />
+	<th:block th:replace="fragments/general :: scroll-to-top" />
+	<th:block th:replace="fragments/general :: logout-modal" />
+	<th:block th:replace="fragments/import :: js-body" />
+
+	<!-- Modal Coa -->
+
+	<div class="modal fade" id="coa-modal" tabindex="-1" role="dialog"
+		aria-labelledby="coa-modal" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="client-modal-label">Chart of
+						Account</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="row card-body justify-content-end">
+						<div class="col-md-3">
+							<select id="coaSelector" name="coaSelector" class="custom-select">
+								<option value="coaCode">Account</option>
+								<option value="coaDescript">Description</option>
+							</select>
+						</div>
+						<div class="input-group col-md-3">
+							<input id="coaFilterValue" type="text" class="form-control">
+							<div class="input-group-append">
+								<button id="coaFilterSearchBtn" class="btn btn-primary"
+									type="button" onclick="coatFilteredSearch()">
+									<i class="fas fa-search"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+					<br>
+					<table id="tableCoa" data-toggle="table" data-url=""
+						data-sortable="true" data-side-pagination="server"
+						data-pagination="true" data-page-size="5"
+						data-pagination-v-align="top"
+						data-page-list="[5, 10, 25, 50, ALL]">
+						<thead>
+							<tr>
+								<th data-field="coaCode" data-sortable="true">Account</th>
+								<th data-field="coaDescript" data-sortable="true">Description</th>
+								<th data-field="coaCurrId">Currency</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- /Modal Coa -->
+
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+	isCreate = true;
+	
+	var editRow = null;
+	$(function() {	
+		
+		$('#tableBt').bootstrapTable('hideColumn', 'idKey');
+		$('#tableBt').bootstrapTable('hideColumn', 'tbYear');
+		$('#tableBt').bootstrapTable('hideColumn', 'saCode');
+		$('#tableBt').bootstrapTable('hideColumn', 'tbMonth');
+		
+		$('#coaSelector').select2({width : '100%'});
+		$('#btnCreate').click(function() {
+			isCreate=true;
+			
+			$('#titlePage').text(/*[[${titlePageCreate}]]*/);
+			$('#budgetAndTargetCreateEdit').removeAttr('hidden');
+			$('#budgetAndTargetInq').attr('hidden', 'true');
+			
+			reset();
+		});
+		
+		$('#btnExport').click(function() {
+			var urlInq = /*[[@{/static-data/budgetAndTarget/export}]]*/;
+			var param = '?tbYear=' + $('#year').val();
+			
+			param = encodeURI(param);
+			urlInq += param;
+			
+			console.log(urlInq);
+			window.open(urlInq, '_blank');
+		});
+		
+		rest('GET', '/gui-re-broker/static-data/budgetAndTarget/dropdown-tb-year')
+		.done(function(data) {
+			if(data.length == 0){
+				data.push({id:/*[[${year}]]*/, text:/*[[${year}]]*/});
+			}
+			$('#year').select2({
+				width : '100%',
+				data : data
+			});
+		});
+		
+		$('#tableBt').on('click-row.bs.table', function(e, row, $tr) {
+			isCreate=false;
+			
+			$('#titlePage').text(/*[[${titlePageEdit}]]*/);
+			$('#budgetAndTargetCreateEdit').removeAttr('hidden');
+			$('#budgetAndTargetInq').attr('hidden', 'true');
+			$('#divCoaCode').removeAttr('hidden');
+			$('#btnCoaSearch').attr('disabled', 'true');
+			$('#officer').attr('disabled', 'true');
+			
+			editRow = $('#tableBt').bootstrapTable('getRowByUniqueId', row.idKey);
+			reset();
+	  	});
+		
+		$('#btnBack').click(function() {
+			isCreate = true;
+			$('#titlePage').text(/*[[${titlePage}]]*/);
+			$('#budgetAndTargetCreateEdit').attr('hidden', 'true');
+			$('#budgetAndTargetInq').removeAttr('hidden');
+			$('#btnCoaSearch').removeAttr('disabled');
+			$('#officer').removeAttr('disabled');
+			
+			$('#divCoaCode').attr('hidden', 'true');
+			
+			reset();
+		});
+		
+		
+		$('#btnCoaSearch').click(function() {
+			$('#coaFilterValue').val('');
+			$('#coaSelector').val('coaCode').trigger('change');
+			
+			
+			$('#tableCoa').bootstrapTable('refreshOptions', {
+			    theadClasses: 'thead-dark',
+			    url: /*[[@{/accounting/entry-journal/coa}]]*/,
+			    pageNumber: 1
+			});
+		});
+		
+		$('#tableCoa').on('click-row.bs.table',function(e, row, $tr) {
+			$('#h_coa').val(row.coaCode);
+			$('#coa').val(row.coaDescript);
+			
+			$('#coa-modal').modal('hide');
+		});
+		
+		rest('GET', '/gui-re-broker/static-data/budgetAndTarget/dropdown-officer')
+		.done(function(data) {
+			$('#officer').select2({
+				width : '100%',
+				data : data
+			});
+		});
+		
+		var urlInq = /*[[@{/static-data/budgetAndTarget/inquiry}]]*/;
+		
+		$('#tableBt').bootstrapTable('refreshOptions', {
+	        theadClasses: 'thead-dark',
+	        url: urlInq,
+		    pageNumber: 1
+	    });
+		
+		  	
+		$('#year').on('change', function (e) {
+			var urlInq = /*[[@{/static-data/budgetAndTarget/inquiry}]]*/;
+			urlInq = urlInq + '?tbYear=' + $('#year').val();
+			console.log(urlInq);
+			$('#tableBt').bootstrapTable('refreshOptions', {
+		        theadClasses: 'thead-dark',
+		        url: urlInq,
+			    pageNumber: 1
+		    });
+		});
+			
+		new AutoNumeric('#amount', {
+		    decimalCharacter : '.',
+		    digitGroupSeparator : ',',
+		    maximumValue : '10000000000000000000'
+		});
+	
+		AutoNumeric.getAutoNumericElement('#amount').set('0.00');
+		
+		$('#btnSave').click(function() {
+			if (isSaveOk()) {
+				$('#modalConfirmation').modal('show');
+			} else {
+				alert('Please complete all required field');
+			}
+		});
+		$('#btnModalYes').click(function() {
+			save();
+		});
+		
+	
+		$('#btnCancel').click(function() {
+			reset();
+		});
+	});
+	
+	function coatFilteredSearch(){
+		var url = "/gui-re-broker/static-data/budgetAndTarget/coa";
+		var filterKey = $( "#coaSelector" ).select2('val');
+		var filterValue = $( "#coaFilterValue" ).val();
+		var allUrl = url
+		
+		if(filterValue != ""){
+			var allUrl = url+"?filterKey="+filterKey+"&filterValue="+filterValue;
+		}
+		
+		$('#tableCoa').bootstrapTable('refreshOptions', {
+		    theadClasses: 'thead-dark',
+		    url: allUrl,
+		    pageNumber: 1
+		});
+	}
+	
+	function reset(){
+		if(isCreate){
+			$('#yearCreate').val($('#year').val());
+			$('#coa').val('');
+			$('#h_coa').val('');
+			$('#officer').val('').trigger('change');
+			$('#month').val('1').trigger('change');
+			AutoNumeric.getAutoNumericElement('#amount').set('0.00');
+			$('#forEachMonth').prop('checked', false);
+		}else{
+			$('#yearCreate').val(editRow.tbYear);
+			$('#coa').val(editRow.description);
+			$('#h_coa').val(editRow.coaCode);
+			$('#officer').val(editRow.saCode).trigger('change');
+			$('#month').val(editRow.tbMonth).trigger('change');
+			AutoNumeric.getAutoNumericElement('#amount').set(editRow.tbAmountStr);
+			$('#forEachMonth').prop('checked', false);
+		}
+	}
+	
+	function save(){
+			var year = $('#yearCreate').val();
+			var coa = $('#h_coa').val();
+			var officer = $('#officer').val();
+			var month = $('#month').val();
+			var amount = AutoNumeric.getAutoNumericElement('#amount').get();
+			var forEachMonth = $('#forEachMonth').is(":checked");
+			var saveData = {
+				year:year,
+				coa:coa,
+				officer:officer,
+				amount:amount,
+				month:month,
+				forEachMonth:forEachMonth
+			}
+			var url = '/gui-re-broker/static-data/budgetAndTarget/save';
+			restPOST('POST', url, saveData).done(function(data) {
+				$('#modalConfirmation').modal('hide');
+				if (data.status == "200") {
+					showAlertSuccess();
+				} else {
+					showAlertFailed(data.message);
+				}
+			});
+			
+	}
+	
+	function isSaveOk(){
+		var year = $('#yearCreate').val();
+		var coa = $('#h_coa').val();
+		var month = $('#month').val();
+		var amount = parseFloat(AutoNumeric.getAutoNumericElement('#amount').get());
+		if(year == "" || coa == "" || officer == "" || month == ""){
+			return false;
+		}else if(amount <= 0.00){
+			alert("amount must greater than 0.00");
+			return false;
+		}
+		
+		return true;
+	}
+	
+	function showAlertSuccess() {
+		$(location).attr('href', '#page-top');
+		$('#alertSuccess').fadeTo(2000, 500).slideUp(500, function() {
+			$('#alertSuccess').slideUp(500);
+			location.reload();
+		});
+	}
+	function showAlertFailed(msgAlert) {
+		$(location).attr('href', '#page-top');
+		$('#alertFailedMsg').text(msgAlert);
+		$('#alertFailed').fadeTo(3000, 500).slideUp(500, function() {
+			$('#alertFailed').slideUp(500);
+			$('#btnModalYesDelete').removeAttr('disabled')
+			$('#btnModalYes').removeAttr('disabled')
+		});
+	}
+
+	/*]]>*/
+</script>
+
+</html>

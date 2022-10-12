@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<th:block th:replace="fragments/import :: info-header"/>
+	<th:block th:replace="fragments/import :: css-header"/>
+	<th:block th:replace="fragments/import :: js-header"/>
+</head>
+
+<body id="page-top">
+	<th:block th:replace="fragments/general :: navbar-header"/>
+	
+  	<div id="wrapper">
+		<th:block th:replace="fragments/general :: menu"/>
+		
+    	<div id="content-wrapper">
+      		<div class="container-fluid">
+      		<th:block th:replace="fragments/general :: panel-page"/>
+
+			<!-- CONTENT PAGE -->
+        	<div class="card mb-3">
+	          	<div class="card-header">
+	            	<b><span id="titlePage" th:text="${titlePage}"></span></b>
+	            </div>
+	             
+	            <div id="profitLostInquiry" class="card-body">
+	             	<div class="row justify-content-end">
+				  		<button id="btnImport" class="btn btn-success col-md-2">
+							Export to Excel
+						</button>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<button id="btnPrint" class="btn btn-secondary col-md-1">
+							Print
+						</button>
+					</div>
+					<br>
+					<div class="form-check col-md-2">
+						<input class="form-check-input" type="checkbox" value="1" id="isAsAt">
+						<label class="form-check-label" for="isAsAt"> As at </label>
+					</div>
+					<br>
+					<div class="row">
+						<div class="col-md-1">
+							<label>Period</label>
+						</div>
+						<div class="col-md-2">
+							<select name="dropdownMonth" id="dropdownMonth"
+								class="select2 form-control" style="width:100%">
+								<option value="01">January</option>
+								<option value="02">February</option>
+								<option value="03">March</option>
+								<option value="04">April</option>
+								<option value="05">May</option>
+								<option value="06">June</option>
+								<option value="07">July</option>
+								<option value="08">August</option>
+								<option value="09">September</option>
+								<option value="10">October</option>
+								<option value="11">November</option>
+								<option value="12">December</option>
+							</select>
+						</div>
+
+						<div class="col-md-2">
+							<select name="dropdownYear" id="dropdownYear"
+								class="select2 form-control" style="width:100%">
+							</select>
+						</div>
+						<div class="col-md-2">
+							<button class="btn btn-primary" id="btnSearch" type="button">
+								&nbsp;<i class="fas fa-search"></i>&nbsp;
+							</button>
+						</div>
+					</div>
+					<br>
+					<div class="form-check col-md-3">
+						<input class="form-check-input" type="checkbox" value="1" id="isActualBudget">
+						<label class="form-check-label" for="isActualBudget"> Actual vs Budget and Target </label>
+					</div>
+					<br>
+					<br>
+					
+					<div id="viewHtml" class="viewHtml"></div>
+	            </div>     
+	        </div>
+
+      		</div>
+      		<!-- /.container-fluid -->
+			<th:block th:replace="fragments/general :: copyright-footer"></th:block>
+    	</div>
+    	<!-- /.content-wrapper -->
+	</div>
+  	<!-- /#wrapper -->
+
+	<th:block th:replace="fragments/general :: scroll-to-top"/>
+	<th:block th:replace="fragments/general :: logout-modal"/>
+	<th:block th:replace="fragments/import :: js-body"/>
+
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+
+	$(function() {
+		$('#isAsAt').prop('checked', true);
+		$('#isActualBudget').prop('checked', true);
+		
+		function initializeDropdown() {
+			$('#dropdownMonth').select2();
+			$('#dropdownYear').select2();
+			
+			return $.ajax({
+				type: 'GET', global: false, dataType: 'json',
+				url: /*[[@{/static-data/beginBal/get-year}]]*/
+			});
+		}
+		initializeDropdown().done(function(data) {		
+			$('#dropdownYear').select2({data: data});
+			$('#dropdownYear').select2().val(/*[[${year}]]*/).trigger('change');
+			$('#dropdownMonth').select2().val(/*[[${month}]]*/).trigger('change');
+		});	  	
+		
+	});
+	
+	$('#btnSearch').click(function() {
+		var urlInq = "profitLost/search";
+		var param = "";
+		param += '?year=' + $('#dropdownYear option:selected').val();
+		param += '&month=' + $('#dropdownMonth option:selected').val();
+		
+		var isAsAt = "0";
+		if($('#isAsAt').prop('checked') == true)
+			isAsAt = "1";
+		
+		var isActualBudget = "0";
+		if($('#isActualBudget').prop('checked') == true)
+			isActualBudget = "1";
+		
+		param += '&isAsAt=' + isAsAt;
+		param += '&isActualBudget=' + isActualBudget;
+		
+		param = encodeURI(param);
+
+		$("#viewHtml").load(urlInq+param);
+	});
+	
+	$('#btnImport').click(function() {
+		var urlInq = "profitLost/export-excel";
+		var param = "";
+		param += '?year=' + $('#dropdownYear option:selected').val();
+		param += '&month=' + $('#dropdownMonth option:selected').val();
+		
+		var isAsAt = "0";
+		if($('#isAsAt').prop('checked') == true)
+			isAsAt = "1";
+		
+		var isActualBudget = "0";
+		if($('#isActualBudget').prop('checked') == true)
+			isActualBudget = "1";
+		
+		param += '&isAsAt=' + isAsAt;
+		param += '&isActualBudget=' + isActualBudget;
+		
+		param = encodeURI(param);
+		
+		window.open(urlInq+param, '_blank');
+	});
+	
+	$('#btnPrint').click(function() {
+		var urlInq = "profitLost/view-pdf";
+		var param = "";
+		param += '?year=' + $('#dropdownYear option:selected').val();
+		param += '&month=' + $('#dropdownMonth option:selected').val();
+		
+		var isAsAt = "0";
+		if($('#isAsAt').prop('checked') == true)
+			isAsAt = "1";
+		
+		var isActualBudget = "0";
+		if($('#isActualBudget').prop('checked') == true)
+			isActualBudget = "1";
+		
+		param += '&isAsAt=' + isAsAt;
+		param += '&isActualBudget=' + isActualBudget;
+		
+		param = encodeURI(param);
+		
+		window.open(urlInq+param, '_blank');
+	});
+		
+	/*]]>*/
+</script>
+
+</html>

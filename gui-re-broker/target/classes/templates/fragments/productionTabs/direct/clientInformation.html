@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+
+<body>
+
+	<th:block th:fragment="client-information-tab">
+		<div id="cart" class="card mb-3">
+			<div class="card-body">
+				
+				<div class="row">
+					<div class="col-md-5">
+						<label>*Client</label> <br>
+						<div class="input-group">
+							<input id="t1-clientDesc" name="t1-clientDesc" type="text"
+								class="form-control" disabled> 
+							<input id="t1-client" name="t1-client" type="text" 
+								class="form-control" hidden="true" disabled/>
+	
+							<div class="input-group-append">
+								<button id='t1-btnClientSearch' class="btn btn-primary"
+									type="button" data-toggle="modal"
+									data-target="#client-modal">
+									<i class="fas fa-search"></i>
+								</button>
+							</div>
+						</div>
+					</div>	
+					<div class="col-md-2">
+						<label>Share (%)</label> <br> 
+						<input type="text" class="form-control col-md-12" id="t1-share"
+							style="text-align: right;" placeholder="0.0000%" required>
+					</div>
+					<div class="col-md-2">
+						<label>Curr</label> <br> 
+						<select name="t1-curr" id="t1-curr" class="form-control col-md-12" required>
+						</select>
+					</div>
+					<div class="col-md-3">
+						<label>Total Sum Insured</label> <br>
+						<input type="text" class="form-control col-md-12" id="t1-totalSumInsured"
+							style="text-align: right;" placeholder="0.00" required>
+					</div>
+				</div>
+				
+				<br>
+				
+				<div class="row">
+					<div class="col-md-7">
+						<label>*Insured Name</label> <br>
+						<textarea class="form-control" id="t1-insuredName"
+							name="t1-insuredName" rows="5"></textarea>
+					</div>
+					<div class="col-md-5">
+						<div class="row">
+							<div class="col-md-5">
+								<label>Transaction Date</label>
+								<div class="input-group">
+									<input id="t1-transactionDate" name="t1-transactionDate"
+										type="text" class="form-control" disabled>
+									<div class="input-group-append">
+										<button id='t1-btnTransactionDate' class="btn btn-primary"
+											type="button">
+											<i class="fas fa-calendar"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+							<div class="col-md-5">
+								<label>Exchange Rate</label>
+								<input type="text" class="form-control col-md-12" id="t1-exchangeRate"
+									style="text-align: right;" placeholder="0.00" required>
+							</div>
+						</div>
+						
+						<br>
+						
+						<div class="row">
+							<div class="col-md-7">
+								<label>*Payment Method</label>
+								<select name="t1-paymentMethod" id="t1-paymentMethod" class="form-control col-md-12" required>
+								</select>
+							</div>
+						</div>
+						
+						<br>
+						
+						<div class="row">
+							<div class="col-md-7">
+								<label>Amount</label> <br> 
+								<input type="text" class="form-control col-md-12" id="t1-amount"
+									style="text-align: right;" placeholder="0.00" required disabled>
+							</div>
+						</div>
+						
+						<br>
+					</div>
+				</div>
+				
+				<br>
+				
+				<div class="row">
+					<div class="col-md-4">
+						<label>*Officer</label>
+						<select name="t1-officer" id="t1-officer" class="form-control col-md-12" required>
+						</select>
+					</div>
+					<div class="col-md-2">
+						<label>*Direct Payment</label>
+						<select name="t1-directPayment" id="t1-directPayment" class="form-control col-md-12" required>
+							<option value="N">No</option>
+							<option value="Y">Yes</option>
+						</select>
+					</div>
+				</div>
+				
+				<br>
+				
+				<div class="row">
+					<div class="col-md-12">
+						<label>Remarks</label> <br> 
+						<input type="text" name="t1-remarks" id="t1-remarks"
+							class="form-control col-md-12"/>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+		
+		<!-- Modal Client -->
+		<div class="modal fade" id="client-modal" tabindex="-1"
+			role="dialog" aria-labelledby="client-modal" aria-hidden="true">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="client-modal-label">Client</h5>
+						<button id="t1-btnCloseClientModal" type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="row card-body justify-content-end">
+							<div class="col-md-3">
+								<select id="clientSelector" name="clientSelector"
+									class="custom-select">
+									<option value="cliName">Name</option>
+									<option value="cliCode">Client Id</option>
+								</select>
+							</div>
+							<div class="input-group col-md-3">
+								<input id="clientFilterValue" type="text" class="form-control">
+								<div class="input-group-append">
+									<button id="clientFilterSearchBtn" class="btn btn-primary"
+										type="button" onclick="clientFilteredSearch()">
+										<i class="fas fa-search"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+						
+						<table id="tableClient" data-toggle="table" data-url=""
+							data-sortable="true" data-side-pagination="server"
+							data-pagination="true" data-page-size="5"
+							data-page-list="[5, 10, 25, 50, ALL]"
+							data-pagination-V-Align="top">
+							<thead>
+								<tr>
+									<th data-field="cliCode" data-sortable="true">Client ID</th>
+									<th data-field="cliName" data-sortable="true">Client
+										Name</th>
+									<th data-field="cliTypeDesc">Type</th>
+									<th data-field="cliDataStatusStr">Status</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /Modal Client -->
+		
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		$(function() {
+			$('#t1-directPayment').select2({width: '100%'});
+			$('#clientSelector').select2({width: '100%'});
+			
+			function initDropdownCurr() {
+				return $.ajax({
+					type: 'GET', global: false, dataType: 'json',
+					url: /*[[@{/static-data/dropdown-currency}]]*/
+				});
+			}
+			initDropdownCurr().done(function(data) {
+				$('#t1-curr').select2({width: '100%', data: data});
+				$('#t2-curr').select2({width: '100%', data: data});
+				$('#t4-curr').select2({width: '100%', data: data});
+				$('#t1-curr').val($('#t1-curr option:first-child').val()).trigger('change');
+			});
+			
+			function initDropdownPayMthd() {
+				return $.ajax({
+					type: 'GET', global: false, dataType: 'json',
+					url: /*[[@{/static-data/dropdown-paymentMethod}]]*/
+				});
+			}
+			initDropdownPayMthd().done(function(data) {
+				$('#t1-paymentMethod').select2({width: '100%', data: data});
+				$('#t1-paymentMethod').val($('#t1-paymentMethod option:first-child').val()).trigger('change');
+			});
+			
+			function initDropdownOfficer() {
+				return $.ajax({
+					type: 'GET', global: false, dataType: 'json',
+					url: /*[[@{/static-data/dropdown-officerTypeNot2}]]*/
+				});
+			}
+			initDropdownOfficer().done(function(data) {
+				$('#t1-officer').select2({width: '100%', data: data});
+				$('#t1-officer').val($('#t1-officer option:first-child').val()).trigger('change');
+			});
+		});
+		
+		$('#t1-transactionDate').datepicker({
+			dateFormat: 'dd/mm/yy',
+			changeMonth: true,
+			changeYear: true
+		}).datepicker('setDate', /*[[${appDate}]]*/);
+		var trxDateGlobal = $('#t1-transactionDate').val();
+		
+		$('#t1-btnTransactionDate').click(function(){
+			$('#t1-transactionDate').datepicker('show');
+		});
+		
+		new AutoNumeric('#t1-share', {
+			currencySymbol : '%',
+		    decimalCharacter : '.',
+		    digitGroupSeparator : ',',
+		    decimalPlaces : '4',
+		    maximumValue : '100',
+		    minimumValue : '0',
+		    currencySymbolPlacement: AutoNumeric.options.currencySymbolPlacement.suffix
+		});
+		AutoNumeric.getAutoNumericElement('#t1-share').set('100.0000');
+		
+		new AutoNumeric('#t1-amount', {
+		    decimalCharacter : '.',
+		    digitGroupSeparator : ',',
+		    maximumValue : '9999999999999999.00',
+		    minimumValue : '0'
+		});
+		AutoNumeric.getAutoNumericElement('#t1-amount').set('0.00');
+		
+		new AutoNumeric('#t1-exchangeRate', {
+		    decimalCharacter : '.',
+		    digitGroupSeparator : ',',
+		    decimalPlaces : '2',
+		    maximumValue : '99999.00',
+		    minimumValue : '0'
+		});
+		AutoNumeric.getAutoNumericElement('#t1-exchangeRate').set('0.00');
+		
+		new AutoNumeric('#t1-totalSumInsured', {
+		    decimalCharacter : '.',
+		    digitGroupSeparator : ',',
+		    maximumValue : '9999999999999999.00',
+		    minimumValue : '0'
+		});
+		AutoNumeric.getAutoNumericElement('#t1-totalSumInsured').set('0.00');
+		
+		$('#t1-btnCloseClientModal').click(function() {
+			$('#t1-client').val('');
+			$('#t1-clientDesc').val('').trigger('change');
+		});
+			
+		$('#t1-btnClientSearch').click(function() {			
+			$('#clientFilterValue').val('');
+			$('#clientSelector').val('cliName').trigger('change');
+			
+			var url = /*[[@{/static-data/client}]]*/;
+			url = url + "?cliType=1";
+			$('#tableClient').bootstrapTable('refreshOptions', {
+			    theadClasses: 'thead-dark',
+			    url: url
+			});
+		});
+		
+		$('#t1-clientDesc').change(function() {
+			$('#t7-client').val($('#t1-client').val());
+			$('#t7-clientDesc').val($('#t1-clientDesc').val());
+			t7UpdateDropdownFor();
+		});
+	
+		$('#tableClient').on('click-row.bs.table',function(e, row, $tr) {
+			$('#t1-client').val(row.cliCode);
+			$('#t1-clientDesc').val(row.cliName).trigger('change');
+			$('#client-modal').modal('hide');
+		});
+		
+		function clientFilteredSearch() {
+			var url = /*[[@{/static-data/client}]]*/;
+			var filterKey = $("#clientSelector").select2('val');
+			var filterValue = $("#clientFilterValue").val();
+			
+			url = url + "?cliType=1";
+			if(filterValue != "")
+				url = url + "&filterKey="+filterKey+"&filterValue="+filterValue;
+			
+			$('#tableClient').bootstrapTable('refreshOptions', {
+			    theadClasses: 'thead-dark',
+			    url: url
+			});
+		}
+		
+		$('#t1-curr').change(function() {
+			$('#t2-curr').val($('#t1-curr').val()).trigger('change');
+			$('#t4-curr').val($('#t1-curr').val()).trigger('change');
+			$('#t5d-labelCurr').text($('#t1-curr').val());
+			
+			setExchange();
+		});
+		
+		$('#t1-totalSumInsured, #t1-share').on('keyup paste change', function() {
+			var shareStr = AutoNumeric.getAutoNumericElement('#t1-share').get();
+			var tsiStr = AutoNumeric.getAutoNumericElement('#t1-totalSumInsured').get();
+			
+			if(shareStr == "")
+				shareStr = '0.00';
+			if(tsiStr == "")
+				tsiStr = '0.00';
+			
+			var share = parseFloat(shareStr)/100;
+			var tsi = parseFloat(tsiStr);
+			
+			AutoNumeric.getAutoNumericElement('#t1-amount').set(tsi*share);
+			AutoNumeric.getAutoNumericElement('#t2-tsi').set(tsi*share);
+			AutoNumeric.getAutoNumericElement('#t4-tsi').set(tsi*share);
+			
+			isEdit_t5dbrokerage = false;
+			isEdit_t5dtaxinBfee = false;
+			
+			calculatePremium();
+		});
+		
+		function setExchange() {
+			var url = /*[[@{/static-data/exchangeNonEom}]]*/;
+			var appDate = $('#t1-transactionDate').val();
+			
+			$.ajax({
+		        url: url + "?date=" + appDate + "&curr=" + $('#t1-curr').val(),
+		    }).then(function(data) {
+		    	AutoNumeric.getAutoNumericElement('#t1-exchangeRate').set(data);
+		    	$('#t1-exchangeRate').trigger('change');
+		    });
+		}
+		
+		$('#t1-paymentMethod').change(function() {
+// 			t7AddData1();
+		});
+		
+		$('#t1-exchangeRate').change(function() {
+	    	calculatePolicyCost();
+			calculateStampDuty();
+			calculateAdminFee();
+		});
+		
+		$('#t1-transactionDate').change(function() {
+			var trxDate = $('#t1-transactionDate').val();
+			if(trxDate == null || trxDate == '')
+				return null;
+			
+			var param = {
+				'trxDate': trxDate
+			};
+
+			$.ajax({
+				type: 'POST', global: false, dataType: 'json',  
+				contentType:'application/json',
+				url: /*[[@{/marketing/direct-production_bds/isValidTrxDate}]]*/,
+				data: JSON.stringify(param), 
+				success: function (data) {
+				}
+			}).done(function(data) {
+				if(data) { //valid date
+					trxDateGlobal = trxDate;
+					$('#t1-curr').trigger('change');
+				}else {
+					$('#t1-transactionDate').datepicker('setDate', trxDateGlobal);
+					alert('Transaction Date is already EOM');
+				}
+			}).fail(function() {
+				showAlertFailed('Failed validation for Transaction Date');
+			});
+		});
+		
+		/*]]>*/
+		</script>
+	</th:block>
+</body>
+
+</html>

@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TrialBalance" pageWidth="1686" pageHeight="595" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="1646" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="35" uuid="0cdc44af-92fa-4d0b-bb8f-472e68a1bc54">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="940"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="P_USER" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_COMPANY" class="java.lang.String"/>
+	<parameter name="P_ASAT" class="java.lang.String"/>
+	<parameter name="P_ID_REQUEST" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT * FROM RPT001 R WHERE R.ID_REQUEST = $P{P_ID_REQUEST}
+    ORDER BY R.COA_CODE asc;]]>
+	</queryString>
+	<field name="ID_KEY" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ID_REQUEST" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="COA_CODE" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="COA_DESCRIPTION" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="COA_HEADER" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="COA_NORMAL" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="COA_ROLL_UP" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="COA_LEVEL" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="BB_DEBIT_ORG" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="BB_CREDIT_ORG" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="BB_DEBIT_IDR" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="BB_CREDIT_IDR" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="MUT_DEBIT_ORG" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="MUT_CREDIT_ORG" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="MUT_DEBIT_IDR" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="MUT_CREDIT_IDR" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="EB_DEBIT_ORG" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="EB_CREDIT_ORG" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="EB_DEBIT_IDR" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="EB_CREDIT_IDR" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="SUM_BB_DORG" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[("".equals($F{COA_ROLL_UP}) || $F{COA_ROLL_UP} == null)
+? $F{BB_DEBIT_ORG} : new BigDecimal("0")]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal("0")]]></initialValueExpression>
+	</variable>
+	<variable name="SUM_BB_CORG" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[("".equals($F{COA_ROLL_UP}) || $F{COA_ROLL_UP} == null)
+? $F{BB_CREDIT_ORG} : new BigDecimal("0")]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal("0")]]></initialValueExpression>
+	</variable>
+	<variable name="SUM_BB_DIDR" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[("".equals($F{COA_ROLL_UP}) || $F{COA_ROLL_UP} == null)
+? $F{BB_DEBIT_IDR} : new BigDecimal("0")]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal("0")]]></initialValueExpression>
+	</variable>
+	<variable name="SUM_BB_CIDR" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[("".equals($F{COA_ROLL_UP}) || $F{COA_ROLL_UP} == null)
+? $F{BB_CREDIT_IDR} : new BigDecimal("0")]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal("0")]]></initialValueExpression>
+	</variable>
+	<variable name="SUM_MUT_DORG" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[("".equals($F{COA_ROLL_UP}) || $F{COA_ROLL_UP} == null)
+? $F{MUT_DEBIT_ORG} : new BigDecimal("0")]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal("0")]]></initialValueExpression>
+	</variable>
+	<variable name="SUM_MUT_CORG" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[("".equals($F{COA_ROLL_UP}) || $F{COA_ROLL_UP} == null)
+? $F{MUT_CREDIT_ORG} : new BigDecimal("0")]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal("0")]]></initialValueExpression>
+	</variable>
+	<variable name="SUM_MUT_DIDR" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[("".equals($F{COA_ROLL_UP}) || $F{COA_ROLL_UP} == null)
+? $F{MUT_DEBIT_IDR} : new BigDecimal("0")]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal("0")]]></initialValueExpression>
+	</variable>
+	<variable name="SUM_MUT_CIDR" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[("".equals($F{COA_ROLL_UP}) || $F{COA_ROLL_UP} == null)
+? $F{MUT_CREDIT_IDR} : new BigDecimal("0")]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal("0")]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="53" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="186" height="20" uuid="3782df69-4b31-48fd-b1c4-5719e97395d4"/>
+				<textFieldExpression><![CDATA[$P{P_COMPANY}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="726" y="0" width="186" height="20" uuid="89ca0f5b-d2bb-4b28-8f1d-67676bb141d3"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TRIAL BALANCE"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="771" y="17" width="47" height="20" uuid="7ea22379-1307-4ac6-924c-b5085c65a0e7"/>
+				<textFieldExpression><![CDATA["As at : "]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1469" y="17" width="94" height="20" uuid="5fb39a94-3442-4710-b8e4-dea5c1d274cf"/>
+				<textFieldExpression><![CDATA["Printed Date"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1479" y="0" width="71" height="20" uuid="15b92f44-4baa-4d39-87f4-b9bd16b23b26"/>
+				<textFieldExpression><![CDATA["Printed By"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="805" y="17" width="100" height="20" uuid="5935b1f3-0be6-4d19-aeea-fe75aa5d810b"/>
+				<textFieldExpression><![CDATA[$P{P_ASAT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MM-yyyy HH:mm">
+				<reportElement x="1546" y="17" width="100" height="20" uuid="c2e891e8-26a0-4a4b-998a-d3afab0b8727"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1546" y="0" width="100" height="20" uuid="37c0813f-5547-44b9-8b60-d88862673ff4"/>
+				<textFieldExpression><![CDATA[$P{P_USER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="60">
+			<textField>
+				<reportElement x="0" y="20" width="107" height="40" uuid="452faff4-8aae-4f33-abb1-033c8cb2faf3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Chart Of Account"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="107" y="20" width="280" height="40" uuid="b1a700e6-bcae-4c9f-9adc-91611eb6b042"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Description"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="387" y="40" width="105" height="20" uuid="7296cc1e-1015-472a-8f58-7a84f7cd901c"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Debit (ORG)"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="492" y="40" width="105" height="20" uuid="282342c0-e4af-4135-aeed-f66ed52cb86d"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Credit (ORG)"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="597" y="40" width="105" height="20" uuid="cf93e58d-c0eb-48f7-9327-98f9253c6254"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Debit (IDR)"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="702" y="40" width="105" height="20" uuid="a4a317b6-9bd2-4375-80cd-0dcd55476630"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Credit (IDR)"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="387" y="20" width="420" height="20" uuid="db67480f-b9be-4e95-8472-676918ff1c75"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["BEGINNING BALANCE"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="807" y="20" width="420" height="20" uuid="f96a7825-9ccf-4c2c-b463-d762dc6e4efe"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["MUTATION"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1227" y="20" width="420" height="20" uuid="0f230574-f4b6-4f01-91f4-407396f67f0a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["END BALANCE"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="912" y="40" width="105" height="20" uuid="16927e57-5293-4f7a-895c-fe413fce9c8c"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Credit (ORG)"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1122" y="40" width="105" height="20" uuid="b62af463-aca6-4754-baf3-3846260826ab"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Credit (IDR)"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="807" y="40" width="105" height="20" uuid="fbe9a69d-5d0a-403d-aa7a-3ecd71e5b517"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Debit (ORG)"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1017" y="40" width="105" height="20" uuid="611848d1-7cf6-4e69-9a45-5ce1b409dbba"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Debit (IDR)"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1227" y="40" width="105" height="20" uuid="c696c607-872d-4e60-86d1-a9b59f5178ba"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Debit (ORG)"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1332" y="40" width="105" height="20" uuid="879c70bc-b48b-4852-8651-ba81c8c55e55"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Credit (ORG)"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1542" y="40" width="105" height="20" uuid="c2f6539e-33c1-41e7-b3c7-793c7f0bf5ce"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Credit (IDR)"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1437" y="40" width="105" height="20" uuid="9454c73d-c982-4b82-afbd-74dd6935195d"/>
+				<textElement textAlignment="Right">
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Debit (IDR)"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="107" y="0" width="280" height="20" uuid="f15a908e-9619-41cb-a39d-1c91eb4be733"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{COA_DESCRIPTION}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToTallestObject" x="597" y="0" width="105" height="20" uuid="c060e7f3-6931-44d3-9fdb-f95a820cab73"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{BB_DEBIT_IDR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToTallestObject" x="702" y="0" width="105" height="20" uuid="d13e85bc-7a82-4b7c-8d2a-b47e2709c482"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{BB_CREDIT_IDR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="107" height="20" uuid="108514e8-488b-4949-afcd-18f9ef2f624d"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{COA_CODE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToTallestObject" x="387" y="0" width="105" height="20" uuid="69c68a79-719b-4668-b0f1-6f79521d2db3"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{BB_DEBIT_ORG}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToTallestObject" x="492" y="0" width="105" height="20" uuid="c96a14b8-707b-4428-ac9e-8b1c65a56f00"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{BB_CREDIT_ORG}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToTallestObject" x="912" y="0" width="105" height="20" uuid="e4db3175-8ec1-4cda-9c48-8c2cac76bdca"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{MUT_CREDIT_ORG}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToTallestObject" x="1017" y="0" width="105" height="20" uuid="0592444d-6d23-44b3-a5fb-8c99b8921c0c"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{MUT_DEBIT_IDR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToTallestObject" x="1122" y="0" width="105" height="20" uuid="c7614826-a368-4432-9705-191cf4906f1a"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{MUT_CREDIT_IDR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToTallestObject" x="807" y="0" width="105" height="20" uuid="cf201e9e-26fa-4dd4-965b-4fa4a1f70643"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{MUT_DEBIT_ORG}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToTallestObject" x="1332" y="0" width="105" height="20" uuid="43218c0e-b2d2-496f-8402-2428d31e7cd8"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{EB_CREDIT_ORG}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToTallestObject" x="1437" y="0" width="105" height="20" uuid="d4763171-f634-4f29-950e-3a92bc522206"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{EB_DEBIT_IDR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToTallestObject" x="1542" y="0" width="105" height="20" uuid="123bf7ed-b3bc-4971-b38f-399602aaae63"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{EB_CREDIT_IDR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToTallestObject" x="1227" y="0" width="105" height="20" uuid="1bb858a9-709c-4464-8860-ba3cbb8b4e6c"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{EB_DEBIT_ORG}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="50">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToTallestObject" x="387" y="0" width="105" height="20" uuid="5a3d2aef-2df3-4375-8f5c-0ccecb1431fd"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{SUM_BB_DORG}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToTallestObject" x="492" y="0" width="105" height="20" uuid="eedb2b00-29d7-4ed7-9dd3-9c57959fd182"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{SUM_BB_CORG}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToTallestObject" x="597" y="0" width="105" height="20" uuid="b0712959-9dba-4b66-aef9-b150f4ffecc6"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{SUM_BB_DIDR}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToTallestObject" x="702" y="0" width="105" height="20" uuid="0b6e86ef-1493-4ee4-9051-ccaf93e88df6"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{SUM_BB_CIDR}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="107" y="0" width="280" height="20" uuid="cf755f4a-5c7c-40cc-aeb0-a2c57bf36977"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold"/>
+					<paragraph rightIndent="15"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToTallestObject" x="1436" y="0" width="105" height="20" uuid="e8dc2343-44cd-48d5-8ad2-d74f33836162"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{SUM_BB_DIDR}.add(
+    $V{SUM_MUT_DIDR}.subtract($V{SUM_MUT_CIDR})
+)]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToTallestObject" x="1541" y="0" width="105" height="20" uuid="822bc9b1-43a9-45de-a866-13470dbec57e"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{SUM_BB_CIDR}.add(
+    $V{SUM_MUT_CIDR}.subtract($V{SUM_MUT_DIDR})
+)]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToTallestObject" x="1331" y="0" width="105" height="20" uuid="b0e07b6c-0f55-4154-8b78-5af14834387b"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{SUM_BB_CORG}.add(
+    $V{SUM_MUT_CORG}.subtract($V{SUM_MUT_DORG})
+)]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;(#,##0.00)">
+				<reportElement stretchType="RelativeToTallestObject" x="1227" y="0" width="105" height="20" uuid="82c68f24-7226-488b-b282-179a15e3e99d"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{SUM_BB_DORG}.add(
+    $V{SUM_MUT_DORG}.subtract($V{SUM_MUT_CORG})
+)]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+</head>
+
+<body>
+
+	<th:block th:fragment="claims-tab">
+		<div class="card mb-3">
+			<div class="card-body">
+				<div class="row">
+					<div class="col-md-2">
+						<div class="row">
+							<div class="col-md-12">
+								<label>Lost Date</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="input-group">
+									<input id="txLostDate2" name="txLostDate" type="text" class="form-control" disabled>
+									<div class="input-group-append">
+										<button id='btnCalLostDate2' class="btn btn-primary" type="button">
+											<i class="fas fa-calendar"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-2">
+						<div class="row">
+							<div class="col-md-12">
+								<label>Advice Date</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="input-group">
+									<input id="txAdviceDate2" name="txAdviceDate" type="text" class="form-control"
+										disabled>
+									<div class="input-group-append">
+										<button id='btnCalAdviceDate2' class="btn btn-primary" type="button">
+											<i class="fas fa-calendar"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-5">
+						<label>U/W Ref</label> <br>
+						<input type="text" class="form-control col-md-12" id="txUwRef2">
+					</div>
+					<div class="col-md-3">
+						<label>Max Days of Claim Finished</label> <br>
+						<input type="text" class="form-control col-md-12" id="txMaxPaid2">
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-md-12">
+					<label>Cause</label><br>
+					<textarea class="form-control" id="txCause2" name="txCause" rows="5"></textarea>
+					</div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-md-12">
+					<label>Detail</label><br>
+					<textarea class="form-control" id="txDetails2" name="txDetails" rows="6"></textarea>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		<script type="text/javascript" th:inline="javascript">
+			
+		</script>
+	</th:block>
+
+</body>
+
+
+</html>

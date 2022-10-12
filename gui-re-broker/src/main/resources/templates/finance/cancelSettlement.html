@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<th:block th:replace="fragments/import :: info-header" />
+	<th:block th:replace="fragments/import :: css-header" />
+	<th:block th:replace="fragments/import :: js-header" />
+</head>
+
+<body id="page-top">
+	<th:block th:replace="fragments/general :: navbar-header" />
+
+	<div id="wrapper">
+		<th:block th:replace="fragments/general :: menu" />
+
+		<div id="content-wrapper">
+			<div class="container-fluid">
+				<th:block th:replace="fragments/general :: panel-page" />
+
+				<!-- CONTENT PAGE -->
+				<div id="cart" class="card mb-3">
+
+					<div id="divContentHeader" class="card-header">
+						<b><span id="titlePage" th:text="${titlePage}"></span></b>
+					</div>
+					
+					<div class="card-body">
+						<div id="alertSuccess" class="alert alert-success" style="display: none;">
+							<strong>Success!</strong> <span id="alertSuccessMsg" th:text="${M_0005}"></span>
+						</div>
+						<div id="alertFailed" class="alert alert-danger" style="display: none;">
+							<strong>Failed!</strong> <span id="alertFailedMsg"></span>
+						</div>
+						
+						<div id="cancelSettlementCreateEdit">	
+							<input type="hidden" id="h_voucherId" />	
+							<input type="hidden" id="h_oldVoucherId" />
+							<input type="hidden" id="h_oldType" />				
+							<div class="row">
+								<div class="col-md-1"></div>
+								<div class="col-md-2">
+									<label>Type</label>
+								</div>
+								<div class="col-md-3">
+									<select name="type" id="type" class="form-control col-md-12">
+										<option value="PY">Payment</option>
+										<option value="RC">Received</option>
+									</select>
+								</div>
+							</div>
+							
+							<br>
+							
+							<div class="row">
+								<div class="col-md-1"></div>
+								<div class="col-md-2">
+									<label>Transaction Date</label>
+								</div>
+								<div class="col-md-2">
+									<div class="input-group">
+										<input id="transactionDateFrom" name="transactionDateFrom" type="text"
+											class="form-control" placeholder="dd/MM/yyyy" disabled>
+										<div class="input-group-append">
+											<button id='btnTransactionDateFrom' class="btn btn-primary" type="button">
+												<i class="fas fa-calendar"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+								<div class="justify-content-center">
+									<label class="">to</label>
+								</div>
+								<div class="col-md-2">
+									<div class="input-group">
+										<input id="transactionDateTo" name="transactionDateTo" type="text"
+											class="form-control" placeholder="dd/MM/yyyy" disabled>
+										<div class="input-group-append">
+											<button id='btnTransactionDateTo' class="btn btn-primary" type="button">
+												<i class="fas fa-calendar"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<br>
+							
+							<div class="row">
+								<div class="col-md-1"></div>
+								<div class="col-md-2">
+									<label>Client/Re</label>
+								</div>
+								<div class="col-md-3">
+									<div class="input-group">
+										<input id="clientDesc" name="clientDesc" type="text" class="form-control" disabled> 
+										<input id="client" name="client" type="text" class="form-control" hidden="true"/>
+				
+										<div class="input-group-append">
+											<button id='btnClientSearch' class="btn btn-primary" type="button" 
+												data-toggle="modal" data-target="#client-modal">
+												<i class="fas fa-search"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<br>
+							<br>
+							
+							<th:block th:replace="fragments/button :: btn-search-reset"></th:block>
+							
+							<br>
+							
+							<table id="tableSettlement" 
+								  data-toggle="table"
+								  data-sortable="true"
+								  data-url=""
+								  data-side-pagination="server"
+								  data-pagination="true"
+								  data-page-size="5"
+								  data-unique-id="idKey" 
+								  data-page-list="[5, 10, 25, 50, ALL]"
+								  data-pagination-V-Align="top">
+								<thead>
+									<tr>
+										<th data-field="trxDateStr" data-sortable="true">Date</th>
+										<th data-field="trxType">Type</th>
+										<th data-field="trxVoucherId" data-sortable="true">Voucher</th>
+										<th data-field="trxClientDesc" data-sortable="true">Client</th>
+										<th data-field="trxDescription">Description</th>
+										<th data-field="trxCurrId" data-sortable="true">Curr</th>										
+										<th data-field="trxSetAmountStr" data-halign="right" data-align="right">Amount</th>
+										<th data-field="action" data-halign="center" data-align="center">Action</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+						
+						<div id="previewJournal" class="card-body" hidden="true">
+							<div class="row justify-content-end">
+								<button id="btnExportXls" class="btn btn-success col-md-2">
+									Export to Excel</button>
+								&nbsp;&nbsp;&nbsp;&nbsp;
+								<button id="btnPrint" class="btn btn-secondary col-md-1">
+									Print</button>
+							</div>
+							
+							<div id="previewJournalHtml" class="viewHtml"></div>
+							
+							<br>
+							
+							<div class="row justify-content-center">
+								<button id="btnClosePreviewJournal" type="button" class="btn btn-danger col-md-2">Close</button>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				
+				<!-- Modal Client -->
+				<div class="modal fade" id="client-modal" tabindex="-1"
+					role="dialog" aria-labelledby="client-modal" aria-hidden="true">
+					<div class="modal-dialog modal-lg" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="client-modal-label">Client</h5>
+								<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<div class="row card-body justify-content-end">
+									<div class="col-md-3">
+										<select id="clientSelector" name="clientSelector" class="custom-select">
+											<option value="cliName">Name</option>
+											<option value="cliCode">Client Id</option>
+										</select>
+									</div>
+									<div class="input-group col-md-3">
+										<input id="clientFilterValue" type="text" class="form-control">
+										<div class="input-group-append">
+											<button id="btnClientFilterSearch" class="btn btn-primary"
+												type="button" onclick="clientFilterSearch()">
+												<i class="fas fa-search"></i>
+											</button>
+										</div>
+									</div>
+								</div>
+								<br>
+								<table id="tableClient" data-toggle="table" data-url=""
+									data-sortable="true" data-side-pagination="server"
+									data-pagination="true" data-page-size="5"
+									data-page-list="[5, 10, 25, 50, ALL]"
+									data-pagination-V-Align="top">
+									<thead>
+										<tr>
+											<th data-field="cliCode" data-sortable="true">Client ID</th>
+											<th data-field="cliName" data-sortable="true">Client
+												Name</th>
+											<th data-field="cliDataStatusStr">Status</th>
+										</tr>
+									</thead>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- /Modal Client -->
+
+			</div>
+			<!-- /.container-fluid -->
+			<th:block th:replace="fragments/general :: copyright-footer"></th:block>
+		</div>
+		<!-- /.content-wrapper -->
+	</div>
+	
+	<!-- /#wrapper -->
+	<th:block th:replace="fragments/modal :: confirmation-save-v2" />
+	<th:block th:replace="fragments/general :: scroll-to-top" />
+	<th:block th:replace="fragments/general :: logout-modal" />
+	<th:block th:replace="fragments/import :: js-body" />
+
+</body>
+
+<script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+		
+	$(function() {		
+		$('#type').select2({ width: '100%' });
+		$('#clientSelector').select2({ width: '100%' });
+		
+		initTable();		
+		initDate();
+	});		
+	
+	$('#btnTransactionDateFrom').click(function() {
+		$('#transactionDateFrom').datepicker('show');
+	});
+	
+	$('#btnTransactionDateTo').click(function() {
+		$('#transactionDateTo').datepicker('show');
+	});
+	
+	$('#transactionDateFrom').change(function() {		
+		$('#transactionDateTo').datepicker('option', 'minDate', $('#transactionDateFrom').val());
+	});
+	
+	$('#btnSearch').click(function() {			
+		inquirySettlement();
+	});
+	
+	$('#btnReset').click(function() {			
+		$('#type').val($('#type option:first-child').val()).trigger('change');
+		
+		$('#transactionDateFrom').datepicker('destroy');
+		$('#transactionDateTo').datepicker('destroy');
+		initDate();
+		
+		$('#client').val('');
+		$('#clientDesc').val('');
+	});
+	
+	$('#btnClientSearch').click(function() {			
+		$('#clientFilterValue').val('');
+		$('#clientSelector').val('cliName').trigger('change');
+		
+		clientFilterSearch();
+	});
+	
+	$('#tableClient').on('click-row.bs.table', function(e, row, $tr) {
+		$('#client').val(row.cliCode);
+		$('#clientDesc').val(row.cliName);
+		$('#client-modal').modal('hide');
+	});
+	
+	$('#btnClientSearch').click(function() {			
+		$('#clientFilterValue').val('');
+		$('#clientSelector').val('cliName').trigger('change');
+		
+		clientFilterSearch();
+	});
+	
+	function clientFilterSearch() {
+		var url = /*[[@{/static-data/client}]]*/;
+		var filterKey = $("#clientSelector").select2('val');
+		var filterValue = $("#clientFilterValue").val();
+		
+		var cliType="0";
+		if($('#type').val()=="RC")
+			cliType="-0";
+		
+		url = url + "?cliType=" + cliType;
+		if(filterValue != "")
+			url = url + "&filterKey="+filterKey+"&filterValue="+filterValue;
+		
+		$('#tableClient').bootstrapTable('refreshOptions', {
+		    theadClasses: 'thead-dark',
+		    url: url
+		});
+	}
+	
+	function inquirySettlement() {
+		var type = $('#type').val();
+		var transactionDateFrom = $('#transactionDateFrom').val();
+		var transactionDateTo = $('#transactionDateTo').val();
+		var clientCode = $('#client').val();
+		
+		var url = /*[[@{/finance/cancel-settlement/inquiry}]]*/;
+		url += '?type=' + type;
+		url += '&transactionDateFrom=' + transactionDateFrom;
+		url += '&transactionDateTo=' + transactionDateTo;
+		url += '&clientCode=' + clientCode;
+		
+		$('#tableSettlement').bootstrapTable('refreshOptions', {
+	  		theadClasses: 'thead-dark',
+	        url: url
+	    });
+	}
+	
+	function initTable() {
+		$('#tableSettlement').bootstrapTable('refreshOptions', {
+		    theadClasses: 'thead-dark'
+		});
+	}
+	
+	function initDate() {
+		$('#transactionDateFrom').datepicker({
+			dateFormat: 'dd/mm/yy',
+			changeMonth: true,
+			changeYear: true
+		}).datepicker('setDate', /*[[${appDate}]]*/);
+		
+		$('#transactionDateTo').datepicker({
+			dateFormat: 'dd/mm/yy',
+			changeMonth: true,
+			changeYear: true,
+			minDate: $('#transactionDateFrom').val()
+		}).datepicker('setDate', /*[[${appDate}]]*/);
+	}
+	
+	function showAlertFailed(msgAlert) {
+		$(location).attr('href','#page-top');
+		$('#alertFailedMsg').text(msgAlert);
+		$('#alertFailed').fadeTo(3000, 500).slideUp(500, function() {
+		    $('#alertFailed').slideUp(500);
+		});
+	}
+	
+	function showAlertSuccess() {
+		$(location).attr('href','#page-top');
+		$('#alertSuccess').fadeTo(2000, 500).slideUp(500, function() {
+		    $('#alertSuccess').slideUp(500);
+		});	
+	}
+	
+	/**
+	 * Button Trash onclick
+	 * nama function diinisiasi pada service core
+	 */
+	function t12Edit(voucherId, type) {
+		$('#h_oldVoucherId').val(voucherId);
+		$('#h_oldType').val(type);
+		
+		$('#modalConfirmation').modal('show');		
+	}
+	
+	$('#btnModalYes').click(function() {
+		$('#btnModalYes').attr('disabled', 'true');
+		$('#modalConfirmation').modal('hide');
+		
+		var voucherId = $('#h_oldVoucherId').val()
+		var type = $('#h_oldType').val();
+		save(voucherId, type);
+	});
+	
+	 function save(param1, param2) {
+			$('#btnModalyes').attr('disabled', true);
+			/*
+			Hanya kirim data yang berubah saja ke Core
+			Id, new Amount, Remarks 
+			**/
+			var p_voucherId = param1;
+			var p_type = param2;
+			//var p_remarks = $('#trxRemarks').val();
+			
+			var data = {
+					trxVoucherId:p_voucherId,
+					trxType:p_type
+				}
+			$.ajax({ 
+		        type: "POST",
+		        dataType: "json",
+		        contentType: "application/json",
+		        data:JSON.stringify(data),
+		        url: /*[[@{/finance/cancel-settlement/save}]]*/,
+		        success: function (data) {
+		        	if(data) {
+		        		showAlertSuccess();
+		        	    inquirySettlement();
+		        	    
+						$("#h_voucherId").val(data.result);
+						
+						if($('#printJournal').prop('checked') == true)
+							showPreviewJournal();
+		        	}
+		 			else {
+		 				showAlertFailed(/*[[${M_0006}]]*/);
+		 			}
+		        	$('#btnModalYes').attr('disabled', false);
+		        	$('#printJournal'). prop('checked', false);
+		        },
+		        complete:function(jqXHR, textStatus){
+		 			if(textStatus != "success")
+		 				showAlertFailed(/*[[${M_0006}]]*/);
+		        }
+		    });	
+			$('#btnModalyes').removeAttr('disabled');
+		 	$('#modalConfirmation').modal('hide');
+		}
+	
+	 /* function showAlertSuccess() {
+			$('#alertSuccess').fadeTo(2000, 500).slideUp(500, function() {
+			    $('#alertSuccess').slideUp(500);
+			    location.reload();
+			});
+		} */
+
+	function showAlertFailed(msgAlert) {
+		$('#alertFailedMsg').text(msgAlert);
+		$('#alertFailed').fadeTo(3000, 500).slideUp(500, function() {
+		    $('#alertFailed').slideUp(500);
+		});
+	}
+	
+	$('#btnExportXls').click(function() {
+		exportXsl();
+	});
+	
+	$('#btnPrint').click(function() {
+		print();
+	});
+	
+	$('#btnClosePreviewJournal').click(function() {
+		location.reload();
+	});
+	
+	function showPreviewJournal() {	
+		var voucherId = $("#h_voucherId").val();
+		
+		var url = /*[[@{/finance/cancel-settlement/search}]]*/;
+		var param = 'voucherId=' + voucherId;
+		
+		param = encodeURI(param);
+		
+		$('#previewJournal').removeAttr('hidden');
+		$('#previewJournalHtml').load(url, param);
+	}
+	
+	function exportXsl(voucher) {
+		var voucherId = $("#h_voucherId").val();
+		
+		var url = /*[[@{/finance/cancel-settlement/export-excel}]]*/;
+		var param = '?voucherId=' + voucherId;
+		
+		param = encodeURI(param);
+		
+		window.open(url+param, '_blank');
+	}
+	
+	function print(voucher) {
+		var voucherId = $("#h_voucherId").val();
+		
+		var url = /*[[@{/finance/cancel-settlement/view-pdf}]]*/;
+		var param = '?voucherId=' + voucherId;
+		
+		param = encodeURI(param);
+		
+		window.open(url+param, '_blank');
+	}
+	 
+	/*]]>*/
+</script>
+
+</html>
